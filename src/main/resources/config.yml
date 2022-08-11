@@ -1,3 +1,5 @@
+require-vault: true # Set to false if you don't any of the economy features (will drop errors if an economy feature is attempted to be accessed)
+
 replace-table-gui: true # Replaces enchantment table GUI with a custom one.
 replace-anvil-gui: true # Replaces the default anvil GUI with a custom one.
 fireworks-on-enchants: true # Launches a firework on every successful enchant. Note that these fireworks are harmful!

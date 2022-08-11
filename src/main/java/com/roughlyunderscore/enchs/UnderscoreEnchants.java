@@ -613,6 +613,7 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 
 	//<editor-fold desc="Initialization and setup methods.">
 	private boolean setupEconomy() {
+		if (!getConfig().getBoolean("require-vault")) return true;
 		if (getServer().getPluginManager().getPlugin("Vault") == null) {
 			return false;
 		}
