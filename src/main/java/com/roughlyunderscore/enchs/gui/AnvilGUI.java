@@ -4,7 +4,13 @@ import com.cryptomorin.xseries.XMaterial;
 import com.roughlyunderscore.enchantsapi.events.EnchantmentsCombineEvent;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import com.roughlyunderscore.enchs.util.holders.AnvilHolder;
-import lombok.AllArgsConstructor;
+import dev.triumphteam.gui.builder.item.ItemBuilder;
+import dev.triumphteam.gui.components.GuiType;
+import dev.triumphteam.gui.guis.Gui;
+import dev.triumphteam.gui.guis.GuiItem;
+import dev.triumphteam.gui.guis.PaginatedGui;
+import lombok.*;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -26,16 +32,74 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.roughlyunderscore.enchs.util.general.PlayerUtils.*;
-import static net.md_5.bungee.api.ChatMessageType.ACTION_BAR;
 import static com.roughlyunderscore.enchs.util.general.Utils.*;
 
-@AllArgsConstructor
 /*
 AnvilGUI is the second hardest and the most bug-prone class in this entire project.
 It has been rewritten from scratch countless times.
 This time, I also left some comments when writing it, but I am not entirely sure about how correct they are.
  */
-public class AnvilGUI implements Listener {
+public class AnvilGUI {
+
+    @Getter private final Player opener;
+    @Getter private final Gui GUI;
+
+    public AnvilGUI(final UnderscoreEnchants plugin, final Player opener) {
+        this.opener = opener;
+
+        GUI = Gui.gui()
+            .title(Component.text(format("&eCombine items!")))
+            .rows(3)
+            .disableAllInteractions()
+            .create();
+
+        final ItemStack fillerItem = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+        final ItemStack insertItem = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+        final ItemStack retrieveItem = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
+
+        final GuiItem filler = ItemBuilder.from(fillerItem)
+            .name(Component.text(format("&r======")))
+            .asGuiItem(ev -> {
+                if (!isPane(ev.getCurrentItem())) {
+                    ItemStack current = ev.getCurrentItem().clone(); // anti-dupe measure
+                    ev.setCurrentItem(fillerItem);
+                    ev.getWhoClicked().getInventory().addItem(current);
+                }
+            });
+
+        final GuiItem insert = ItemBuilder.from(insertItem)
+            .name(Component.text(format("&r======")))
+            .asGuiItem(ev -> {
+                if (!isPane(ev.getCurrentItem())) {
+                    ItemStack current = ev.getCurrentItem().clone(); // anti-dupe measure
+                    ev.setCurrentItem(insertItem);
+                    ev.getWhoClicked().getInventory().addItem(current);
+                }
+            });
+
+        final GuiItem retrieve = ItemBuilder.from(retrieveItem)
+            .name(Component.text(format("&r======")))
+            .asGuiItem(ev -> {
+                Player pl = (Player) ev.getWhoClicked();
+                if (!isPane(ev.getCurrentItem()) && pl.getInventory().firstEmpty() != -1) {
+                    ItemStack current = ev.getCurrentItem().clone(); // anti-dupe measure
+                    ev.setCurrentItem(retrieveItem);
+                    pl.getInventory().addItem(current);
+                }
+            });
+
+        GUI.getFiller().fill(filler);
+
+        GUI.setItem(2, 2, insert);
+        GUI.setItem(2, 4, insert);
+        GUI.setItem(2, 8, retrieve);
+
+        GUI.setPlayerInventoryAction(ev -> {
+
+        });
+    }
+
+    /*
 
     private final UnderscoreEnchants plugin;
     private final int combined0 = 10;
@@ -293,5 +357,8 @@ public class AnvilGUI implements Listener {
         }
         return true;
     }
+
+
+     */
 
 }

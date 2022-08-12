@@ -17,6 +17,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Arrow;
@@ -35,6 +36,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.mariuszgromada.math.mxparser.Expression;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -51,6 +53,7 @@ import java.net.URL;
 
 import static com.roughlyunderscore.enchs.UnderscoreEnchants.STATIC_EMPTY;
 import static com.roughlyunderscore.enchs.UnderscoreEnchants.staticEnchantmentData;
+import static com.roughlyunderscore.enchs.registration.Register.*;
 import static com.roughlyunderscore.enchs.util.general.PlayerUtils.*;
 
 @UtilityClass @SuppressWarnings({"unused", "deprecation"})
@@ -1042,7 +1045,7 @@ public class Utils {
      * @param name the enchantment name
      * @return the enchantment, or {@code UnderscoreEnchants.STATIC_EMPTY} (identical to EMPTY) if such enchantment doesn't exist
      */
-    public DetailedEnchantment parseEnchantment(String name) {
+    public DetailedEnchantment parseEnchantment(final String name) {
 
         if (UnderscoreEnchants.staticEnchantmentData.stream().noneMatch(ench -> ench.getCommandName().equalsIgnoreCase(name))) {
             if (Arrays.stream(Enchantment.values()).noneMatch(ench -> getName(ench).replace(" ", "_").equalsIgnoreCase(name))) {
@@ -1067,21 +1070,111 @@ public class Utils {
 
     }
 
+    /**
+     * Runs an asynchronous task.
+     * @param plugin a plugin instance
+     * @param runnable the task to run
+     */
+    public void async(final UnderscoreEnchants plugin, final Runnable runnable) {
+        async(plugin, runnable, 0L);
+    }
 
-    public void downloadWithJavaNIO(String fileURL, String localFilename, UnderscoreEnchants plugin) throws MalformedURLException {
+    /**
+     * Runs an asynchronous task.
+     * @param plugin a plugin instance
+     * @param runnable the task to run
+     * @param delay delay before running the task
+     */
+    public void async(final UnderscoreEnchants plugin, final Runnable runnable, final long delay) {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, runnable, delay);
+    }
+
+
+    public void downloadWithJavaNIO(final String fileURL, final String localFilename, final UnderscoreEnchants plugin) throws MalformedURLException {
         // github.com/eugenp/tutorials/blob/master/core-java-modules/core-java-networking-2/src/main/java/com/baeldung/download/FileDownload.java
 
-        URL url = new URL(fileURL);
+        final URL url = new URL(fileURL);
         try (
-            ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
-            FileOutputStream fileOutputStream = new FileOutputStream(localFilename);
-            FileChannel fileChannel = fileOutputStream.getChannel()
+            final ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
+            final FileOutputStream fileOutputStream = new FileOutputStream(localFilename);
+            final FileChannel fileChannel = fileOutputStream.getChannel()
         ) {
             fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
             fileOutputStream.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
 
     }
+
+    /**
+     * Downloads all files from the link with a per-second limit. A VERY case-specific method, as of 2.0.12 only used to simplify /ue download default
+     * @param files the files' addresses
+     * @param dir the directory to download to
+     * @param limit the limit
+     * @param wait the time to wait after reaching a limit (in ticks)
+     * @param link the base link
+     * @param load whether to load the file as an enchantment
+     * @param notifiee somebody to notify about the enchantment progress
+     * @param plugin an UnderscoreEnchants instance
+     */
+    public void downloadEnchantmentLimitedAndLoad(
+        final List<String> files,
+        final File dir,
+        final int limit,
+        final long wait,
+        final String link,
+        final boolean load,
+        final CommandSender notifiee,
+        final UnderscoreEnchants plugin
+    )
+    {
+        for (final var filename : files) {
+            final String name = dir.getPath() + File.separator + filename;
+            current++;
+
+            if (current >= limit) {
+                async(plugin, () -> {
+                    try {
+                        downloadWithJavaNIO(link + "/" + filename, name, plugin);
+
+                        final File enchantment = new File(name);
+                        notifiee.sendMessage(plugin.getMessages().DOWNLOADED.replace("%ench%", enchantment.getName()));
+
+                        if (load) {
+                            loadEnchantment(enchantment, plugin);
+                            notifiee.sendMessage(plugin.getMessages().LOADED.replace("%ench%", enchantment.getName()));
+                        }
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                        Bukkit.getLogger().info("Something went wrong while downloading a file!");
+                        plugin.getDebugger().log("Something went wrong while downloading a file!");
+                    }
+                }, wait);
+            }
+            else {
+                async(plugin, () -> {
+                    try {
+                        downloadWithJavaNIO(link + "/" + filename, name, plugin);
+
+                        final File enchantment = new File(name);
+                        notifiee.sendMessage(plugin.getMessages().DOWNLOADED.replace("%ench%", enchantment.getName()));
+
+                        if (load) {
+                            loadEnchantment(enchantment, plugin);
+                            notifiee.sendMessage(plugin.getMessages().LOADED.replace("%ench%", enchantment.getName()));
+                        }
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                        Bukkit.getLogger().info("Something went wrong while downloading a file!");
+                        plugin.getDebugger().log("Something went wrong while downloading a file!");
+                    }
+                });
+            }
+
+
+        }
+    }
+
+    private int current = 0;
 }

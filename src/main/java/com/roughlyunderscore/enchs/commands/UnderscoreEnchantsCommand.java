@@ -9,8 +9,6 @@ import com.roughlyunderscore.enchs.util.data.DetailedEnchantment;
 import com.roughlyunderscore.enchs.util.enums.Permissions;
 import com.roughlyunderscore.enchs.util.holders.AnvilHolder;
 import com.roughlyunderscore.enchs.util.holders.EnchantHolder;
-import static com.roughlyunderscore.enchs.registration.Register.*;
-import static com.roughlyunderscore.enchs.util.general.Utils.*;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -26,7 +24,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.BufferedWriter;
@@ -36,6 +33,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static com.roughlyunderscore.enchs.util.general.PlayerUtils.*;
+import static com.roughlyunderscore.enchs.registration.Register.*;
 import static com.roughlyunderscore.enchs.util.general.Utils.*;
 
 @AllArgsConstructor
@@ -45,6 +43,8 @@ The code is a bit scuffed, but I tried to get the best out of it
 after rewriting it from the terrible legacy state.
  */
 public class UnderscoreEnchantsCommand implements CommandExecutor {
+    public static final int LIMIT = 50;
+    public static final int WAIT = 25;
     private final UnderscoreEnchants plugin;
 
     @Override
@@ -260,38 +260,20 @@ public class UnderscoreEnchantsCommand implements CommandExecutor {
                     final File dir = new File(plugin.getDataFolder().getPath() + File.separator + "enchantments" + File.separator + "default");
                     if (!dir.exists()) dir.mkdirs();
 
-                    final String linke = "https://roughlyunderscore.7m.pl/default_enchantments/";
+                    final String linkBase = "https://roughlyunderscore.7m.pl/default_enchantments/";
 
-                    Document doc = Jsoup.connect(linke).get(); // gets the document
+                    Document doc = Jsoup.connect(linkBase).get(); // gets the document
                     Elements links = doc.getElementsByTag("a"); // gets all "a" objects
                     List<String> files = new ArrayList<>();
 
-                    for (Element link : links) {
+                    for (final var link : links) {
                         String res = link.attr("href"); // gets the href attribute
-                        if (res.endsWith(".yaml") || res.endsWith(".yml")) files.add(res); // makes sure that it's a YML file and adds it to the resources
+                        if (res.endsWith(".yaml") || res.endsWith(".yml"))
+                            files.add(res); // makes sure that it's a YML file and adds it to the resources
                     }
 
-                    int file = 0;
+                    downloadEnchantmentLimitedAndLoad(files, dir, LIMIT, WAIT, linkBase, load, sender, plugin);
 
-                    for (final String filename : files) {
-                        String name = dir.getPath() + File.separator + filename;
-                        file++;
-
-                        if (file == 59) {
-                            Thread.sleep(1000);      // the server only allows 60 requests per second so let's wait
-                                                     // it won't harm because we only do it once and quickly
-                            downloadWithJavaNIO(linke + "/" + filename, name, plugin);
-                        } else downloadWithJavaNIO(linke + "/" + filename, name, plugin);
-
-
-                        File enchantment = new File(name);
-                        sender.sendMessage(plugin.getMessages().DOWNLOADED.replace("%ench%", enchantment.getName()));
-
-                        if (load) {
-                            loadEnchantment(enchantment, plugin);
-                            sender.sendMessage(plugin.getMessages().LOADED.replace("%ench%", enchantment.getName()));
-                        }
-                    }
 
                 }
 
@@ -301,7 +283,7 @@ public class UnderscoreEnchantsCommand implements CommandExecutor {
                 if (args[0].equalsIgnoreCase("download")) {
                     // ue download <link> <name> <load or not>
                     if (isPlayer) {
-                        Player player = (Player) sender;
+                        final Player player = (Player) sender;
                         if (!player.hasPermission(Permissions.ENCHANT.getPermission())) {
                             sender.sendMessage(plugin.getMessages().NO_PERMS);
                             return false;
@@ -452,7 +434,7 @@ public class UnderscoreEnchantsCommand implements CommandExecutor {
      */
     protected Inventory getAnvilGUI() {
         int size = 27;
-        Inventory inv = Bukkit.createInventory(new AnvilHolder(), size, format("&eCombine items!"));
+        Inventory inv = Bukkit.createInventory(new AnvilHolder(), size, "Anvil");
         for (int i = 0; i != 27; i++) {
             inv.setItem(i, new ItemStack(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial()));
         }
@@ -462,6 +444,8 @@ public class UnderscoreEnchantsCommand implements CommandExecutor {
 
         return inv;
     }
+
+
 
     /**
      * LEGACY (reason: couldn't care less about this method)<br>

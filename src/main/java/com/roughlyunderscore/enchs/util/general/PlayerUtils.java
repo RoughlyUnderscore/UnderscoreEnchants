@@ -102,6 +102,10 @@ public class PlayerUtils<T, Z> {
 
 	//<editor-fold desc="Money">
 	public double getMoney(Player player) {
+		if (UnderscoreEnchants.econ == null) {
+			UnderscoreEnchants.getStaticLogger().log("getMoney was called with economy features disabled");
+			return 0;
+		}
 		UnderscoreEnchants.getStaticLogger().log("getMoney was called on player " + player.getName() + " and resulted in the following balance: " + UnderscoreEnchants.econ.getBalance(player));
 		return UnderscoreEnchants.econ.getBalance(player);
 	}
@@ -449,6 +453,11 @@ public class PlayerUtils<T, Z> {
 
 	//<editor-fold desc="Money">
 	public EconomyResponse setMoney(Player player, double money) {
+		if (UnderscoreEnchants.econ == null) {
+			UnderscoreEnchants.getStaticLogger().log("setMoney was called with economy features disabled");
+			return new EconomyResponse(0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "");
+		}
+
 		UnderscoreEnchants.getStaticLogger().log("setMoney was called on player " + player.getName() + " with a value of " + money + ".");
 		UnderscoreEnchants.econ.withdrawPlayer(player, UnderscoreEnchants.econ.getBalance(player));
 		return UnderscoreEnchants.econ.depositPlayer(player, money);

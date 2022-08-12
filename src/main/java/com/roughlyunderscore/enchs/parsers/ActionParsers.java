@@ -16,11 +16,11 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.roughlyunderscore.enchs.util.general.PlayerUtils.*;
 import static com.roughlyunderscore.enchs.util.general.EntityUtils.*;
 import static com.roughlyunderscore.enchs.util.general.Utils.*;
+import static org.bukkit.Bukkit.getServer;
 
 @UtilityClass
 public class ActionParsers {
@@ -639,6 +639,16 @@ public class ActionParsers {
 					}
 					plugin.debugger.log("[Manual Logging] " + builder);
 				}
+
+				case "console-command" ->{
+					StringBuilder builder = new StringBuilder();
+					boolean debug = split[split.length - 1].toLowerCase().startsWith("delay:");
+					int endingIndex = debug ? split.length - 1 : split.length; // if ends with the delay argument, ignore that last bit
+					for (int i = 1; i < endingIndex; i++) {
+						builder.append(split[i]).append(" ");
+					}
+					getServer().dispatchCommand(getServer().getConsoleSender(), builder.toString());
+				}
 			}
 		}, delay);
 	}
@@ -917,6 +927,15 @@ public class ActionParsers {
 					}
 					plugin.debugger.log("[Manual Logging] " + builder);
 				}
+				case "console-command" -> {
+					StringBuilder builder = new StringBuilder();
+					boolean debug = split[split.length - 1].toLowerCase().startsWith("delay:");
+					int endingIndex = debug ? split.length - 1 : split.length; // if ends with the delay argument, ignore that last bit
+					for (int i = 1; i < endingIndex; i++) {
+						builder.append(split[i]).append(" ");
+					}
+					plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), builder.toString());
+				}
 			}
 		}, delay);
 	}
@@ -1080,6 +1099,16 @@ public class ActionParsers {
 						builder.append(split[i]).append(" ");
 					}
 					plugin.debugger.log("[Manual Logging] " + builder);
+				}
+
+				case "console-command" -> {
+					StringBuilder builder = new StringBuilder();
+					boolean debug = split[split.length - 1].toLowerCase().startsWith("delay:");
+					int endingIndex = debug ? split.length - 1 : split.length; // if ends with the delay argument, ignore that last bit
+					for (int i = 1; i < endingIndex; i++) {
+						builder.append(split[i]).append(" ");
+					}
+					plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), builder.toString());
 				}
 
 				case "entity-velocity" -> produceVelocity(entity, split);

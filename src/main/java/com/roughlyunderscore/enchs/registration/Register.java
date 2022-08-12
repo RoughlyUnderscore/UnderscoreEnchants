@@ -158,7 +158,7 @@ public class Register {
 				parseAction(event, lev, plugin);
 			} catch (Exception e) {
 				plugin.debugger.log(Arrays.toString(e.getStackTrace()));
-				System.out.println("Please check your actions in " + name + "! They are wrongly configured.");
+				Bukkit.getLogger().info("Please check your actions in " + name + "! They are wrongly configured.");
 				return;
 			}
 		}
@@ -215,7 +215,7 @@ public class Register {
 				parseAction(event, lev, plugin);
 			} catch (Exception e) {
 				plugin.debugger.log(Arrays.toString(e.getStackTrace()));
-				System.out.println("Please check your actions in " + name + "! They are wrongly configured.");
+				Bukkit.getLogger().info("Please check your actions in " + name + "! They are wrongly configured.");
 				return;
 			}
 		}
@@ -294,7 +294,7 @@ public class Register {
 					parseAction(event, lev, plugin);
 				} catch (Exception e) {
 					plugin.debugger.log(Arrays.toString(e.getStackTrace()));
-					System.out.println("Please check your actions in " + name + "! They are wrongly configured.");
+					Bukkit.getLogger().info("Please check your actions in " + name + "! They are wrongly configured.");
 					return;
 				}
 			}
@@ -315,7 +315,7 @@ public class Register {
 					parseAction(event, lev, plugin);
 				} catch (Exception e) {
 					plugin.debugger.log(Arrays.toString(e.getStackTrace()));
-					System.out.println("Please check your actions in " + name + "! They are wrongly configured.");
+					Bukkit.getLogger().info("Please check your actions in " + name + "! They are wrongly configured.");
 					return;
 				}
 			}

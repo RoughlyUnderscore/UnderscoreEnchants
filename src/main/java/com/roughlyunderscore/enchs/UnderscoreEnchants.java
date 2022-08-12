@@ -130,13 +130,13 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 	public Pair<DetailedEnchantment, AbstractEnchantment> parseEnchantment(YamlConfiguration file) {
 
 		//<editor-fold desc="Preparatory">
-		@NonNull String enchantmentName = format(file.getString("name"));
-		@NonNull EnchantmentTarget target = parseTarget(file.getString("applicable"));
-		@NonNull Class<? extends Event> eventString = parseEvent(file.getString("trigger"));
-		List<String> conditions = file.getStringList("conditions");
-		List<String> forbidOn = file.getStringList("forbid-on");
-		@NonNull List<EnchantmentLevel> levelsList = getLevelsOf(file.getConfigurationSection("levels"));
-		String damagerOrVictim = file.getString("player");
+		final @NonNull String enchantmentName = format(file.getString("name"));
+		final @NonNull EnchantmentTarget target = parseTarget(file.getString("applicable"));
+		final @NonNull Class<? extends Event> eventString = parseEvent(file.getString("trigger"));
+		final List<String> conditions = file.getStringList("conditions");
+		final List<String> forbidOn = file.getStringList("forbid-on");
+		final @NonNull List<EnchantmentLevel> levelsList = getLevelsOf(file.getConfigurationSection("levels"));
+		final String damagerOrVictim = file.getString("player");
 		boolean forDamager = false, forVictim = false, valueEmpty = true;
 		if (damagerOrVictim != null) {
 			valueEmpty = false;
@@ -144,11 +144,11 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 			else if (damagerOrVictim.equalsIgnoreCase("victim")) forVictim = true;
 		}
 
-		int maximumLevel = getMaxLevelOf(file.getConfigurationSection("levels"));
-		int cooldownApplied = file.getInt("cooldown");
+		final int maximumLevel = getMaxLevelOf(file.getConfigurationSection("levels"));
+		final int cooldownApplied = file.getInt("cooldown");
 
-		NamespacedKey key = new NamespacedKey(instance, "underscore_enchants_" + enchantmentName.replace(" ", "__"));
-		DetailedEnchantment entry = new DetailedEnchantment(key.getKey(), instance);
+		final NamespacedKey key = new NamespacedKey(instance, "underscore_enchants_" + enchantmentName.replace(" ", "__"));
+		final DetailedEnchantment entry = new DetailedEnchantment(key.getKey(), instance);
 		AbstractEnchantment ench;
 		//</editor-fold>
 
@@ -565,7 +565,6 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 		PluginManager manager = getServer().getPluginManager();
 		manager.registerEvents(new InteractListener(this), this);
 
-		manager.registerEvents(new AnvilGUI(this), this);
 		manager.registerEvents(new EnchantGUI(this), this);
 
 		manager.registerEvents(new LootPopulateListener(this), this);
