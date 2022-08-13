@@ -14,7 +14,20 @@ public class Messages {
 
     private UnderscoreEnchants enchants;
 
-    public String NO_PERMS, NO_CONSOLE, CREATING_LOG, LOG_CREATED, NO_LOG, BAD_ARGS, WRONG_NAME, WRONG_LEVEL, ENCHANTED, ACTIVATED, DOWNLOADED, LOADED, WRONG_PARAMETER;
+    public String NO_PERMS,
+        NO_CONSOLE,
+        CREATING_LOG,
+        LOG_CREATED,
+        NO_LOG,
+        UNLOADED,
+        WRONG_NAME,
+        WRONG_LEVEL,
+        ENCHANTED,
+        ACTIVATED,
+        DOWNLOADED,
+        LOADED,
+        WRONG_PARAMETER,
+        TOGGLED;
 
     public Messages(String string, UnderscoreEnchants enchants) {
         if (string.equals("Default")) {
@@ -26,13 +39,14 @@ public class Messages {
             CREATING_LOG = prefix + getMessage("creating-log");
             LOG_CREATED = prefix + getMessage("log-created");
             NO_LOG = prefix + getMessage("couldnt-make-log");
-            BAD_ARGS = prefix + getMessage("improper-args");
+            UNLOADED = prefix + getMessage("unloaded");
             WRONG_NAME = prefix + getMessage("wrong-enchantment-name");
             WRONG_LEVEL = prefix + getMessage("wrong-enchantment-level");
             ENCHANTED = prefix + getMessage("enchanted");
             ACTIVATED = prefix + getMessage("activated");
             DOWNLOADED = prefix + getMessage("downloaded");
             LOADED = prefix + getMessage("loaded");
+            TOGGLED = prefix + getMessage("toggled");
             WRONG_PARAMETER = prefix + getMessage("wrong-parameter");
         }
     }

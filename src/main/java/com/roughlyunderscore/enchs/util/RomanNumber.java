@@ -1,0 +1,47 @@
+package com.roughlyunderscore.enchs.util;
+
+import lombok.experimental.UtilityClass;
+
+import java.util.TreeMap;
+
+@UtilityClass
+public class RomanNumber {
+
+	/**
+	 * By https://stackoverflow.com/questions/12967896/converting-integers-to-roman-numerals-java
+	 */
+	private final TreeMap<Integer, String> map = new TreeMap<>();
+
+	static {
+
+		map.put(1000, "M");
+		map.put(900, "CM");
+		map.put(500, "D");
+		map.put(400, "CD");
+		map.put(100, "C");
+		map.put(90, "XC");
+		map.put(50, "L");
+		map.put(40, "XL");
+		map.put(10, "X");
+		map.put(9, "IX");
+		map.put(5, "V");
+		map.put(4, "IV");
+		map.put(1, "I");
+
+	}
+
+	/**
+	 * Converts a number to a Roman numeral.
+	 *
+	 * @param number The number to convert.
+	 * @return The Roman numeral.
+	 */
+	public String toRoman(final int number) {
+		final int l = map.floorKey(number);
+		if (number == l) {
+			return map.get(number);
+		}
+		return map.get(l) + toRoman(number - l);
+	}
+
+}

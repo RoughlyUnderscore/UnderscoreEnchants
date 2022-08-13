@@ -86,11 +86,15 @@ public class PreparatoryParsers {
 			level++;
 			double chance = levels.getDouble(path + ".chance");
 			if (chance == 0) chance = 100;
+
 			List<String> actions = levels.getStringList(path + ".action");
 			List<String> conditions = levels.getStringList(path + ".conditions");
 			int cooldown = levels.getInt(path + ".cooldown");
 
-			levels0.add(new EnchantmentLevel(level, chance, cooldown, actions, conditions));
+			String flag = levels.getString(path + ".flag");
+			if (flag == null) flag = "";
+
+			levels0.add(new EnchantmentLevel(level, chance, cooldown, actions, conditions, flag));
 		}
 
 		return levels0;
@@ -120,9 +124,14 @@ public class PreparatoryParsers {
 	 * @param level the {@link EnchantmentLevel} object to parse the level for
 	 * @param key the {@link NamespacedKey} object, necessary for the registration
 	 * @param conditions the {@link List} of {@link String} objects, which are conditions to pass.
+	 * @param flag the {@link Boolean} flag, which can change how they are parsed
 	 * @return the result of the checks - true if none fail, false otherwise
 	 */
-	public boolean validateActivation(UnderscoreEnchants plugin, Event event, Player player, EnchantmentLevel level, NamespacedKey key, List<String> conditions) {
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
+	public boolean validateActivation(
+		UnderscoreEnchants plugin, Event event, Player player, EnchantmentLevel level, NamespacedKey key, List<String> conditions, String flag
+	)
+	{
 		// 0) Checking if the event is cancelled.
 		if (event instanceof Cancellable ca && ca.isCancelled()) return false;
 
@@ -144,19 +153,27 @@ public class PreparatoryParsers {
 		if (Math.random() * 100 > level.getChance()) return false;
 
 		// 4) Parsing and checking for the conditions to match.
+		return passConditions(event, conditions, flag, plugin) && !passConditions(event, level.getConditions(), flag, plugin);
+	}
+
+	private boolean passConditions(Event event, List<String> conditions, String flag, UnderscoreEnchants plugin) {
 		boolean passed = true;
 		if (conditions != null && !conditions.isEmpty()) {
 			for (String condition : conditions) {
-				if (!ConditionParsers.parseCondition(event, condition, plugin)) passed = false;
+				//! ---------------
+				//! Flags
+				if (flag.equalsIgnoreCase("need-one")) {
+					passed = false;
+					if (ConditionParsers.parseCondition(event, condition, plugin)) {
+						passed = true;
+						break;
+					}
+				}
+				else {
+					if (!ConditionParsers.parseCondition(event, condition, plugin)) passed = false;
+				}
 			}
 		}
-		if (level.getConditions() != null && !level.getConditions().isEmpty()) {
-			for (String condition : level.getConditions()) {
-				if (!ConditionParsers.parseCondition(event, condition, plugin)) passed = false;
-			}
-		}
-
-		// 5) Final decision
 		return passed;
 	}
 

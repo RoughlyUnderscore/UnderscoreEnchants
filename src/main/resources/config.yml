@@ -40,14 +40,15 @@ messages:
     creating-log: '&bCreating a log...' # Called when a /log command is used.
     log-created: '&6A log has been created in &b/plugins/UnderscoreEnchants/logfile.log/ folder.' # Called when log creation is finished.
     couldnt-make-log: '&cCouldn''t create a log!' # Called when something went wrong while creating a log.
-    improper-args: '&cImproper amount of arguments!' # Called when improper amount of arguments are inputted in the command.
     wrong-enchantment-name: '&cCouldn''t enchant the item - unknown enchantment!' # Called when /uenchant command has a wrong enchantment argument.
     wrong-enchantment-level: '&cCouldn''t enchant the item - its level is either higher than the maximum or less than 1!' # Called when /uenchant command has a wrong level argument.
     enchanted: '&6Enchanted your item with &b%name% %level%.' # Called after a successful /uenchant.
     activated: '&6You have activated the &l&b%name% enchantment.' # Called when an enchantment was activated. P.S. "activated" boolean (at the top) must be true for this.
-    wrong-parameter: '&cWrong parameter (%param%)!' # Called when a specific paragraph with no specific message has an improper value.
+    wrong-parameter: '&cWrong parameter (%param%)!' # Called when an unusable argument is passed.
     downloaded: '&bEnchantment &e%ench% &bhas been successfully downloaded.' # Called when an enchantment file has been downloaded.
     loaded: '&bEnchantment &e%ench% &bhas been loaded.' # Called when an enchantment has been loaded after being downloaded.
+    unloaded: '&bEnchantment &e%ench% &bhas been unloaded.' # Called when an enchantment has been unloaded with a command.
+    toggled: '&bToggled enchantment &e%ench% &bfor you.' # Called when an enchantment has been toggled with a command.
     # Credit to ZBLL (the creator)
 
   ru:
@@ -56,7 +57,6 @@ messages:
     creating-log: '&bСоздаю лог...'
     log-created: '&6Лог был создан в папке &b/plugins/UnderscoreEnchants/logfile.log/.'
     couldnt-make-log: '&cНе получилось создать лог!'
-    improper-args: '&cНеверное количество аргументов!'
     wrong-enchantment-name: '&cНе получилось зачаровать предмет - неизвестное зачарование!'
     wrong-enchantment-level: '&cНе получилось зачаровать предмет - уровень либо превышает максимум, либо меньше чем 1!'
     enchanted: '&6Ваш предмет был зачарован на &b%name% %level%.'
@@ -64,6 +64,8 @@ messages:
     wrong-parameter: '&cНеправильный параметр (%param%)!'
     downloaded: '&bЗачарование &e%ench% &bбыло успешно скачано.'
     loaded: '&bЗачарование &e%ench% &bбыло загружено.'
+    unloaded: '&bЗачарование &e%ench% &bбыло отключено.'
+    toggled: '&bЗачарование &e%ench% персонально переключено.'
     # Credit to ZBLL (the creator)
 
   ro:
@@ -72,7 +74,6 @@ messages:
     creating-log: '&bCrearea unui jurnal...'
     log-created: '&6Un jurnal a fost creat în folderul &b/plugins/UndercoreEnchants/logfile.log/.'
     couldnt-make-log: '&cNu s-a putut crea un jurnal!'
-    improper-args: '&cNumăr nepotrivit de argumente!'
     wrong-enchantment-name: '&cNu s-a putut încânta obiectul - vrajeală necunoscută!'
     wrong-enchantment-level: '&cNu s-a putut vrăji elementul - nivelul său este fie mai mare decât maxim, fie mai mic de 1!'
     enchanted: '&6V-ați vrăjit articolul cu &b%name% %level%.'
@@ -80,6 +81,8 @@ messages:
     wrong-parameter: '&cParametru greșit (%param%)!'
     downloaded: '&bEnchantment &e%ench% &ba fost descărcat cu succes.' # DeepL
     loaded: '&bÎncântarea &e%ench% &ba fost încărcată.' # DeepL
+    unloaded: '&bÎncântarea &e%ench% &ba fost descărcată.' # DeepL
+    toggled: '&bToggled enchantment &e%ench% &bfor you.'
     # Credit to Lukedy & DeepL
 
   it:
@@ -88,7 +91,6 @@ messages:
     creating-log: '&bCreando un log...'
     log-created: '&6Un log è stato creato nella cartella &b/plugins/UnderscoreEnchants/logfile.log/.'
     couldnt-make-log: '&cImpossibile creare un log!'
-    improper-args: '&cQuantità impropria di parametri!'
     wrong-enchantment-name: '&cImpossibile incantare l''oggetto - incantantamento sconosciuto!'
     wrong-enchantment-level: '&cImpossibile incantare l''oggetto - il suo livello è superiore al massimo o inferiore a 1!'
     enchanted: '&6Incanta il tuo oggetto con &b%name% %level%.'
@@ -96,6 +98,8 @@ messages:
     wrong-parameter: '&cParametro errato (%param%)!'
     downloaded: '&bL''incantesimo &e%ench% &bè stato scaricato con successo.'
     loaded: '&bL''incantesimo &e%ench% &bè stato caricato.'
+    unloaded: '&bL''incantesimo &e%ench% &bè stato disattivato.' # DeepL
+    toggled: '&bToggled enchantment &e%ench% &bfor you.'
     # Credit to Yoshiro/Yoshiro09
 
   es:
@@ -104,7 +108,6 @@ messages:
     creating-log: '&bCreando un registro...'
     log-created: '&6Un registro ha sido creado en la carpeta &b/plugins/UnderscoreEnchants/logfile.log/.'
     couldnt-make-log: '&c¡No se pudo crear el registro!'
-    improper-args: '&c¡Cantidad inapropiada de argumentos!'
     wrong-enchantment-name: '&cNo se puedo encantar el objeto - ¡Encantamiento desconocido!'
     wrong-enchantment-level: '&cNo se puedo encantar el objeto - ¡Su nivel es mayor al máximo o menor a 1!'
     enchanted: '&6Encantado este objeto con &b%name% %level%.'
@@ -112,6 +115,8 @@ messages:
     wrong-parameter: '&cParámetro inválido (%param%)!'
     downloaded: '&bEl encantamiento &e%ench% &bha sido descargado correctamente.'
     loaded: '&bEl encantamiento &e%ench% &bha sido cargado.'
+    unloaded: '&bEl encantamiento &e%ench% &bha sido desactivado.' # DeepL
+    toggled: '&bToggled enchantment &e%ench% &bfor you.'
     # Credit to Aliakks (check out his plugins!)
 
   de:
@@ -120,7 +125,6 @@ messages:
     creating-log: '&bErstelle Log...'
     log-created: '&6Log wurde im Ordner &b/plugins/UnderscoreEnchants/logfile.log/ erstellt.'
     couldnt-make-log: '&cKonnte kein Log erstellen!'
-    improper-args: '&cUngültige Anzahl an Parametern!'
     wrong-enchantment-name: '&cKonnte den Gegenstand nicht verzaubern - unbekannte Verzauberung!'
     wrong-enchantment-level: '&cKonnte den Gegenstand nicht verzaubern - das angegebene Level ist entweder höher als das Maximum oder kleiner als 1!'
     enchanted: '&6Dein Gegenstand wurde mit &b%Name% %level% verzaubert.'
@@ -128,6 +132,8 @@ messages:
     wrong-parameter: '&cUngültig Parameter (%param%)!'
     downloaded: '&bDie Verzauberung &e%ench% &bwurde erfolgreich heruntergeladen.'
     loaded: '&bDie Verzauberung &e%ench% &bwurde geladen.'
+    unloaded: '&bDie Verzauberung &e%ench% &bwurde unloaded.'
+    toggled: '&bToggled enchantment &e%ench% &bfor you.'
     # Credit to mfnalex for editing default translations!
 
   fr:
@@ -136,7 +142,6 @@ messages:
     creating-log: '&bCréation d''un journal...'
     log-created: '&6Un journal a été créé dans le dossier &b/plugins/UnderscoreEnchants/logfile.log/.'
     couldnt-make-log: '&cImpossible de créer un journal!'
-    improper-args: '&cQuantité incorrecte de paramètres!'
     wrong-enchantment-name: '&cPeut pas enchanter l''objet - enchantement inconnu!'
     wrong-enchantment-level: '&cPas pu enchanter l''objet - son niveau est soit supérieur au maximum, soit inférieur à 1!'
     enchanted: '&6Enchanter votre objet avec &b%name% %level%.'
@@ -144,22 +149,25 @@ messages:
     wrong-parameter: '&cParamètre non valide (%param%)!'
     downloaded: '&bEnchantment &e%ench% &ba été téléchargé avec succès.'
     loaded: '&bEnchantment &e%ench% &ba été chargé.'
+    unloaded: '&bEnchantment &e%ench% &ba été déchargé.' # DeepL
+    toggled: '&bToggled enchantment &e%ench% &bfor you.'
     # Credit to DeepL (the translation might not be 100% accurate, feel free to edit!)
 
   tr:
     no-perms: '&cYetersiz izinler!'
     no-console: '&cBunu konsoldan kullanamazsınız!'
-    creating-log: '&bBir günlük oluşturuluyor...'
-    log-created: '&b/plugins/UnderscoreEnchants/logfile.log/ klasöründe &6bir günlük oluşturuldu.'
-    couldnt-make-log: '&cGünlük oluşturulamadı!'
-    improper-args: '&cUygunsuz sayıda argüman!'
+    creating-log: '&bBir kayıt oluşturuluyor...'
+    log-created: '&b/plugins/UnderscoreEnchants/logfile.log/ dizininde &6yeni bir kayıt oluşturuldu.'
+    couldnt-make-log: '&cKayıt oluşturulamadı!'
     wrong-enchantment-name: '&cÖğeyi büyüleyemedi - bilinmeyen büyü!'
     wrong-enchantment-level: '&cÖğeyi büyüleyemedi - seviyesi ya maksimumdan yüksek ya da 1''den az!'
-    enchanted: '&6Öğenizi &b%name% %level% ile büyüledi.'
+    enchanted: '&6Eşyanız &b%name% %level% &6büyüsü ile büyülendi.'
     activated: '&6&l&b%name% büyüsünü etkinleştirdiniz.'
     wrong-parameter: '&cHatalı parametre (%param%)!'
     downloaded: '&bBüyü &e%ench% &bbaşarıyla indirildi.'
-    loaded: '&bBüyü &e%ench% &byüklendi.'
+    loaded: '&e%ench% &badlı büyü yüklendi.'
+    unloaded: '&e%ench% &badlı büyü kaldırıldı.'
+    toggled: '&e%ench% &badlı büyünün durumu senin için değiştirildi'
     # Credit to Kigo & Cazcez
 
   ta:
@@ -168,7 +176,6 @@ messages:
     creating-log: '&bபதிவை உருவாக்குகிறேன்...'
     log-created: '&6பதிவு &b/plugins/UnderscoreEnchants/logfile.log/ &6என்ற கோப்புறையில் உருவாக்கப்பட்டுள்ளது.'
     couldnt-make-log: '&cபதிவை உருவாக்க முடியவில்லை!'
-    improper-args: '&cஅளவுருக்கள் பற்றவில்லை!'
     wrong-enchantment-name: '&cபொருளை மயக்க முடியவில்லை - மயக்கம் சரியானது அல்ல!'
     wrong-enchantment-level: '&cபொருளை மயக்க முடியவில்லை - மயக்க நிலை 1-இற்கு கீழோ அளவுக்கு அதிகமாகவோ உள்ளது!'
     enchanted: '&6பொருள் %name% %level% ஆல் மந்திரிக்க பட்டது.'
@@ -176,6 +183,8 @@ messages:
     wrong-parameter: '&cதவறான அளவுரு (%param%)!'
     downloaded: '&e%ench% &bமந்திரம் வெற்றிகரமாக பதிவிறக்கப்பட்டது.'
     loaded: '&e%ench% &bமந்திரம் இப்போது செயலில் உள்ளது.'
+    unloaded: '&e%ench% &bமந்திரம் செயலிழக்கப்பட்டது.'
+    toggled: '&bToggled enchantment &e%ench% &bfor you.'
     # Credit to Ilamparithi (THE MAN)
 
   se:
@@ -184,7 +193,6 @@ messages:
     creating-log: '&bSkapar en logg...'
     log-created: '&6En logg har skapats i &b/plugins/UnderscoreEnchants/logfile.log/ folder.'
     couldnt-make-log: '&cKunde inte skapa en logg!'
-    improper-args: '&cFelaktig mängd argument!'
     wrong-enchantment-name: '&cKunde inte enchanta föremålet - okänd enchant!'
     wrong-enchantment-level: '&cKunde inte enchanta föremålet - dess nivå är antingen högre än maxvärdet eller mindre än 1!'
     enchanted: '&6Enchantade ditt föremål med &b%name% %level%.'
@@ -192,6 +200,6 @@ messages:
     wrong-parameter: '&cFel parameter (%param%)!'
     downloaded: '&bEnchantment &e%ench% &bhas laddats ner framgångsrikt.' # DeepL
     loaded: '&bEnchantment &e%ench% &bhar laddats.' # DeepL
+    unloaded: '&bEnchantment &e%ench% &bhar avaktiverats.' # DeepL
+    toggled: '&bToggled enchantment &e%ench% &bfor you.'
     # Credit to Yollan
-
-version: '2.0' # Don't change this value!

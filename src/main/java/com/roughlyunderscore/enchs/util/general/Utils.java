@@ -8,10 +8,12 @@ import com.roughlyunderscore.enchs.util.Pair;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import com.roughlyunderscore.enchs.enchants.abstracts.AbstractEnchantment;
 import com.roughlyunderscore.enchs.events.PlayerPVPEvent;
+import com.roughlyunderscore.enchs.util.RomanNumber;
 import com.roughlyunderscore.enchs.util.data.DetailedEnchantment;
 import com.roughlyunderscore.enchs.util.enums.Type;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
@@ -37,12 +39,8 @@ import org.bukkit.util.Vector;
 import org.mariuszgromada.math.mxparser.Expression;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.ReadableByteChannel;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -85,26 +83,11 @@ public class Utils {
      * @return the resulting roman number in the form of a {@link String}
      */
     public String toRoman(int arabic) {
-        if (arabic >= 1 && arabic < 4) return "I".repeat(arabic);
-        else if (arabic == 4) return "IV";
-        else if (arabic >= 5 && arabic <= 8) return "V" + "I".repeat(arabic - 5);
-        else if (arabic == 9) return "IX";
-        else if (arabic == 10) return "X";
-        else if (arabic >= 11 && arabic < 14) return "X" + "I".repeat(arabic - 10);
-        else if (arabic == 14) return "XIV";
-        else if (arabic >= 15 && arabic <= 18) return "XV" + "I".repeat(arabic - 15);
-        else if (arabic == 19) return "XIX";
-        else if (arabic == 20) return "XX";
-        else return String.valueOf(arabic);
+        return RomanNumber.toRoman(arabic);
     }
 
-    // P.S. for above and below methods
-    // Shut up I am too lazy to actually figure out the way
-    // to do it universally for 1-4000
-    // Smarty pants? Make a PR.
-
     /**
-     * Converts a roman number to arabic.
+     * Converts a roman number to arabic. Limit is 20 because I am way too lazy?
      * @param roman the number to convert
      * @return the resulting arabic number
      */
@@ -237,13 +220,10 @@ public class Utils {
         maxYMatcher.appendTail(maxYBuilder);
         action = maxYBuilder.toString();
 
-        String[] split0 = action.split(" ");
-        String[] split = new String[split0.length];
-
         if (players.getSize() == 1) {
             Matcher playerMatcher = Pattern.compile("%player_pdc_(.+)%").matcher(action);
 
-            StringBuffer playerBuilder = new StringBuffer();
+            StringBuilder playerBuilder = new StringBuilder();
 
             while (playerMatcher.find()) {
                 String arg = playerMatcher.group(1);
@@ -256,10 +236,7 @@ public class Utils {
         }
         else {
             Matcher victimMatcher = Pattern.compile("%victim_pdc_(.+)%").matcher(action);
-            Matcher damagerMatcher = Pattern.compile("%damager_pdc_(.+)%").matcher(action);
-
             StringBuilder victimBuilder = new StringBuilder();
-            StringBuilder damagerBuilder = new StringBuilder();
 
             while (victimMatcher.find()) {
                 String arg = victimMatcher.group(1);
@@ -270,6 +247,9 @@ public class Utils {
             victimMatcher.appendTail(victimBuilder);
             action = victimBuilder.toString();
 
+            Matcher damagerMatcher = Pattern.compile("%damager_pdc_(.+)%").matcher(action);
+            StringBuilder damagerBuilder = new StringBuilder();
+
             while (damagerMatcher.find()) {
                 String arg = damagerMatcher.group(1);
                 String val = String.valueOf(getPDCValue(players.getPlayers()[1], getKey(arg, plugin)));
@@ -279,6 +259,9 @@ public class Utils {
             damagerMatcher.appendTail(damagerBuilder);
             action = damagerBuilder.toString();
         }
+
+        String[] split0 = action.split(" ");
+        String[] split = new String[split0.length];
 
 
         for (int i = 0; i < split0.length; i++) {
@@ -461,6 +444,7 @@ public class Utils {
      * @param item an {@link ItemStack} to check
      * @return {@code true} if the {@link ItemStack} is enchantable, {@code false} otherwise
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isEnchantable(ItemStack item) {
         if (item == null || item.getType() == Material.AIR) return false;
         Material material = item.getType();
@@ -481,7 +465,7 @@ public class Utils {
     public ArrayList<Enchantment> getPossibleEnchantments(ItemStack item, List<Enchantment> possibleEnchantments, int maxAmount) {
         ArrayList<Enchantment> nonConflictingEnchants = new ArrayList<>();
         // AIR cannot be enchanted and doesn't have meta
-        if(item.getType().equals(Material.AIR)) return nonConflictingEnchants;
+        if(item.getType().equals(Material.AIR) || item.getItemMeta() == null) return nonConflictingEnchants;
         ItemMeta meta = item.getItemMeta();
         // Add all possible enchants to our list
         possibleEnchantments
@@ -506,7 +490,7 @@ public class Utils {
      * @param item the {@link ItemStack} to generate the {@link Enchantment}s for
      * @return the {@link ArrayList} of the generated {@link Enchantment} objects
      */
-    public ArrayList<Enchantment> getTypicalEnchantments(ItemStack item) {
+    public List<Enchantment> getTypicalEnchantments(ItemStack item) {
         ArrayList<Enchantment> empty = new ArrayList<>();
         Type itemType;
         Material material = item.getType();
@@ -1091,24 +1075,23 @@ public class Utils {
 
 
     public void downloadWithJavaNIO(final String fileURL, final String localFilename, final UnderscoreEnchants plugin) throws MalformedURLException {
-        // github.com/eugenp/tutorials/blob/master/core-java-modules/core-java-networking-2/src/main/java/com/baeldung/download/FileDownload.java
+        // github.com/eugenp/tutorials/blob/master/core-java-modules/core-java-networking-2/src/main/java/com/baeldung/download/FileDownload.java#L52
 
-        final URL url = new URL(fileURL);
-        try (
-            final ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
-            final FileOutputStream fileOutputStream = new FileOutputStream(localFilename);
-            final FileChannel fileChannel = fileOutputStream.getChannel()
-        ) {
-            fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
-            fileOutputStream.close();
-        } catch (final IOException e) {
+        int CONNECT_TIMEOUT = 10000;
+        int READ_TIMEOUT = 10000;
+        try {
+            FileUtils.copyURLToFile(new URL(fileURL), new File(localFilename), CONNECT_TIMEOUT, READ_TIMEOUT);
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
+    private int current = 0;
+
     /**
-     * Downloads all files from the link with a per-second limit. A VERY case-specific method, as of 2.0.12 only used to simplify /ue download default
+     * Downloads all files from the link with a per-second limit. A VERY case-specific method, as of 2.0.12 only used to simplify /ue download default. Uses a lot of
+     * repeated code, because I did not want to make another boilerplate method that will be used in one method that is only used once.
      * @param files the files' addresses
      * @param dir the directory to download to
      * @param limit the limit
@@ -1176,5 +1159,14 @@ public class Utils {
         }
     }
 
-    private int current = 0;
+    /**
+     * Checks if the given argument is equal to a given XMaterial type.
+     * @param argument the argument to check
+     * @param check the validating factor (XMaterial type)
+     */
+    public boolean is(Material argument, XMaterial check) {
+        return argument.equals(check.parseMaterial());
+    }
+
+
 }

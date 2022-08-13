@@ -41,6 +41,7 @@ This time, I also left some comments when writing it, but I am not entirely sure
  */
 public class AnvilGUI {
 
+    /*
     @Getter private final Player opener;
     @Getter private final Gui GUI;
 
@@ -90,14 +91,16 @@ public class AnvilGUI {
 
         GUI.getFiller().fill(filler);
 
-        GUI.setItem(2, 2, insert);
-        GUI.setItem(2, 4, insert);
-        GUI.setItem(2, 8, retrieve);
+        GUI.setItem(10, insert);
+        GUI.setItem(12, insert);
+        GUI.setItem(16, retrieve);
 
         GUI.setPlayerInventoryAction(ev -> {
 
         });
     }
+
+    */
 
     /*
 
@@ -108,28 +111,6 @@ public class AnvilGUI {
 
     @EventHandler
     public void onClick(InventoryClickEvent ev) {
-        // if no inventory was clicked, return
-        if (ev.getClickedInventory() == null) return;
-
-        // variables
-        Player player = (Player) ev.getWhoClicked();
-        int clicked0 = ev.getSlot();
-
-        Inventory top = ev.getView().getTopInventory();
-        Inventory bottom = ev.getView().getBottomInventory();
-
-        // a click happened in anvil GUI with player GUI open
-        if (ev.getClickedInventory().getHolder() instanceof AnvilHolder) {
-            // variables
-            ItemStack clicked = top.getItem(clicked0);
-
-            if ((clicked0 == combined0 || clicked0 == combinee0 || clicked0 == result0) && !isPane(clicked)) {
-                // an item was clicked that is not a pane, so give it to player and set the click source to pane
-                if (player.getInventory().firstEmpty() != -1) player.getInventory().addItem(clicked);
-                top.setItem(clicked0, XMaterial.RED_STAINED_GLASS_PANE.parseItem());
-            }
-        }
-
         // a click happened in player GUI with anvil GUI open
         else if (ev.getClickedInventory().getHolder() instanceof Player && top.getHolder() instanceof AnvilHolder) {
             // variables
@@ -143,18 +124,7 @@ public class AnvilGUI {
 
             // check for enchantability
             if (clicked == null || clicked.getType() == Material.AIR) return;
-            Material temp = clicked.getType();
-            if (!UnderscoreEnchants.weaponsList.contains(temp) &&
-                    !UnderscoreEnchants.armorList.contains(temp) &&
-                    !UnderscoreEnchants.toolsList.contains(temp) &&
-                    temp != XMaterial.BOW.parseMaterial() &&
-                    temp != XMaterial.CROSSBOW.parseMaterial() &&
-                    temp != XMaterial.TRIDENT.parseMaterial() &&
-                    temp != XMaterial.DIAMOND.parseMaterial() &&
-                    temp != XMaterial.IRON_INGOT.parseMaterial() &&
-                    temp != XMaterial.GOLD_INGOT.parseMaterial() &&
-                    temp != XMaterial.ENCHANTED_BOOK.parseMaterial()
-            ) return;
+
 
             // check if result is empty
             if (!isPane(result)) return;
@@ -336,26 +306,18 @@ public class AnvilGUI {
     //    }
     //}
 
-    boolean goodTypes(ItemStack first, ItemStack second) {
-        Material type = first.getType();
-        Material ingot = second.getType();
-        if (ingot != Material.GOLD_INGOT && ingot != Material.IRON_INGOT && ingot != Material.DIAMOND && ingot != Material.LEATHER) return false;
-        if (type.name().toUpperCase(Locale.ROOT).startsWith("GOLDEN_") && ingot == Material.GOLD_INGOT) return true;
-        else if (type.name().toUpperCase(Locale.ROOT).startsWith("IRON_") && ingot == Material.IRON_INGOT) return true;
-        else if (type.name().toUpperCase(Locale.ROOT).startsWith("DIAMOND_") && ingot == Material.DIAMOND) return true;
-        else return type.name().toUpperCase(Locale.ROOT).startsWith("LEATHER_") && ingot == Material.LEATHER;
-    }
+
 
     boolean hasConflicts(ItemStack stack) {
         for (Enchantment testable : stack.getEnchantments().keySet()) {
             for (Enchantment testSubject : stack.getEnchantments().keySet()) {
 
                 if (testable.getKey().equals(testSubject.getKey())) continue;
-                if (testable.conflictsWith(testSubject)) return false;
+                if (testable.conflictsWith(testSubject)) return true;
 
             }
         }
-        return true;
+        return false;
     }
 
 

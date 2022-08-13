@@ -3,7 +3,7 @@ name: UnderscoreEnchants
 version: ${project.version}
 main: com.roughlyunderscore.enchs.UnderscoreEnchants
 authors: [ Roughly_ ]
-description: A premium plugin that adds a TON of enchants in the game!
+description: A premium class plugin that adds a TON of enchants in the game!
 load: startup
 awareness:
   - !@UTF8
@@ -38,6 +38,12 @@ permissions:
   underscoreenchants.download:
     default: op
     description: Allows you to use /ue download.
+  underscoreenchants.help:
+    default: op
+    description: Allows you to use /ue help.
+  underscoreenchants.load:
+      default: op
+      description: Allows you to use /ue load.
   underscoreenchants.*:
     default: op
     description: Allows you to use all the Underscore Enchants commands.
@@ -48,3 +54,5 @@ permissions:
       - underscoreenchants.enchant
       - underscoreenchants.toggle
       - underscoreenchants.download
+      - underscoreenchants.help
+      - underscoreenchants.load

@@ -14,7 +14,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -22,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.roughlyunderscore.enchs.parsers.ActionParsers.*;
@@ -118,6 +118,55 @@ public class Register {
 	}
 
 	/**
+	 * Unloads an enchantment from a file.
+	 * @param file the file to load
+	 * @param plugin UnderscoreEnchants
+	 */
+	@SneakyThrows @SuppressWarnings({"unchecked", "unused"})
+	public void unloadEnchantment(File file, UnderscoreEnchants plugin) {
+		plugin.debugger.log("Attempting to unload an enchantment: " + file.getAbsolutePath());
+		plugin.debugger.log("Enchantment file name: " + file.getName());
+		plugin.debugger.log("Enchantment path: " + file.getPath());
+		YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+		// Pair<DetailedEnchantment, AbstractEnchantment> enchant = plugin.parseEnchantment(configuration);
+		DetailedEnchantment enchantment = findEnchantment(file, plugin);
+		String name = enchantment.getName();
+		NamespacedKey key = enchantment.getKey();
+
+		Field keyField = Enchantment.class.getDeclaredField("byKey");
+		keyField.setAccessible(true);
+
+		HashMap<NamespacedKey, Enchantment> byKey = (HashMap<NamespacedKey, Enchantment>) keyField.get(null);
+		byKey.remove(key);
+
+		Field nameField = Enchantment.class.getDeclaredField("byName");
+		nameField.setAccessible(true);
+
+		HashMap<String, Enchantment> byName = (HashMap<String, Enchantment>) nameField.get(null);
+		byName.remove(name);
+
+		UnderscoreEnchants.staticEnchantmentData.remove(enchantment);
+		plugin.getEnchantmentData().remove(enchantment);
+	}
+
+	/**
+	 * Finds an enchantment from a file.
+	 * @param file the file to look at,
+	 * @param plugin UnderscoreEnchants
+	 */
+	public DetailedEnchantment findEnchantment(File file, UnderscoreEnchants plugin) {
+		// Load file as a yamlconfiguration
+		YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+		// Get the enchantment name
+		String name = configuration.getString("name");
+
+		final NamespacedKey key = new NamespacedKey(plugin, "underscore_enchants_" + name.replace(" ", "__"));
+
+		DetailedEnchantment entry = new DetailedEnchantment(key.getKey(), plugin);
+		return entry;
+	}
+
+	/**
 	 * Works in parseEnchantment and is placed here for making the code more readable
 	 * @param event The event itself, used here to check if is cancelled
 	 * @param player The event's player, used for various checks
@@ -127,6 +176,7 @@ public class Register {
 	 * @param levels A list of all EnchantmentLevels accessible for this enchantment
 	 * @param key The NamespacedKey of this enchantment, used for checking the toggle status
 	 * @param conditions A list of conditions that must be met before activating the enchantments
+	 * @param flag A potential condition flag that changes the condition parse
 	 * @param name The enchantment name
 	 * @param cooldown An overall enchantment cooldown
 	 * @param plugin UnderscoreEnchants
@@ -141,16 +191,21 @@ public class Register {
 						List<EnchantmentLevel> levels,
 						NamespacedKey key,
 						List<String> conditions,
+						String flag,
 						String name,
 						int cooldown,
 						UnderscoreEnchants plugin
 	) {
 		int lvl = getEnchantLevel(player, entry, target, forbidOn);
 		if (lvl == 0) return;
+
+		Bukkit.getLogger().info("Enchantment " + name + " found on " + player.getName() + "'s " + target.name() + ".");
+		if (flag == null) flag = "";
+
 		EnchantmentLevel level = levels.get(lvl - 1);
 
 		// Pass all the checks
-		if (!validateActivation(plugin, event, player, level, key, conditions)) return;
+		if (!validateActivation(plugin, event, player, level, key, conditions, flag)) return;
 
 		// Parse every action
 		for (String lev : level.getAction()) {
@@ -183,6 +238,7 @@ public class Register {
 	 * @param levels A list of all EnchantmentLevels accessible for this enchantment
 	 * @param key The NamespacedKey of this enchantment, used for checking the toggle status
 	 * @param conditions A list of conditions that must be met before activating the enchantments
+	 *                  @param flag A potential condition flag that changes the condition parse
 	 * @param name The enchantment name
 	 * @param cooldown An overall enchantment cooldown
 	 * @param plugin UnderscoreEnchants
@@ -198,16 +254,20 @@ public class Register {
 		List<EnchantmentLevel> levels,
 		NamespacedKey key,
 		List<String> conditions,
+		String flag,
 		String name,
 		int cooldown,
 		UnderscoreEnchants plugin
 	) {
 		int lvl = getEnchantLevel(player, entry, extra, target, forbidOn);
 		if (lvl == 0) return;
+
+		if (flag == null) flag = "";
+
 		EnchantmentLevel level = levels.get(lvl - 1);
 
 		// Pass all the checks
-		if (!validateActivation(plugin, event, player, level, key, conditions)) return;
+		if (!validateActivation(plugin, event, player, level, key, conditions, flag)) return;
 
 		// Parse every action
 		for (String lev : level.getAction()) {
@@ -240,6 +300,7 @@ public class Register {
 	 * @param levels A list of all EnchantmentLevels accessible for this enchantment
 	 * @param key The NamespacedKey of this enchantment, used for checking the toggle status
 	 * @param conditions A list of conditions that must be met before activating the enchantments
+	 *                  @param flag A potential condition flag that changes the condition parse
 	 * @param isEmpty A boolean, indicating if the "player" value exists in the configuration header
 	 * @param isForDamager A boolean, indicating if the "player" value is equal to DAMAGER
 	 * @param isForVictim A boolean, indicating if the "player" value is equal to VICTIM
@@ -258,6 +319,7 @@ public class Register {
 					List<EnchantmentLevel> levels,
 					NamespacedKey key,
 					List<String> conditions,
+					String flag,
 					boolean isEmpty,
 					boolean isForDamager,
 					boolean isForVictim,
@@ -269,6 +331,9 @@ public class Register {
 		int damagerLvl = getEnchantLevel(damager, entry, target, forbidOn), victimLvl = getEnchantLevel(victim, entry, target, forbidOn);
 		boolean damagerActivated = true, victimActivated = true;
 
+		if (flag == null) flag = "";
+
+
 		if (damagerLvl == 0) damagerActivated = false;
 		if (victimLvl == 0) victimActivated = false;
 
@@ -276,11 +341,11 @@ public class Register {
 
 		if (damagerActivated) {
 			damagerEnchLevel = levels.get(damagerLvl - 1);
-			if (!validateActivation(plugin, event, damager, damagerEnchLevel, key, conditions)) damagerActivated = false;
+			if (!validateActivation(plugin, event, damager, damagerEnchLevel, key, conditions, flag)) damagerActivated = false;
 		}
 		if (victimActivated) {
 			victimEnchLevel = levels.get(victimLvl - 1);
-			if (!validateActivation(plugin, event, victim, victimEnchLevel, key, conditions)) victimActivated = false;
+			if (!validateActivation(plugin, event, victim, victimEnchLevel, key, conditions, flag)) victimActivated = false;
 		}
 		if (!isEmpty) {
 			if (!isForDamager) damagerActivated = false;

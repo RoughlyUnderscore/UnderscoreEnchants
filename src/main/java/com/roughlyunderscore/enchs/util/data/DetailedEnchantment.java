@@ -12,7 +12,7 @@ import java.util.Objects;
 /*
 This is a way of storing an Enchantment and a lot of necessary data in one class.
  */
-@EqualsAndHashCode @ToString
+@EqualsAndHashCode
 public class DetailedEnchantment {
     private final NamespacedKey key;
 
@@ -39,6 +39,15 @@ public class DetailedEnchantment {
     }
     public String getName() {
         return this.getEnchantment().getName();
+    }
+
+    // tostring
+    @Override
+    public String toString() {
+        return "DetailedEnchantment{" +
+                "key=" + key +
+                ",name=" + this.getEnchantment().getName() +
+                '}';
     }
 
 }

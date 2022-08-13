@@ -38,11 +38,19 @@
 
                         <relocation>
                             <pattern>com.cryptomorin.xseries</pattern>
-                            <shadedPattern>com.roughlyunderscore.enchs.UnderscoreEnchants.libs</shadedPattern>
+                            <shadedPattern>com.roughlyunderscore.enchs.libs</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>de.jeff_media.updatechecker</pattern>
-                            <shadedPattern>com.roughlyunderscore.enchs.UnderscoreEnchants.libs</shadedPattern>
+                            <shadedPattern>com.roughlyunderscore.enchs.libs</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>co.aikar.commands</pattern>
+                            <shadedPattern>com.roughlyunderscore.enchs.acf</shadedPattern> <!-- Replace this -->
+                        </relocation>
+                        <relocation>
+                            <pattern>co.aikar.locales</pattern>
+                            <shadedPattern>com.roughlyunderscore.enchs.locales</shadedPattern> <!-- Replace this -->
                         </relocation>
 
                     </relocations>
@@ -101,6 +109,10 @@
             <id>jeff-media-gbr</id>
             <url>https://hub.jeff-media.de/nexus/repository/jeff-media-public/</url>
         </repository>
+        <repository>
+            <id>aikar</id>
+            <url>https://repo.aikar.co/content/groups/aikar/</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -115,6 +127,11 @@
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.15.2</version>
+        </dependency>
+        <dependency>
+            <groupId>co.aikar</groupId>
+            <artifactId>acf-bukkit</artifactId>
+            <version>0.5.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -141,7 +158,7 @@
         <dependency>
             <groupId>org.mariuszgromada.math</groupId>
             <artifactId>MathParser.org-mXparser</artifactId>
-            <version>5.0.2</version>
+            <version>5.0.6</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -152,7 +169,7 @@
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
-            <version>8.7.1</version>
+            <version>9.0.0</version>
         </dependency>
         <dependency>
             <groupId>de.jeff_media</groupId>

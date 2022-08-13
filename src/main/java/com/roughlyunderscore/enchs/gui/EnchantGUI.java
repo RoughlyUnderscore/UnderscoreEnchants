@@ -181,7 +181,7 @@ public class EnchantGUI implements Listener {
 
                 if (!item.getEnchantments().isEmpty() && item.getEnchantments().size() >= plugin.getConfig().getInt("enchantmentLimit")) return;
 
-                ArrayList<Enchantment> enchs = Utils.getTypicalEnchantments(item);
+                List<Enchantment> enchs = Utils.getTypicalEnchantments(item);
 
                 ItemStack firstSuggestion = new ItemStack(Material.ENCHANTED_BOOK),
                         secondSuggestion = new ItemStack(Material.ENCHANTED_BOOK),
