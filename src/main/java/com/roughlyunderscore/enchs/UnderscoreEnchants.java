@@ -10,6 +10,7 @@ import com.roughlyunderscore.enchs.enchants.EnchantmentLevel;
 import com.roughlyunderscore.enchs.enchants.abstracts.*;
 import com.roughlyunderscore.enchs.events.*;
 import com.roughlyunderscore.enchs.enchants.Cooldown;
+import com.roughlyunderscore.enchs.gui.AnvilHandler;
 import com.roughlyunderscore.enchs.listeners.*;
 import com.roughlyunderscore.enchs.util.Debug;
 import com.roughlyunderscore.enchs.util.Pair;
@@ -81,8 +82,8 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 	public static List<Material> toolsList = new ArrayList<>();
 	public static List<Material> armorList = new ArrayList<>();
 	@Getter public List<Enchantment> allEnchs = new ArrayList<>();
-	@Getter	public List<DetailedEnchantment> enchantmentData = new ArrayList<>();
-	public static List<DetailedEnchantment> staticEnchantmentData = new ArrayList<>();
+	@Getter	public Map<DetailedEnchantment, AbstractEnchantment> enchantmentData = new HashMap<>();
+	public static Map<DetailedEnchantment, AbstractEnchantment> staticEnchantmentData = new HashMap<>();
 
 	public static Map<UUID, Integer> gods = new HashMap<>();
 
@@ -482,7 +483,7 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 		//<editor-fold desc="Last initializations.">
 		EMPTY = new DetailedEnchantment(this);
 		STATIC_EMPTY = new DetailedEnchantment(this);
-		staticEnchantmentData.addAll(enchantmentData);
+		staticEnchantmentData.putAll(enchantmentData);
 		instance = this;
 		messages = new Messages(this);
 		staticConfig = getConfig();
@@ -541,15 +542,6 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 		if (getConfig().getBoolean("bStats")) {
 			metrics = new Metrics(this, metricsId);
 
-			metrics.addCustomChart(new Metrics.SimplePie(
-				"replaced_table_gui",
-				() -> String.valueOf(getConfig().getBoolean("replace-table-gui"))
-			));
-
-			metrics.addCustomChart(new Metrics.SimplePie(
-				"replaced_anvil_gui",
-				() -> String.valueOf(getConfig().getBoolean("replace-anvil-gui"))
-			));
 
 			metrics.addCustomChart(new Metrics.SimplePie(
 				"fireworks_launched_after_enchanting",
@@ -595,6 +587,7 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 		PluginManager manager = getServer().getPluginManager();
 		manager.registerEvents(new InteractListener(this), this);
 
+		manager.registerEvents(new AnvilHandler(this), this);
 		manager.registerEvents(new EnchantGUI(this), this);
 
 		manager.registerEvents(new LootPopulateListener(this), this);
@@ -895,7 +888,8 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 			XMaterial.NETHERITE_HELMET.parseMaterial(),
 			XMaterial.NETHERITE_CHESTPLATE.parseMaterial(),
 			XMaterial.NETHERITE_LEGGINGS.parseMaterial(),
-			XMaterial.NETHERITE_BOOTS.parseMaterial()
+			XMaterial.NETHERITE_BOOTS.parseMaterial(),
+			XMaterial.TURTLE_HELMET.parseMaterial()
 		);
 
 

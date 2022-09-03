@@ -27,6 +27,20 @@ public class AbstractEnchantment extends Enchantment implements Listener {
     private final List<Enchantment> conflicts;
     private final List<ItemStack> canEnchant;
 
+    public AbstractEnchantment(Enchantment enchantment) {
+        this(
+                enchantment.getKey(),
+                enchantment.getName(),
+                enchantment.getMaxLevel(),
+                enchantment.getStartLevel(),
+                enchantment.getItemTarget(),
+                enchantment.isCursed(),
+                enchantment.isTreasure(),
+                null,
+                null
+        );
+    }
+
     public AbstractEnchantment(NamespacedKey key, String name, int maxLevel, int startLevel, EnchantmentTarget target, boolean isCursed, boolean isTreasure, List<Enchantment> conflicts, List<ItemStack> canEnchant) {
         super(key);
         this.key = key;

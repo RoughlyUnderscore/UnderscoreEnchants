@@ -23,39 +23,38 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.roughlyunderscore.enchs.util.general.Utils.*;
+import static com.roughlyunderscore.enchs.util.general.PlayerUtils.*;
 
 @Data
 public class AnvilHandler implements Listener {
     private final UnderscoreEnchants plugin;
-/*
+
     @EventHandler
     public void onAnvil(PrepareAnvilEvent ev) {
         if (ev.getInventory().getItem(0) == null || ev.getInventory().getItem(1) == null) {
             return;
         }
-        Player player = ev.getView().getPlayer();
+        if (ev.getResult() != null) {
+            return;
+        }
+        Player player = (Player) ev.getView().getPlayer();
 
         ItemStack item1 = ev.getInventory().getItem(0);
         ItemStack item2 = ev.getInventory().getItem(1);
 
         Material type = item2.getType();
-        if (!UnderscoreEnchants.weaponsList.contains(type) &&
-            !UnderscoreEnchants.armorList.contains(type) &&
-            !UnderscoreEnchants.toolsList.contains(type) &&
-            type != XMaterial.BOW.parseMaterial() &&
-            type != XMaterial.CROSSBOW.parseMaterial() &&
-            type != XMaterial.TRIDENT.parseMaterial() &&
-            type != XMaterial.DIAMOND.parseMaterial() &&
-            type != XMaterial.IRON_INGOT.parseMaterial() &&
-            type != XMaterial.GOLD_INGOT.parseMaterial() &&
-            type != XMaterial.ENCHANTED_BOOK.parseMaterial()
+        if (
+                !type.isItem() // ???
+                && type != Material.NAME_TAG
         ) return;
 
-        ItemStack newItem = new ItemStack(combined.getType());
+        if (!isSecondItemValid(item1, item2)) return;
+
+        ItemStack newItem = new ItemStack(item1.getType());
         ItemMeta newMeta = Bukkit.getItemFactory().getItemMeta(newItem.getType());
 
-        ConcurrentHashMap<Enchantment, Integer> item1Enchants = new ConcurrentHashMap<>(item1.getEnchantments());
-        ConcurrentHashMap<Enchantment, Integer> item2Enchants = new ConcurrentHashMap<>(item2.getEnchantments());
+        Map<Enchantment, Integer> item1Enchants = new ConcurrentHashMap<>(item1.getEnchantments());
+        Map<Enchantment, Integer> item2Enchants = new ConcurrentHashMap<>(item2.getEnchantments());
         Map<Enchantment, Integer> allEnchants = new ConcurrentHashMap<>();
 
         for (Map.Entry<Enchantment, Integer> combinedEntry : item1Enchants.entrySet()) {
@@ -84,9 +83,9 @@ public class AnvilHandler implements Listener {
         // generic
         newMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
-        // making sure nothing conflicts
+        // making sure no enchantments conflict
         // the method is weirdly coded so i inverse it
-        if (!hasConflicts(newItem)) return;
+
 
         // lore
         List<String> newLore = new ArrayList<>();
@@ -102,34 +101,10 @@ public class AnvilHandler implements Listener {
 
         // adding enchantments from combined & combinee
         allEnchants.forEach(newItem::addUnsafeEnchantment);
-        ItemStack book = new ItemStack(Material.ENCHANTED_BOOK); // making a book to store the leftover enchantments in case they'd exist
-
-        boolean overlap = false;
 
         if (!allEnchants.isEmpty() && allEnchants.size() >= plugin.getConfig().getInt("enchantmentLimit")) {
-            overlap = true;
-            ArrayList<Enchantment> keys = new ArrayList<>(allEnchants.keySet());
-            ArrayList<Integer> values = new ArrayList<>(allEnchants.values());
-            for (int i = 0; i < allEnchants.size(); i++) {
-                allEnchants.remove(keys.get(i));
-                keys.remove(0); // remove the OK enchantments
-                values.remove(0);
-            }
-            for (int i = 0; i < allEnchants.size(); i++) newItem.removeEnchantment(keys.get(i));
-
-            ItemMeta meta = book.getItemMeta();
-            List<String> bookLore = new ArrayList<>();
-
-            bookLore.add(format("&7Book created in result of combining two items"));
-            bookLore.add(format("&7and overflowing the per-item enchantment limit."));
-            bookLore.add(format("&7 "));
-
-            for (int i = 0; i < keys.size(); i++) {
-                bookLore.add(format("&7" + getName(keys.get(i)) + " " + toRoman(values.get(i))));
-            }
-
-            meta.setLore(bookLore);
-            book.setItemMeta(meta);
+            sendActionbar(player, "&cYou can't have more than " + plugin.getConfig().getInt("enchantmentLimit") + " enchantments on an item!");
+            return;
         }
 
         // making sure has enough levels
@@ -145,14 +120,13 @@ public class AnvilHandler implements Listener {
         if (!ece.isCancelled()) {
             if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - enchants);
 
-            if (overlap) dropItem(player, book);
-            top.setItem(combined0, XMaterial.RED_STAINED_GLASS_PANE.parseItem());
-            top.setItem(combinee0, XMaterial.RED_STAINED_GLASS_PANE.parseItem());
-            top.setItem(result0, ece.getResult());
+            ev.setResult(newItem);
+           // ev.getInventory().setItem(0, null);
+           // ev.getInventory().setItem(1, null);
         }
     }
-*/
-    boolean areItemAndRepairer(ItemStack first, ItemStack second) {
+
+    boolean isSecondItemValid(ItemStack first, ItemStack second) {
         Material item = first.getType(), ingot = second.getType();
 
         if (item == ingot) return true;

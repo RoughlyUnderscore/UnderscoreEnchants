@@ -15,6 +15,7 @@ import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -87,7 +88,7 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
             return;
         }
 
-        player.sendMessage("This is currently under development"); // TODO
+        player.openInventory(Bukkit.createInventory(player, InventoryType.ANVIL));
     }
 
     @Subcommand("anvil")
@@ -207,11 +208,12 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
 
         final String linkBase = "https://roughlyunderscore.7m.pl/default_enchantments/";
 
-        Document doc = null; // gets the document
+        Document doc; // gets the document
         try {
             doc = Jsoup.connect(linkBase).get();
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
         Elements links = doc.getElementsByTag("a"); // gets all "a" objects
         List<String> files = new ArrayList<>();
@@ -243,7 +245,9 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
             return;
         }
 
-        unloadEnchantment(file, plugin);
+        if (isEnchantmentLoaded(file, plugin)) {
+            unloadEnchantment(file, plugin);
+        }
         loadEnchantment(file, plugin);
         player.sendMessage(plugin.getMessages().LOADED.replace("%ench%", file.getName()));
     }
@@ -264,7 +268,9 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
             return;
         }
 
-        unloadEnchantment(file, plugin);
+        if (isEnchantmentLoaded(file, plugin)) {
+            unloadEnchantment(file, plugin);
+        }
         player.sendMessage(plugin.getMessages().UNLOADED.replace("%ench%", file.getName()));
     }
 
@@ -335,7 +341,7 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
                     "Enchantments:"
             ), plugin);
 
-            for (DetailedEnchantment ench : plugin.getEnchantmentData()) {
+            for (DetailedEnchantment ench : plugin.getEnchantmentData().keySet()) {
                 write0(sender, writer, Arrays.asList(
                         " - Key: " + ench.getKey(),
                         " - Name: " + ench.getName(),

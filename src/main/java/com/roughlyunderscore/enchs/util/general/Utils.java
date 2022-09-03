@@ -1010,7 +1010,7 @@ public class Utils {
     // two debug methods, used before and maybe will be used later
     private String tellMeTheStaticEnchantmentData() {
         StringBuilder builder = new StringBuilder();
-        for (DetailedEnchantment en : staticEnchantmentData) {
+        for (DetailedEnchantment en : staticEnchantmentData.keySet()) {
             builder.append(en.getName()).append(" / ").append(en.getKey()).append("\n");
         }
         return builder.toString();
@@ -1031,7 +1031,7 @@ public class Utils {
      */
     public DetailedEnchantment parseEnchantment(final String name) {
 
-        if (UnderscoreEnchants.staticEnchantmentData.stream().noneMatch(ench -> ench.getCommandName().equalsIgnoreCase(name))) {
+        if (UnderscoreEnchants.staticEnchantmentData.keySet().stream().noneMatch(ench -> ench.getCommandName().equalsIgnoreCase(name))) {
             if (Arrays.stream(Enchantment.values()).noneMatch(ench -> getName(ench).replace(" ", "_").equalsIgnoreCase(name))) {
                 return STATIC_EMPTY; // returns the placeholder if there's no enchantment with such name
             }
@@ -1039,7 +1039,7 @@ public class Utils {
 
         Enchantment ench;
 
-        Optional<DetailedEnchantment> optional = UnderscoreEnchants.staticEnchantmentData.stream().filter(enchn -> enchn.getCommandName().equalsIgnoreCase(name)).findFirst();
+        Optional<DetailedEnchantment> optional = UnderscoreEnchants.staticEnchantmentData.keySet().stream().filter(enchn -> enchn.getCommandName().equalsIgnoreCase(name)).findFirst();
         if (optional.isPresent()) {
             ench = optional.get().getEnchantment(); // sets the enchantment to the received one (this is a custom enchantment)
         } else {

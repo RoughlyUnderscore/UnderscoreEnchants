@@ -15,6 +15,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
@@ -96,7 +97,7 @@ public class Register {
 		listEnchantment(keyHolder.getEnchantment(), plugin);
 
 		plugin.getAllEnchs().add(keyHolder.getEnchantment());
-		plugin.enchantmentData.add(keyHolder);
+		plugin.enchantmentData.put(keyHolder, new AbstractEnchantment(ench));
 	}
 
 	/**
@@ -114,7 +115,7 @@ public class Register {
 		if (enchant == null) return;
 		AbstractEnchantment enchantment = enchant.getValue();
 		wrapEnchantment(enchantment, enchant.getKey(), plugin);
-		UnderscoreEnchants.staticEnchantmentData.add(enchant.getKey());
+		UnderscoreEnchants.staticEnchantmentData.put(enchant.getKey(), enchantment);
 	}
 
 	/**
@@ -145,13 +146,16 @@ public class Register {
 		HashMap<String, Enchantment> byName = (HashMap<String, Enchantment>) nameField.get(null);
 		byName.remove(name);
 
+		Listener listener = UnderscoreEnchants.staticEnchantmentData.get(enchantment);
+		HandlerList.unregisterAll(listener);
 		UnderscoreEnchants.staticEnchantmentData.remove(enchantment);
+
 		plugin.getEnchantmentData().remove(enchantment);
 	}
 
 	/**
 	 * Finds an enchantment from a file.
-	 * @param file the file to look at,
+	 * @param file the file to look at
 	 * @param plugin UnderscoreEnchants
 	 */
 	public DetailedEnchantment findEnchantment(File file, UnderscoreEnchants plugin) {
@@ -164,6 +168,24 @@ public class Register {
 
 		DetailedEnchantment entry = new DetailedEnchantment(key.getKey(), plugin);
 		return entry;
+	}
+
+	/**
+	 * Checks if an enchantment is loaded.
+	 * @param file the enchantment to check
+	 * @param plugin UnderscoreEnchants
+	 */
+	public boolean isEnchantmentLoaded(File file, UnderscoreEnchants plugin) {
+		return isEnchantmentLoaded(findEnchantment(file, plugin), plugin);
+	}
+
+	/**
+	 * Checks if an enchantment is loaded.
+	 * @param enchantment the enchantment to check
+	 * @param plugin UnderscoreEnchants
+	 */
+	public boolean isEnchantmentLoaded(DetailedEnchantment enchantment, UnderscoreEnchants plugin) {
+		return plugin.getEnchantmentData().containsKey(enchantment);
 	}
 
 	/**
@@ -199,13 +221,19 @@ public class Register {
 		int lvl = getEnchantLevel(player, entry, target, forbidOn);
 		if (lvl == 0) return;
 
-		Bukkit.getLogger().info("Enchantment " + name + " found on " + player.getName() + "'s " + target.name() + ".");
+		Bukkit.getLogger().info("Found enchantment: " + name + " with level: " + lvl + "by player: " + player.getName());
+
 		if (flag == null) flag = "";
+
+        Bukkit.getLogger().info("Current flag: " + flag);
 
 		EnchantmentLevel level = levels.get(lvl - 1);
 
+		Bukkit.getLogger().info("Attempting to validate the activation...");
 		// Pass all the checks
 		if (!validateActivation(plugin, event, player, level, key, conditions, flag)) return;
+
+		Bukkit.getLogger().info("Activation validated!");
 
 		// Parse every action
 		for (String lev : level.getAction()) {
