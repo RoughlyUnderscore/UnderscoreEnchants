@@ -1,21 +1,29 @@
 package com.roughlyunderscore.enchs.util;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.SneakyThrows;
-import lombok.ToString;
+import com.roughlyunderscore.enchs.UnderscoreEnchants;
+import lombok.*;
+import org.bukkit.Bukkit;
 
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.Date;
 
-@AllArgsConstructor @EqualsAndHashCode @ToString // just so that my ide stopped complaining
+@Data
 public class Debug {
 	private final boolean log;
 	private final BufferedWriter writer;
+	private final UnderscoreEnchants plugin;
 
-	@SneakyThrows
 	public void log(String message) {
-		if (log) writer.write("[" + Date.from(Instant.now()) + "] " + message + "\n");
+		if (log) {
+			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+				try {
+					writer.write("[" + Date.from(Instant.now()) + "] " + message + "\n");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+		}
 	}
 }

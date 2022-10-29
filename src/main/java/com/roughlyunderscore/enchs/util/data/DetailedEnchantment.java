@@ -24,8 +24,11 @@ public class DetailedEnchantment {
         this.key = key;
     }
 
-    public DetailedEnchantment(UnderscoreEnchants plugin) {
-        this.key = new NamespacedKey(plugin, "EMPTY");
+    public DetailedEnchantment(String key) {
+        switch (key.toLowerCase(Locale.ROOT)) {
+            case "wrong_level", "wrong_name" -> this.key = NamespacedKey.minecraft(key.toLowerCase(Locale.ROOT) + "_underscore_enchants");
+            default -> throw new IllegalArgumentException("DetailedEnchantment was attempted to be initialized with an unknown string value: " + key);
+        }
     }
 
     public String getCommandName() {
@@ -41,7 +44,6 @@ public class DetailedEnchantment {
         return this.getEnchantment().getName();
     }
 
-    // tostring
     @Override
     public String toString() {
         return "DetailedEnchantment{" +

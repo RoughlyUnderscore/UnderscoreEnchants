@@ -9,6 +9,7 @@ import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import com.roughlyunderscore.enchs.enchants.abstracts.AbstractEnchantment;
 import com.roughlyunderscore.enchs.events.PlayerPVPEvent;
 import com.roughlyunderscore.enchs.util.RomanNumber;
+import com.roughlyunderscore.enchs.util.Triple;
 import com.roughlyunderscore.enchs.util.data.DetailedEnchantment;
 import com.roughlyunderscore.enchs.util.enums.Type;
 import lombok.experimental.UtilityClass;
@@ -21,6 +22,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -30,6 +32,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -49,8 +52,7 @@ import java.util.regex.Pattern;
 
 import java.net.URL;
 
-import static com.roughlyunderscore.enchs.UnderscoreEnchants.STATIC_EMPTY;
-import static com.roughlyunderscore.enchs.UnderscoreEnchants.staticEnchantmentData;
+import static com.roughlyunderscore.enchs.UnderscoreEnchants.*;
 import static com.roughlyunderscore.enchs.registration.Register.*;
 import static com.roughlyunderscore.enchs.util.general.PlayerUtils.*;
 
@@ -158,6 +160,7 @@ public class Utils {
         else if (ench.equals(XEnchantment.IMPALING.getEnchant())) return "Impaling";
         else if (ench.equals(XEnchantment.LOYALTY.getEnchant())) return "Loyalty";
         else if (ench.equals(XEnchantment.CHANNELING.getEnchant())) return "Channeling";
+        else if (ench.equals(XEnchantment.SWIFT_SNEAK.getEnchant())) return "Swift Sneak";
         else return ench.getName();
     }
 
@@ -227,7 +230,7 @@ public class Utils {
 
             while (playerMatcher.find()) {
                 String arg = playerMatcher.group(1);
-                String val = String.valueOf(getPDCValue(players.getPlayers()[0], getKey(arg, plugin)));
+                String val = String.valueOf(getPDCValue(players.getPlayers()[0], getKey(arg, plugin), plugin));
                 playerMatcher.appendReplacement(playerBuilder, val);
             }
 
@@ -240,7 +243,7 @@ public class Utils {
 
             while (victimMatcher.find()) {
                 String arg = victimMatcher.group(1);
-                String val = String.valueOf(getPDCValue(players.getPlayers()[0], getKey(arg, plugin)));
+                String val = String.valueOf(getPDCValue(players.getPlayers()[0], getKey(arg, plugin), plugin));
                 victimMatcher.appendReplacement(victimBuilder, val);
             }
 
@@ -252,7 +255,7 @@ public class Utils {
 
             while (damagerMatcher.find()) {
                 String arg = damagerMatcher.group(1);
-                String val = String.valueOf(getPDCValue(players.getPlayers()[1], getKey(arg, plugin)));
+                String val = String.valueOf(getPDCValue(players.getPlayers()[1], getKey(arg, plugin), plugin));
                 damagerMatcher.appendReplacement(damagerBuilder, val);
             }
 
@@ -465,7 +468,7 @@ public class Utils {
     public ArrayList<Enchantment> getPossibleEnchantments(ItemStack item, List<Enchantment> possibleEnchantments, int maxAmount) {
         ArrayList<Enchantment> nonConflictingEnchants = new ArrayList<>();
         // AIR cannot be enchanted and doesn't have meta
-        if(item.getType().equals(Material.AIR) || item.getItemMeta() == null) return nonConflictingEnchants;
+        if (item.getType().equals(Material.AIR) || item.getItemMeta() == null) return nonConflictingEnchants;
         ItemMeta meta = item.getItemMeta();
         // Add all possible enchants to our list
         possibleEnchantments
@@ -476,7 +479,7 @@ public class Utils {
         Collections.shuffle(nonConflictingEnchants);
         // Create a new list
         ArrayList<Enchantment> result = new ArrayList<>();
-        for(Enchantment enchantment : nonConflictingEnchants) {
+        for (Enchantment enchantment : nonConflictingEnchants) {
             // Only add up to maxAmount enchantments to the list
             if(result.size() >= maxAmount) {
                 break;
@@ -614,8 +617,8 @@ public class Utils {
      * @param ench the {@link DetailedEnchantment} object to get the {@link Enchantment} from
      * @return {@code true} if the {@link ItemStack} is enchanted, {@code false} otherwise
      */
-    public boolean enchanted(Player player, DetailedEnchantment ench) {
-        return validItemInHand(player) != null && getMainHand(player).getEnchantments().containsKey(ench.getEnchantment());
+    public boolean enchanted(Player player, DetailedEnchantment ench, UnderscoreEnchants plugin) {
+        return validItemInHand(player, plugin) != null && getMainHand(player, plugin).getEnchantments().containsKey(ench.getEnchantment());
     }
 
     /**
@@ -625,7 +628,7 @@ public class Utils {
      * @param target the {@link EnchantmentTarget} object to get the {@link Enchantment} from
      * @return {@code true} if the {@link ItemStack} is enchanted, {@code false} otherwise
      */
-    public boolean enchanted(Player pl, DetailedEnchantment ench, EnchantmentTarget target) {
+    public boolean enchanted(Player pl, DetailedEnchantment ench, EnchantmentTarget target, UnderscoreEnchants plugin) {
         return switch (target) {
             case ARMOR -> Arrays.stream(pl.getInventory().getArmorContents())
                 .filter(Objects::nonNull)
@@ -643,7 +646,7 @@ public class Utils {
             case ARMOR_TORSO -> pl.getInventory().getChestplate() != null &&
                 pl.getInventory().getChestplate().getType() != Material.AIR &&
                 pl.getInventory().getChestplate().getEnchantments().containsKey(ench.getEnchantment());
-            case BOW, WEAPON, TOOL -> enchanted(pl, ench);
+            case BOW, WEAPON, TOOL -> enchanted(pl, ench, plugin);
             default -> false;
         };
     }
@@ -662,8 +665,8 @@ public class Utils {
      * @param player the {@link Player} to check
      * @return the {@link ItemStack} if is valid, null otherwise
      */
-    public ItemStack validItemInHand(Player player) {
-        return getMainHand(player).getType() == Material.AIR ? null : getMainHand(player);
+    public ItemStack validItemInHand(Player player, UnderscoreEnchants plugin) {
+        return getMainHand(player, plugin).getType() == Material.AIR ? null : getMainHand(player, plugin);
     }
 
     /**
@@ -684,13 +687,13 @@ public class Utils {
      * @param target the {@link EnchantmentTarget} object to get the {@link Enchantment} from
      * @return the level as an integer
      */
-    public int getEnchantLevel(Player player, DetailedEnchantment ench, EnchantmentTarget target, List<String> forbidden0) {
+    public int getEnchantLevel(Player player, DetailedEnchantment ench, EnchantmentTarget target, List<String> forbidden0, UnderscoreEnchants plugin) {
         List<Material> forbidden = new ArrayList<>(Collections.emptyList());
         if (forbidden0 != null && !forbidden0.isEmpty()) {
             forbidden0.forEach(str -> forbidden.add(Material.valueOf(str)));
         }
 
-        ItemStack hand = getMainHand(player);
+        ItemStack hand = getMainHand(player, plugin);
         ItemStack[] armor = player.getInventory().getArmorContents();
         Enchantment enchant = ench.getEnchantment();
         int level = 0;
@@ -742,13 +745,13 @@ public class Utils {
      * @param forbidden0 a list of {@link Material}s that are forbidden to have the enchantment
      * @return the level as an integer
      */
-    public int getEnchantLevel(Player player, DetailedEnchantment ench, ItemStack extra, EnchantmentTarget target, List<String> forbidden0) {
+    public int getEnchantLevel(Player player, DetailedEnchantment ench, ItemStack extra, EnchantmentTarget target, List<String> forbidden0, UnderscoreEnchants plugin) {
         List<Material> forbidden = new ArrayList<>(Collections.emptyList());
         if (forbidden0 != null && !forbidden0.isEmpty()) {
             forbidden0.forEach(str -> forbidden.add(Material.valueOf(str)));
         }
 
-        int level = getEnchantLevel(player, ench, target, forbidden0);
+        int level = getEnchantLevel(player, ench, target, forbidden0, plugin);
 
         if (level == 0) { // level is 0, which means that neither hand nor armor worked, checking extra items
             if (hasEnchantment(extra, ench.getEnchantment(), forbidden))
@@ -995,22 +998,24 @@ public class Utils {
      * @param name the enchantment name
      * @param level the suggested level
      * @param unrestricted whether the level should bypass the restrictions or not (true if should)
+     * @param plugin UnderscoreEnchants
      * @return the parsed enchantment, or {@code UnderscoreEnchants.STATIC_EMPTY} (identical to EMPTY) if such enchantment doesn't exist or if the level boundaries are broken
      */
-    public DetailedEnchantment parseEnchantment(String name, int level, boolean unrestricted) {
-        DetailedEnchantment ench = parseEnchantment(name);
+    public DetailedEnchantment parseEnchantment(String name, int level, boolean unrestricted, UnderscoreEnchants plugin) {
+        DetailedEnchantment ench = parseEnchantment(name, plugin);
+        if (ench.equals(WRONG_LEVEL) || ench.equals(WRONG_NAME)) return ench;
 
         if (!unrestricted && (level < ench.getEnchantment().getStartLevel() || level > ench.getEnchantment().getMaxLevel())) {
-            return STATIC_EMPTY;
+            return WRONG_LEVEL;
         }
 
         else return new DetailedEnchantment(ench.getKey());
     }
 
     // two debug methods, used before and maybe will be used later
-    private String tellMeTheStaticEnchantmentData() {
+    private String tellMeTheStaticEnchantmentData(UnderscoreEnchants plugin) {
         StringBuilder builder = new StringBuilder();
-        for (DetailedEnchantment en : staticEnchantmentData.keySet()) {
+        for (DetailedEnchantment en : plugin.getEnchantmentData().keySet()) {
             builder.append(en.getName()).append(" / ").append(en.getKey()).append("\n");
         }
         return builder.toString();
@@ -1029,25 +1034,27 @@ public class Utils {
      * @param name the enchantment name
      * @return the enchantment, or {@code UnderscoreEnchants.STATIC_EMPTY} (identical to EMPTY) if such enchantment doesn't exist
      */
-    public DetailedEnchantment parseEnchantment(final String name) {
+    public DetailedEnchantment parseEnchantment(final String name, final UnderscoreEnchants plugin) {
 
-        if (UnderscoreEnchants.staticEnchantmentData.keySet().stream().noneMatch(ench -> ench.getCommandName().equalsIgnoreCase(name))) {
+        if (plugin.getEnchantmentData().keySet().stream().noneMatch(ench -> ench.getCommandName().equalsIgnoreCase(name))) {
             if (Arrays.stream(Enchantment.values()).noneMatch(ench -> getName(ench).replace(" ", "_").equalsIgnoreCase(name))) {
-                return STATIC_EMPTY; // returns the placeholder if there's no enchantment with such name
+                return WRONG_NAME; // returns the placeholder if there's no enchantment with such name
             }
         }
 
         Enchantment ench;
 
-        Optional<DetailedEnchantment> optional = UnderscoreEnchants.staticEnchantmentData.keySet().stream().filter(enchn -> enchn.getCommandName().equalsIgnoreCase(name)).findFirst();
+        Optional<DetailedEnchantment> optional = plugin.getEnchantmentData().keySet().stream().filter(enchn -> enchn.getCommandName().equalsIgnoreCase(name)).findFirst();
         if (optional.isPresent()) {
             ench = optional.get().getEnchantment(); // sets the enchantment to the received one (this is a custom enchantment)
         } else {
-            Optional<Enchantment> opt = Arrays.stream(Enchantment.values()).filter(enchn -> getName(enchn).replace(" ", "_").equalsIgnoreCase(name)).findFirst();
-            if (opt.isPresent()) {
-                ench = opt.get(); // sets the enchantment to the received one (this is a default enchantment)
-            }
-            else return STATIC_EMPTY; // returns the placeholder if such enchantment somehow does not exist
+            ench = Arrays
+                .stream(Enchantment.values())
+                .filter(enchn -> getName(enchn)
+                    .replace(" ", "_")
+                    .equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(WRONG_NAME.getEnchantment());
         }
 
         return new DetailedEnchantment(ench.getKey()); // returns a DetailedEnchantment object, built from the received enchantment
@@ -1130,7 +1137,7 @@ public class Utils {
                         }
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
-                        Bukkit.getLogger().info("Something went wrong while downloading a file!");
+                        plugin.getUnderscoreLogger().info("Something went wrong while downloading a file!");
                         plugin.getDebugger().log("Something went wrong while downloading a file!");
                     }
                 }, wait);
@@ -1147,9 +1154,9 @@ public class Utils {
                             loadEnchantment(enchantment, plugin);
                             notifiee.sendMessage(plugin.getMessages().LOADED.replace("%ench%", enchantment.getName()));
                         }
-                    } catch (MalformedURLException e) {
+                    } catch (final MalformedURLException e) {
                         e.printStackTrace();
-                        Bukkit.getLogger().info("Something went wrong while downloading a file!");
+                        plugin.getUnderscoreLogger().info("Something went wrong while downloading a file!");
                         plugin.getDebugger().log("Something went wrong while downloading a file!");
                     }
                 });
@@ -1164,9 +1171,182 @@ public class Utils {
      * @param argument the argument to check
      * @param check the validating factor (XMaterial type)
      */
-    public boolean is(Material argument, XMaterial check) {
+    public boolean is(final Material argument, final XMaterial check) {
         return argument.equals(check.parseMaterial());
     }
 
+    /**
+     * Repairs an item by a given amount of durability.
+     * @param source the item to repair
+     * @param toRepair the amount of durability to repair
+     * @return the repaired item
+     */
+    public ItemStack repair(final ItemStack source, final int toRepair) {
+        if (source.getType().getMaxDurability() == 0) return source;
+        if (!(source.getItemMeta() instanceof Damageable meta)) return source;
 
+        meta.setDamage(Math.max(0, meta.getDamage() - toRepair));
+        source.setItemMeta(meta);
+        return source;
+    }
+
+    /**
+     * Repairs an item by a given durability percentage.
+     * @param source the item to repair
+     * @param percentage the percentage of maximum durability to add to the item (from 0.01 to 1.00)
+     * @return the repaired item
+     */
+    public ItemStack repair(final ItemStack source, double percentage) {
+        percentage = clamp(0.01, 1, percentage) * 100;
+        final short durability = (short) (source.getType().getMaxDurability() / 100 * percentage);
+        return repair(source, durability);
+    }
+
+    /**
+     * Transfers durability from one ItemStack to another.
+     * @param from the item to transfer durability from
+     * @param to the item to transfer durability to
+     * @return the item with transferred durability
+     */
+    public ItemStack transferDurability(final ItemStack from, final ItemStack to) {
+        if (!(from.getItemMeta() instanceof Damageable fromMeta)) return to;
+        if (!(to.getItemMeta() instanceof Damageable toMeta)) return to;
+
+        toMeta.setDamage(fromMeta.getDamage());
+        to.setItemMeta(toMeta);
+        return to;
+    }
+
+    /**
+     * Clamps a double value between two set points.
+     * @param min the lower bound
+     * @param max the upper bound
+     * @param val the value to clamp
+     * @return the clamped value
+     */
+    public double clamp(final double min, final double max, final double val) {
+        return Math.max(min, Math.min(max, val));
+    }
+
+    /**
+     * Generates an array of {@code EnchantmentOffer}s from given enchantments.
+     * @param enchs the enchantments to generate offers from
+     * @return the generated offers
+     */
+    @SafeVarargs
+    public EnchantmentOffer[] generateOffers(final Triple<Enchantment, Integer, Integer>... enchs) {
+        return generateOffersList(enchs).toArray(new EnchantmentOffer[0]);
+    }
+
+    /**
+     * Generates a list of {@code EnchantmentOffer}s from given enchantments.
+     * @param enchs the enchantments to generate offers from
+     * @return the generated offers
+     */
+    @SafeVarargs
+    public List<EnchantmentOffer> generateOffersList(final Triple<Enchantment, Integer, Integer>... enchs) {
+        final List<EnchantmentOffer> offers = new ArrayList<>();
+
+        for (final Triple<Enchantment, Integer, Integer> ench : enchs) {
+            offers.add(new EnchantmentOffer(ench.getA(), ench.getB(), ench.getC()));
+        }
+
+        return offers;
+    }
+
+    /**
+     * Properly generates an enchanted item (lore, etc)
+     * @param oldItem the item to copy
+     * @param enchantments the enchantments to add
+     * @return the generated item
+     */
+    public ItemStack generateEnchantedItem(final ItemStack oldItem,
+                                           final Map<Enchantment, Integer> enchantments,
+                                           final UnderscoreEnchants plugin) throws IllegalArgumentException {
+        return generateEnchantedItem(oldItem, enchantments, Map.of(), plugin);
+    }
+
+    /**
+     * Properly generates an enchanted item (lore, etc), where enchantments are combined from two maps
+     * @param oldItem the item to copy
+     * @param enchantments1 the enchantments to add
+     * @param enchantments2 the enchantments to add
+     * @return the generated item
+     */
+    public ItemStack generateEnchantedItem(final ItemStack oldItem,
+                                           final Map<Enchantment, Integer> enchantments1,
+                                           final Map<Enchantment, Integer> enchantments2,
+                                           final UnderscoreEnchants plugin) throws IllegalArgumentException {
+        if (oldItem == null || oldItem.getType() == Material.AIR) return oldItem;
+
+        final ItemStack item = new ItemStack(oldItem.getType());
+        item.setAmount(oldItem.getAmount());
+
+        final Map<Enchantment, Integer> enchantments = mergeEnchantments(enchantments1, enchantments2);
+
+        item.addUnsafeEnchantments(enchantments);
+
+        final ItemMeta meta = item.getItemMeta();
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
+        final List<String> lore = new ArrayList<>();
+        if (!enchantments.isEmpty()) {
+            for (final Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+                lore.add(format("&7" + getName(entry.getKey()) + " " + toRoman(entry.getValue())));
+            }
+        }
+
+        if (oldItem.getItemMeta() != null && oldItem.getItemMeta().hasDisplayName()) {
+            meta.setDisplayName(oldItem.getItemMeta().getDisplayName());
+        }
+
+        for (final Enchantment conflictable : enchantments.keySet()) {
+            for (final Enchantment conflict : enchantments.keySet()) {
+                if (conflict.equals(conflictable)) {
+                    enchantments.remove(conflict);
+                    enchantments.remove(conflictable);
+                }
+            }
+        }
+
+        if (!enchantments.isEmpty() && enchantments.size() >= plugin.getConfig().getInt("enchantmentLimit")) {
+            throw new IllegalArgumentException("You can't have more than " + plugin.getConfig().getInt("enchantmentLimit") + " enchantments on an item!");
+        }
+
+        meta.setLore(lore);
+
+        return item;
+    }
+
+    /**
+     * Anvil-esque merges two enchantment maps.
+     * @param map1 the first map
+     * @param map2 the second map
+     * @return the merged map
+     */
+    public Map<Enchantment, Integer> mergeEnchantments(final Map<Enchantment, Integer> map1, final Map<Enchantment, Integer> map2) {
+        final Map<Enchantment, Integer> enchantments = new HashMap<>();
+        for (final Map.Entry<Enchantment, Integer> combinedEntry : map1.entrySet()) {
+            for (final Map.Entry<Enchantment, Integer> combineeEntry : map2.entrySet()) {
+                // The goal of this loop is to find identical enchantments and get the max level.
+
+                if (!combinedEntry.getKey().equals(combineeEntry.getKey())) continue; // Leave the enchantment intact, it's not identical
+
+                map1.remove(combinedEntry.getKey()); // Every item should only have one of the same enchantment, this shouldn't go wrong
+                map2.remove(combineeEntry.getKey());
+
+                if (combinedEntry.getValue().equals(combineeEntry.getValue())) { // If the values are identical, increase it by 1 unless it's maximum
+                    enchantments.put(combinedEntry.getKey(), Math.min(combinedEntry.getValue() + 1, combinedEntry.getKey().getMaxLevel()));
+                    continue;
+                }
+
+                enchantments.put(combinedEntry.getKey(), Math.min(Math.max(combinedEntry.getValue(), combineeEntry.getValue()), combinedEntry.getKey().getMaxLevel()));
+            }
+        }
+
+        enchantments.putAll(map1);
+        enchantments.putAll(map2);
+
+        return enchantments;
+    }
 }

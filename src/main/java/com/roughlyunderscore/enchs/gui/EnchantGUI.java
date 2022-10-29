@@ -1,5 +1,6 @@
 package com.roughlyunderscore.enchs.gui;
 
+/*
 import com.cryptomorin.xseries.*;
 import com.roughlyunderscore.enchantsapi.events.PreEnchantEvent;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
@@ -23,11 +24,7 @@ import java.util.*;
 import static net.md_5.bungee.api.ChatMessageType.ACTION_BAR;
 
 @AllArgsConstructor
-/*
-EnchantGUI is the hardest and the most bug-prone class in this entire project.
-It has been rewritten from scratch countless times.
-I am scared to touch this code. It works, and don't you dare do anything.
- */
+
 public class EnchantGUI implements Listener {
 
     private final int itemSlot = 10;
@@ -267,3 +264,4 @@ public class EnchantGUI implements Listener {
     }
 
 }
+*/

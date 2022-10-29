@@ -9,14 +9,11 @@ import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import com.roughlyunderscore.enchs.util.general.Utils;
 import com.roughlyunderscore.enchs.util.data.DetailedEnchantment;
 import com.roughlyunderscore.enchs.util.data.Permissions;
-import com.roughlyunderscore.enchs.util.holders.EnchantHolder;
 import lombok.*;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -35,37 +32,30 @@ import static com.roughlyunderscore.enchs.util.general.PlayerUtils.*;
 import static com.roughlyunderscore.enchs.registration.Register.*;
 import static com.roughlyunderscore.enchs.util.general.Utils.*;
 
-/*
-Here is the UnderscoreEnchants command (/ue) before your very eyes.
-The code is a bit scuffed, but I tried to get the best out of it
-after rewriting it from the terrible legacy state.
- */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @CommandAlias("ue|underscoreenchants|underscoree|uenchants|uenchs|underscoreenchs")
 @SuppressWarnings("unused")
-
 public class UnderscoreEnchantsCommand extends BaseCommand {
     private final UnderscoreEnchants plugin;
 
     @Default @CatchUnknown @Subcommand("help")
-    // @CommandPermission(Permissions.HELP) Before a global localization update, I'll have to manage these myself
     public void defaultCommand(CommandSender sender) {
         if (!sender.hasPermission(Permissions.HELP)) {
             sender.sendMessage(plugin.getMessages().NO_PERMS);
             return;
         }
 
-        sender.sendMessage(format(plugin.getConfig().getString("prefix") + " &r" + plugin.getDescription().getVersion()));
+        sender.sendMessage(format(plugin.getConfig().getString("prefix") + "&r" + plugin.getDescription().getVersion()));
         sender.sendMessage(format("&b&n&m----------------------------------"));
         sender.sendMessage(" ");
         sender.sendMessage(format("&9/ue log - &bCreates a plugin log for the support team to review"));
-        sender.sendMessage(format("&9/ue anvil - &bOpens the new anvil interface"));
-        sender.sendMessage(format("&9/ue enchanttable - &bOpens the new enchantment table interface"));
         sender.sendMessage(format("&9/ue enchant <ench> <level> - &bEnchants the item in your hand, provided that the arguments are valid"));
         sender.sendMessage(format("&9/ue toggle <ench> <on/off> - &bToggles an enchantment for you"));
         sender.sendMessage(format("&9/ue download <link> <name> <load or not (true/false)> - &bDownloads an enchantment from that link"));
         sender.sendMessage(format("&9/ue download default <load or not (true/false)> - &bDownloads the default enchantment set"));
+        sender.sendMessage(format("&9/ue load <name> - &bTries to load an enchantment with the given file name"));
+        sender.sendMessage(format("&9/ue unload <name> - &bTries to unload an enchamtment with the given file name"));
     }
 
     @Subcommand("log")
@@ -79,30 +69,6 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
         createLog(sender, plugin);
     }
 
-    @Subcommand("anvil")
-    // @CommandPermission(Permissions.ANVIL_GUI)
-    @Conditions("cant_console")
-    public void openAnvil(Player player) {
-        if (!player.hasPermission(Permissions.ANVIL_GUI)) {
-            player.sendMessage(plugin.getMessages().NO_PERMS);
-            return;
-        }
-
-        player.openInventory(Bukkit.createInventory(player, InventoryType.ANVIL));
-    }
-
-    @Subcommand("anvil")
-    // @CommandPermission(Permissions.ENCHANT_GUI)
-    @Conditions("cant_console")
-    public void openEnchant(Player player) {
-        if (!player.hasPermission(Permissions.ENCHANT_GUI)) {
-            player.sendMessage(plugin.getMessages().NO_PERMS);
-            return;
-        }
-
-        player.sendMessage("This is currently under development"); // TODO
-    }
-
     @Subcommand("duck")
     @Private
     public void onDuck(CommandSender sender) {
@@ -111,20 +77,29 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
 
     @Subcommand("enchant|ench|addenchant|addenchantment|absolutelyobliteratethisitemwiththisnewoverpoweredenchantment")
     @Conditions("cant_console")
-    public void onEnchant(Player player, String name, Integer level) {
+    @CommandCompletion("@enchant-name-completion @enchant-level-completion")
+    @Syntax("<enchantment> <level>")
+    public void onEnchant(Player player, DetailedEnchantment preEnchantment, Integer level) {
         if (!player.hasPermission(Permissions.ENCHANT)) {
             player.sendMessage(plugin.getMessages().NO_PERMS);
             return;
         }
 
-        ItemStack handItem = getMainHand(player);
+        ItemStack handItem = getMainHand(player, plugin);
         if (handItem.getType() == XMaterial.AIR.parseMaterial()) {
-            playSound(player, XSound.ENTITY_VILLAGER_NO);
+            playSound(player, XSound.ENTITY_VILLAGER_NO, plugin);
             return;
         }
 
-        DetailedEnchantment ench = parseEnchantment(name, level, false);
-        if (ench.equals(plugin.EMPTY) || ench.equals(UnderscoreEnchants.STATIC_EMPTY)) {
+        // This is a dirty workaround, but I need to make sure that the level is in the bounds
+        DetailedEnchantment ench = parseEnchantment(preEnchantment.getName(), level, false, plugin);
+
+        if (ench.equals(UnderscoreEnchants.WRONG_LEVEL)) {
+            player.sendMessage(plugin.getMessages().WRONG_LEVEL);
+            return;
+        }
+
+        if (ench.equals(UnderscoreEnchants.WRONG_NAME)) {
             player.sendMessage(plugin.getMessages().WRONG_NAME);
             return;
         }
@@ -136,7 +111,7 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
 
         Pair<ItemStack, Map<Enchantment, Integer>> pair = enchant(handItem, ench.getEnchantment(), level);
         if (pair.getValue() != null && !pair.getValue().isEmpty()) {
-            playSound(player, XSound.ENTITY_VILLAGER_NO);
+            playSound(player, XSound.ENTITY_VILLAGER_NO, plugin);
             return;
         }
 
@@ -146,7 +121,7 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
         player.getInventory().setItemInMainHand(pair.getKey());
     }
 
-    @Subcommand("toggle|toggl|togle|toogle|toglle|toglee|ttogle")
+    @Subcommand("toggle|toggl|togle|toogle|toglle|toglee|ttogle|tlgeo|tlge|tolge|tpoglge|toglge|totge")
     @Conditions("cant_console")
     public void onToggle(Player player, String name, String onOff) {
         if (!player.hasPermission(Permissions.TOGGLE)) {
@@ -157,8 +132,13 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
         PersistentDataContainer pdc = player.getPersistentDataContainer();
 
         // Attempt to parse the proposed enchantment
-        DetailedEnchantment parsed = parseEnchantment(name);
-        if (parsed.equals(plugin.EMPTY) || parsed.equals(UnderscoreEnchants.STATIC_EMPTY)) {
+        DetailedEnchantment parsed = parseEnchantment(name, plugin);
+        if (parsed.equals(UnderscoreEnchants.WRONG_LEVEL)) {
+            player.sendMessage(plugin.getMessages().WRONG_LEVEL);
+            return;
+        }
+
+        if (parsed.equals(UnderscoreEnchants.WRONG_NAME)) {
             player.sendMessage(plugin.getMessages().WRONG_NAME);
             return;
         }
@@ -321,8 +301,19 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
                     "sendCommandFeedback: " + w.getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK),
                     "reducedDebugInfo: " + w.getGameRuleValue(GameRule.REDUCED_DEBUG_INFO),
                     "doEntityDrops: " + w.getGameRuleValue(GameRule.DO_ENTITY_DROPS),
+                    "keepInventory: " + w.getGameRuleValue(GameRule.KEEP_INVENTORY),
+                    "doWeatherCycle: " + w.getGameRuleValue(GameRule.DO_WEATHER_CYCLE),
+                    "doInsomnia: " + w.getGameRuleValue(GameRule.DO_INSOMNIA),
+                    "announceAdvancements: " + w.getGameRuleValue(GameRule.ANNOUNCE_ADVANCEMENTS),
+                    "disableElytraMovementCheck: " + w.getGameRuleValue(GameRule.DISABLE_ELYTRA_MOVEMENT_CHECK),
+                    "maxEntityCramming: " + w.getGameRuleValue(GameRule.MAX_ENTITY_CRAMMING),
+                    "spawnRadius: " + w.getGameRuleValue(GameRule.SPAWN_RADIUS),
+                    "doLimitedCrafting: " + w.getGameRuleValue(GameRule.DO_LIMITED_CRAFTING),
+                    "maxCommandChainLength: " + w.getGameRuleValue(GameRule.MAX_COMMAND_CHAIN_LENGTH),
+                    "spectatorsGenerateChunks: " + w.getGameRuleValue(GameRule.SPECTATORS_GENERATE_CHUNKS),
                     "Difficulty: " + w.getDifficulty(),
                     "Time: " + w.getTime(),
+                    "PVP: " + w.getPVP(),
                     " ",
                     "-Server parameters-",
                     "Name: " + server.getName(),
@@ -335,6 +326,7 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
                     "Allows Nether: " + server.getAllowNether(),
                     "Default gamemode: " + server.getDefaultGameMode(),
                     "Has whitelist: " + server.hasWhitelist(),
+
                     "Plugins: ", " ", Arrays.toString(server.getPluginManager().getPlugins()),
                     " ",
                     "-Underscore Enchants parameters-",
@@ -381,34 +373,5 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
         } catch (IOException e) {
             sender.sendMessage(plugin.getMessages().NO_LOG);
         }
-    }
-
-
-
-    /**
-     * LEGACY (reason: couldn't care less about this method)<br>
-     * A method that creates a standardized enchantment table GUI.
-     * @return the GUI
-     */
-    protected Inventory getTableGUI() {
-        Inventory inv = Bukkit.createInventory(new EnchantHolder(), 54, format("&eEnchant an item!"));
-
-        for (int i = 0; i != 54; i++)
-            inv.setItem(i, new ItemStack(XMaterial.GRAY_STAINED_GLASS_PANE.parseMaterial()));
-        for (int i = 14; i < 16; i++)
-            inv.setItem(i, new ItemStack(XMaterial.CYAN_STAINED_GLASS_PANE.parseMaterial()));
-        for (int i = 32; i != 34; i++)
-            inv.setItem(i, new ItemStack(XMaterial.CYAN_STAINED_GLASS_PANE.parseMaterial()));
-
-        inv.setItem(16, new ItemStack(XMaterial.CYAN_STAINED_GLASS_PANE.parseMaterial()));
-        inv.setItem(23, new ItemStack(XMaterial.CYAN_STAINED_GLASS_PANE.parseMaterial()));
-        inv.setItem(25, new ItemStack(XMaterial.CYAN_STAINED_GLASS_PANE.parseMaterial()));
-        inv.setItem(32, new ItemStack(XMaterial.CYAN_STAINED_GLASS_PANE.parseMaterial()));
-        inv.setItem(34, new ItemStack(XMaterial.CYAN_STAINED_GLASS_PANE.parseMaterial()));
-
-        inv.setItem(10, new ItemStack(XMaterial.PINK_STAINED_GLASS_PANE.parseMaterial()));
-        inv.setItem(24, new ItemStack(XMaterial.RED_STAINED_GLASS_PANE.parseMaterial()));
-
-        return inv;
     }
 }
