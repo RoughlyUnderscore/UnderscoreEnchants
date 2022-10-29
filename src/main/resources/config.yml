@@ -1,25 +1,25 @@
 require-vault: true # Set to false if you don't any of the economy features (will drop errors if an economy feature is attempted to be accessed)
 
-fireworks-on-enchants: true # Launches a firework on every successful enchant. Note that these fireworks are harmful!
-
-bStats: true # A boolean indicating about bStats job. Collects default bStats data and the used language.
+bStats: true # Whether bStats is activated.
 updater: 24 # Each X hours, an updater checks for updates. Default: 24.
 
-activated: true # A boolean, indicating whether a message should be sent upon enchantment activation.
-permitScrolls: true # A boolean indicating whether to enable scrolls or not. Not used currently.
+activated: true # Whether a message should be sent upon enchantment activation.
 
-populateVillagers: true # A boolean indicating whether to randomly enchant villagers' items or not.
-populateVillagersChance: 7 # A denominator to use when populating villagers loot. Imagine it as X in 1/X chance to populate.
+populateVillagers: true # Whether to randomly enchant villagers' items.
+populateVillagersChance: 7 # A denominator to use when populating villagers loot. Imagine it as X in 1/X chance. Should be an integer above 0.
 
-populateLoot: true # A boolean indicating whether to randomly populate lootchests or not.
-populateLootChance: 7 # A denominator to use when populating lootchests. Imagine it as X in 1/X chance to populate.
+populateLoot: true # Whether to randomly populate lootchests.
+populateLootChance: 7 # A denominator to use when populating lootchests. Imagine it as X in 1/X chance. Should be an integer above 0.
 
-populateFish: true # A boolean indicating whether to randomly populate fish loot or not.
-populateFishChance: 4 # A denominator to use when populating fish loot. Imagine it as X in 1/X chance to populate.
+populateFish: true # Whether to randomly populate fish loot.
+populateFishChance: 4 # A denominator to use when populating fish loot. Imagine it as X in 1/X chance. Should be an integer above 0.
 
-debugMode: false # For advanced users. Takes space on your drive. Enable at your own risk or if a support member tells you to.
+addExtraEnchantment: true # Whether to add an extra enchantment to the item upon enchanting it in the enchantment table.
+extraEnchantmentChance: 3 # A denominator to use when adding extra enchantments. Imagine it as X in 1/X chance. Should be an integer above 0.
 
-enchantmentLimit: 99999 # This is the amount of maximum enchantments per item.
+debugMode: false # For advanced users. Takes space on your drive. Ideally you'll only need to enable this if a support member tells you to.
+
+enchantmentLimit: 99999 # This is the amount of maximum enchantments per item. Change it to whatever you want.
 
 prefix: '&c&l[&r&6UnderscoreEnchants&c&l] ' # The prefix to put before each message.
 

@@ -20,12 +20,6 @@ commands:
       - underscoreenchs
 
 permissions:
-  underscoreenchants.enchantgui:
-    default: op
-    description: Allows you to use /ue enchanttable.
-  underscoreenchants.anvilgui:
-    default: op
-    description: Allows you to use /ue anvil.
   underscoreenchants.log:
     default: op
     description: Allows you to use /ue log.

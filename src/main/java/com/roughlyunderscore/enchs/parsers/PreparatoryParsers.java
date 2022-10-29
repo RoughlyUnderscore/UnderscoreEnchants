@@ -135,11 +135,11 @@ public class PreparatoryParsers {
 	{
 		// 0) Checking if the event is cancelled.
 		if (event instanceof Cancellable ca && ca.isCancelled()) return false;
-		Bukkit.getLogger().info("VALIDATOR | Event is not cancelled.");
+		// plugin.getUnderscoreLogger().info("VALIDATOR | Event is not cancelled.");
 
 		// 1) Checking if the player has the enchantment enabled.
 		if (!Utils.isEnabled(player, key)) return false;
-		Bukkit.getLogger().info("VALIDATOR | Player has the enchantment enabled.");
+		// plugin.getUnderscoreLogger().info("VALIDATOR | Player has the enchantment enabled.");
 
 		// 2) Checking if the player is subject to cooldown with this enchantment.
 		UUID uuid = player.getUniqueId();
@@ -151,42 +151,42 @@ public class PreparatoryParsers {
 			}
 		}
 		if (!result) return false;
-		Bukkit.getLogger().info("VALIDATOR | Player is not subject to cooldown with this enchantment.");
+		// plugin.getUnderscoreLogger().info("VALIDATOR | Player is not subject to cooldown with this enchantment.");
 
 		// 3) Checking if the randomly generated chance is applicable to the EnchantmentLevel.
 		if (Math.random() * 100 > level.getChance()) return false;
-		Bukkit.getLogger().info("VALIDATOR | Random chance is applicable to the EnchantmentLevel.");
+		// plugin.getUnderscoreLogger().info("VALIDATOR | Random chance is applicable to the EnchantmentLevel.");
 
 		// 4) Parsing and checking for the conditions to match.
-		Bukkit.getLogger().info("VALIDATOR | Attempting to pass the conditions...");
+		// plugin.getUnderscoreLogger().info("VALIDATOR | Attempting to pass the conditions...");
 		return passConditions(event, conditions, flag, plugin) && passConditions(event, level.getConditions(), flag, plugin);
 	}
 
 	private boolean passConditions(Event event, List<String> conditions, String flag, UnderscoreEnchants plugin) {
 		boolean passed = true;
 		if (conditions != null && !conditions.isEmpty()) {
-			Bukkit.getLogger().info("> CONDITIONS | Currently parsing " + conditions.size() + " conditions.");
+			 // plugin.getUnderscoreLogger().info("> CONDITIONS | Currently parsing " + conditions.size() + " conditions.");
 			 for (String condition : conditions) {
-				Bukkit.getLogger().info(" > CONDITIONS | Parsing condition: " + condition + " with flag: " + flag);
+				// plugin.getUnderscoreLogger().info(" > CONDITIONS | Parsing condition: " + condition + " with flag: " + flag);
 				//! ---------------
 				//! Flags
 				if (flag.equalsIgnoreCase("need-one")) {
 					passed = false;
 					if (ConditionParsers.parseCondition(event, condition, plugin)) {
-						Bukkit.getLogger().info(" > CONDITIONS | Condition " + condition + " with flag " + flag + " passed.");
+						// plugin.getUnderscoreLogger().info(" > CONDITIONS | Condition " + condition + " with flag " + flag + " passed.");
 						passed = true;
 						break;
 					}
 				}
 				else {
 					if (!ConditionParsers.parseCondition(event, condition, plugin)) {
-						Bukkit.getLogger().info("> CONDITIONS | Condition " + condition + " with flag " + flag + " failed.");
+						// plugin.getUnderscoreLogger().info("> CONDITIONS | Condition " + condition + " with flag " + flag + " failed.");
 						passed = false;
 					}
 				}
 			}
 		}
-		Bukkit.getLogger().info(" > CONDITIONS | Result: " + passed);
+		// plugin.getUnderscoreLogger().info(" > CONDITIONS | Result: " + passed);
 		return passed;
 	}
 

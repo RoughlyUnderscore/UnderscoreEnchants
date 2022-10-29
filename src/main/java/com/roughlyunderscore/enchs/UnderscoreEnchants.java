@@ -2,79 +2,80 @@ package com.roughlyunderscore.enchs;
 
 import co.aikar.commands.BukkitCommandManager;
 import co.aikar.commands.ConditionFailedException;
-import com.codingforcookies.armorequip.*;
-import com.cryptomorin.xseries.*;
+import co.aikar.commands.InvalidCommandArgument;
+import com.codingforcookies.armorequip.ArmorListener;
+import com.codingforcookies.armorequip.DispenserArmorListener;
+import com.cryptomorin.xseries.XEnchantment;
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XPotion;
 import com.roughlyunderscore.enchantsapi.UEnchantsAPI;
 import com.roughlyunderscore.enchs.commands.UnderscoreEnchantsCommand;
-import com.roughlyunderscore.enchs.enchants.EnchantmentLevel;
-import com.roughlyunderscore.enchs.enchants.abstracts.*;
-import com.roughlyunderscore.enchs.events.*;
 import com.roughlyunderscore.enchs.enchants.Cooldown;
+import com.roughlyunderscore.enchs.enchants.abstracts.AbstractEnchantment;
+import com.roughlyunderscore.enchs.events.GeneralListener;
 import com.roughlyunderscore.enchs.gui.AnvilHandler;
-import com.roughlyunderscore.enchs.listeners.*;
+import com.roughlyunderscore.enchs.gui.EnchantTableHandler;
+import com.roughlyunderscore.enchs.listeners.InteractListener;
+import com.roughlyunderscore.enchs.listeners.JoinListener;
+import com.roughlyunderscore.enchs.listeners.LeaveListener;
+import com.roughlyunderscore.enchs.listeners.LootPopulateListener;
 import com.roughlyunderscore.enchs.util.Debug;
-import com.roughlyunderscore.enchs.util.Pair;
 import com.roughlyunderscore.enchs.util.data.DetailedEnchantment;
 import com.roughlyunderscore.enchs.util.data.Messages;
-import com.roughlyunderscore.enchs.util.Metrics;
-import static com.roughlyunderscore.enchs.registration.Register.*;
-
-import com.roughlyunderscore.enchs.gui.EnchantGUI;
 import com.roughlyunderscore.enchs.util.general.Utils;
-import de.jeff_media.updatechecker.*;
+import de.jeff_media.updatechecker.UpdateChecker;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import net.milkbowl.vault.economy.*;
+import lombok.ToString;
+import net.milkbowl.vault.economy.Economy;
 import org.apache.commons.io.FileUtils;
-import org.bukkit.*;
-import org.bukkit.configuration.file.*;
-import org.bukkit.enchantments.*;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.*;
-import org.bukkit.plugin.java.*;
-import org.bukkit.potion.*;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
-import java.lang.reflect.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.lang.reflect.Field;
 import java.util.*;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import static com.roughlyunderscore.enchs.parsers.PreparatoryParsers.*;
+import static com.roughlyunderscore.enchs.registration.Register.*;
 import static com.roughlyunderscore.enchs.util.general.Utils.*;
 
+@ToString // because my ide is a fucker
 public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
-
 
 	// The main class.
 	// A lot of stuff in a confined place, don't trip over something!
 
-	//<editor-fold desc="Earliest variables.">
 	private UnderscoreEnchants instance;
 	@Getter public Messages messages;
-	//</editor-fold>
 
-	@Getter public DetailedEnchantment EMPTY;
-	public static DetailedEnchantment STATIC_EMPTY;
+	public static DetailedEnchantment WRONG_LEVEL, WRONG_NAME;
 
-	//<editor-fold desc="Boring initialization of maps, lists, and generally used variables.">
+	@Getter public final List<PotionEffectType> positiveEffects = new ArrayList<>();
+	@Getter public final List<PotionEffectType> negativeEffects = new ArrayList<>();
 
-	@Getter public List<PotionEffectType> positiveEffects = new ArrayList<>();
-	@Getter public List<PotionEffectType> negativeEffects = new ArrayList<>();
-
-	public static Economy econ = null;
+	public static Economy econ;
 
 	@Getter public Debug debugger = null;
-	private static Debug staticLogger = null;
-
 	private static BufferedWriter writer = null;
 
 	// this is not top tier init code for sure
@@ -83,18 +84,14 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 	public static List<Material> armorList = new ArrayList<>();
 	@Getter public List<Enchantment> allEnchs = new ArrayList<>();
 	@Getter	public Map<DetailedEnchantment, AbstractEnchantment> enchantmentData = new HashMap<>();
-	public static Map<DetailedEnchantment, AbstractEnchantment> staticEnchantmentData = new HashMap<>();
+	public static final Map<DetailedEnchantment, AbstractEnchantment> staticEnchantmentData = new HashMap<>();
 
-	public static Map<UUID, Integer> gods = new HashMap<>();
+	@Getter private final Map<UUID, Integer> gods = new HashMap<>();
 
-	public static Debug getStaticLogger() {
-		return staticLogger;
-	}
+	@Getter private final Logger underscoreLogger = Logger.getLogger(UnderscoreEnchants.class.getName());
 
 	public final List<Cooldown> cooldowns = new ArrayList<>();
 
-	// too late to refactor the arrays
-	// upd: Never too late!
 	public static List<Enchantment> weaponEnchantments = new ArrayList<>();
 	public static List<Enchantment> bowEnchantments = new ArrayList<>();
 	public static List<Enchantment> toolEnchantments = new ArrayList<>();
@@ -104,19 +101,18 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 	public static List<Enchantment> bootsEnchantments = new ArrayList<>();
 	public static List<Enchantment> tridentEnchantments = new ArrayList<>();
 
-	@Getter public List<Material> plankRepariable = new ArrayList<>();
-	@Getter public List<Material> leatherRepariable = new ArrayList<>();
-	@Getter public List<Material> cobbleRepariable = new ArrayList<>();
-		@Getter public List<Material> cobbleTypes = new ArrayList<>();
-	@Getter public List<Material> ironRepariable = new ArrayList<>();
-	@Getter public List<Material> goldRepariable = new ArrayList<>();
-	@Getter public List<Material> diamondRepariable = new ArrayList<>();
-	@Getter public List<Material> netheriteRepariable = new ArrayList<>();
+	@Getter public final List<Material> plankRepariable = new ArrayList<>();
+	@Getter public final List<Material> leatherRepariable = new ArrayList<>();
+	@Getter public final List<Material> cobbleRepariable = new ArrayList<>();
+	@Getter public final List<Material> cobbleTypes = new ArrayList<>();
+	@Getter public final List<Material> ironRepariable = new ArrayList<>();
+	@Getter public final List<Material> goldRepariable = new ArrayList<>();
+	@Getter public final List<Material> diamondRepariable = new ArrayList<>();
+	@Getter public final List<Material> netheriteRepariable = new ArrayList<>();
 
-	public static String serverVersion = Bukkit.getBukkitVersion();
+	private final String serverVersion = Bukkit.getBukkitVersion();
 
 	public static FileConfiguration staticConfig;
-	//</editor-fold>
 	private void regTest() {
 		if (!serverVersion.contains("1.13") &&
 			!serverVersion.contains("1.14") &&
@@ -124,366 +120,31 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 			!serverVersion.contains("1.16") &&
 			!serverVersion.contains("1.17") &&
 			!serverVersion.contains("1.18") &&
-			!serverVersion.contains("1.19")){
+			!serverVersion.contains("1.19")) {
 			throw new IllegalStateException("Couldn't start the plugin. Is your server running on <1.13? The plugin works on 1.13+ and functions properly on 1.17+.");
 		}
 	}
 
-
-	//<editor-fold desc="Some more variable initialization (resource ID and bStats ID + the Metrics and UpdateChecker).">
 	@Getter final int id = 97002;
 	@Getter final int metricsId = 12413;
 	@Getter @Setter	UpdateChecker checker;
 	@Getter @Setter Metrics metrics;
-	//</editor-fold>
-
-	//<editor-fold desc="The enchantment parser">
-	public Pair<DetailedEnchantment, AbstractEnchantment> parseEnchantment(YamlConfiguration file) {
-
-		//<editor-fold desc="Preparatory">
-		final @NonNull String enchantmentName = format(file.getString("name"));
-		final @NonNull EnchantmentTarget target = parseTarget(file.getString("applicable"));
-		final @NonNull Class<? extends Event> eventString = parseEvent(file.getString("trigger"));
-		final List<String> conditions = file.getStringList("conditions");
-		final List<String> forbidOn = file.getStringList("forbid-on");
-		final @NonNull List<EnchantmentLevel> levelsList = getLevelsOf(file.getConfigurationSection("levels"));
-		final String damagerOrVictim = file.getString("player");
-		final @Nullable String conditionFlag = file.getString("condition-flag");
-		boolean forDamager = false, forVictim = false, valueEmpty = true;
-		if (damagerOrVictim != null) {
-			valueEmpty = false;
-			if (damagerOrVictim.equalsIgnoreCase("damager")) forDamager = true;
-			else if (damagerOrVictim.equalsIgnoreCase("victim")) forVictim = true;
-		}
-
-		final int maximumLevel = getMaxLevelOf(file.getConfigurationSection("levels"));
-		final int cooldownApplied = file.getInt("cooldown");
-
-		final NamespacedKey key = new NamespacedKey(instance, "underscore_enchants_" + enchantmentName.replace(" ", "__"));
-		final DetailedEnchantment entry = new DetailedEnchantment(key.getKey(), instance);
-		AbstractEnchantment ench;
-		//</editor-fold>
-
-		//<editor-fold desc="PlayerPVPEvent">
-		if (eventString.getName().equals(PlayerPVPEvent.class.getName())) {
-			boolean finalForDamager = forDamager, finalForVictim = forVictim, finalValueEmpty = valueEmpty;
-
-			ench = new PVPEnchantment(key, enchantmentName, maximumLevel, target) {
-				@Override
-				public void onPVP(PlayerPVPEvent event) {
-					twoPlayerDamageAction(event,
-										  event.getDamager(),
-										  event.getVictim(),
-										  entry,
-										  target,
-										  forbidOn,
-										  levelsList,
-										  key,
-										  conditions,
-										  conditionFlag,
-										  finalValueEmpty,
-										  finalForDamager,
-										  finalForVictim,
-										  enchantmentName,
-										  cooldownApplied,
-										  instance
-					);
-				}
-			};
-
-		}
-		//</editor-fold>
-		//<editor-fold desc="ArmorEquipEvent">
-		else if (eventString.getName().equals(ArmorEquipEvent.class.getName())) {
-			ench = new ArmorEquipEnchantment(key, enchantmentName, maximumLevel, target) {
-				@Override
-				public void onEquip(ArmorEquipEvent event) {
-					extraItemAction(event,
-									event.getPlayer(),
-									entry,
-									event.getNewArmorPiece(),
-									target,
-									forbidOn,
-									levelsList,
-									key,
-									conditions,
-									conditionFlag,
-									enchantmentName,
-									cooldownApplied,
-									instance);
-				}
-			};
-
-		}
-		//</editor-fold>
-		//<editor-fold desc="BlockBreakEvent">
-		else if (eventString.getName().equals(BlockBreakEvent.class.getName())) {
-			ench = new BlockBreakEnchantment(key, enchantmentName, maximumLevel, target) {
-				@Override
-				public void onBreak(BlockBreakEvent event) {
-					commonAction(event,
-								event.getPlayer(),
-								entry,
-								target,
-								forbidOn,
-								levelsList,
-								key,
-								conditions,
-								conditionFlag,
-								enchantmentName,
-								cooldownApplied,
-								instance);
-				}
-			};
-
-		}
-		//</editor-fold>
-		//<editor-fold desc="PlayerItemBreakEvent">
-		else if (eventString.getName().equals(PlayerItemBreakEvent.class.getName())) {
-			ench = new ItemBreakEnchantment(key, enchantmentName, maximumLevel, target) {
-				@Override
-				public void onBreak(PlayerItemBreakEvent event) {
-					// Create the EnchantmentLevel
-					commonAction(event,
-						event.getPlayer(),
-						entry,
-						target,
-						forbidOn,
-						levelsList,
-						key,
-						conditions,
-						conditionFlag,
-						enchantmentName,
-						cooldownApplied,
-						instance);
-				}
-			};
-
-		}
-		//</editor-fold>
-		//<editor-fold desc="PlayerItemConsumeEvent">
-		else if (eventString.getName().equals(PlayerItemConsumeEvent.class.getName())) {
-			ench = new ItemEatEnchantment(key, enchantmentName, maximumLevel, target) {
-				@Override
-				public void onConsume(PlayerItemConsumeEvent event) {
-					commonAction(event,
-						event.getPlayer(),
-						entry,
-						target,
-						forbidOn,
-						levelsList,
-						key,
-						conditions,
-						conditionFlag,
-						enchantmentName,
-						cooldownApplied,
-						instance);
-				}
-			};
-
-		}
-		//</editor-fold>
-		//<editor-fold desc="PlayerInteractAtEntityEvent">
-		else if (eventString.getName().equals(PlayerInteractAtEntityEvent.class.getName())) {
-			ench = new RMBEntityEnchantment(key, enchantmentName, maximumLevel, target) {
-				@Override
-				public void onRMB(PlayerInteractAtEntityEvent event) {
-					commonAction(event,
-						event.getPlayer(),
-						entry,
-						target,
-						forbidOn,
-						levelsList,
-						key,
-						conditions,
-						conditionFlag,
-						enchantmentName,
-						cooldownApplied,
-						instance);
-				}
-			};
-
-		}
-		//</editor-fold>
-		//<editor-fold desc="PlayerInteractEvent">
-		else if (eventString.getName().equals(PlayerInteractEvent.class.getName())) {
-			ench = new RMBEnchantment(key, enchantmentName, maximumLevel, target) {
-				@Override
-				public void onRMB(PlayerInteractEvent event) {
-					commonAction(event,
-						event.getPlayer(),
-						entry,
-						target,
-						forbidOn,
-						levelsList,
-						key,
-						conditions,
-						conditionFlag,
-						enchantmentName,
-						cooldownApplied,
-						instance);
-				}
-			};
-
-		}
-		//</editor-fold>
-		//<editor-fold desc="PlayerMoveEvent">
-		else if (eventString.getName().equals(PlayerMoveEvent.class.getName())) {
-			ench = new MoveEnchantment(key, enchantmentName, maximumLevel, target) {
-				@Override
-				public void onMove(PlayerMoveEvent event) {
-					commonAction(event,
-						event.getPlayer(),
-						entry,
-						target,
-						forbidOn,
-						levelsList,
-						key,
-						conditions,
-						conditionFlag,
-						enchantmentName,
-						cooldownApplied,
-						instance);
-				}
-			};
-
-		}
-		//</editor-fold>
-		//<editor-fold desc="PlayerGotHurtEvent">
-		else if (eventString.getName().equals(PlayerGotHurtEvent.class.getName())) {
-			ench = new GotHurtEnchantment(key, enchantmentName, maximumLevel, target) {
-				@Override
-				public void onHurt(PlayerGotHurtEvent event) {
-					commonAction(event,
-						event.getVictim(),
-						entry,
-						target,
-						forbidOn,
-						levelsList,
-						key,
-						conditions,
-						conditionFlag,
-						enchantmentName,
-						cooldownApplied,
-						instance);
-				}
-			};
-
-		}
-		//</editor-fold>
-		//<editor-fold desc="PlayerHurtsEntityEvent">
-		else if (eventString.getName().equals(PlayerHurtsEntityEvent.class.getName())) {
-			ench = new HurtsEntityEnchantment(key, enchantmentName, maximumLevel, target) {
-				@Override
-				public void onAttack(PlayerHurtsEntityEvent event) {
-					commonAction(event,
-						event.getDamager(),
-						entry,
-						target,
-						forbidOn,
-						levelsList,
-						key,
-						conditions,
-						conditionFlag,
-						enchantmentName,
-						cooldownApplied,
-						instance);
-				}
-			};
-
-		}
-		//</editor-fold>
-		//<editor-fold desc="PlayerShootBowEvent">
-		else if (eventString.getName().equals(PlayerShootBowEvent.class.getName())) {
-			ench = new ShootBowEnchantment(key, enchantmentName, maximumLevel, target) {
-				@Override
-				public void onShoot(PlayerShootBowEvent event) {
-					commonAction(event,
-						event.getShooter(),
-						entry,
-						target,
-						forbidOn,
-						levelsList,
-						key,
-						conditions,
-						conditionFlag,
-						enchantmentName,
-						cooldownApplied,
-						instance);
-				}
-			};
-
-		}
-		//</editor-fold>
-		//<editor-fold desc="PlayerToggleSneakEvent">
-		else if (eventString.getName().equals(PlayerToggleSneakEvent.class.getName())) {
-			ench = new ToggleSneakEnchantment(key, enchantmentName, maximumLevel, target) {
-				@Override
-				public void onToggle(PlayerToggleSneakEvent event) {
-					commonAction(event,
-						event.getPlayer(),
-						entry,
-						target,
-						forbidOn,
-						levelsList,
-						key,
-						conditions,
-						conditionFlag,
-						enchantmentName,
-						cooldownApplied,
-						instance);
-				}
-			};
-
-		}
-		//</editor-fold>
-		//<editor-fold desc="PlayerBowHitEvent">
-		else if (eventString.getName().equals(PlayerBowHitEvent.class.getName())) {
-			boolean finalForDamager = forDamager, finalForVictim = forVictim, finalValueEmpty = valueEmpty;
-			ench = new BowHitEnchantment(key, enchantmentName, maximumLevel, target) {
-				@Override
-				public void onHit(PlayerBowHitEvent event) {
-					twoPlayerDamageAction(  event,
-						event.getDamager(),
-						event.getVictim(),
-						entry,
-						target,
-						forbidOn,
-						levelsList,
-						key,
-						conditions,
-						conditionFlag,
-						finalValueEmpty,
-						finalForDamager,
-						finalForVictim,
-						enchantmentName,
-						cooldownApplied,
-						instance
-					);
-				}
-			};
-
-		}
-		//</editor-fold>
-		//<editor-fold desc="Exception case">
-		else { // Invalid trigger parsing
-			Bukkit.getLogger().severe("Enchantment " + enchantmentName + " did not get registered - invalid trigger!");
-			debugger.log("Enchantment " + enchantmentName + " did not get registered - invalid trigger!");
-			return null;
-		}
-		//</editor-fold>
-
-		return new Pair<>(entry, ench);
-	}
-	//</editor-fold>
 
 	@SneakyThrows
 	@Override
 	public void onEnable() {
 		//<editor-fold desc="Last initializations.">
-		EMPTY = new DetailedEnchantment(this);
-		STATIC_EMPTY = new DetailedEnchantment(this);
+		WRONG_LEVEL = new DetailedEnchantment("WRONG_LEVEL");
+		WRONG_NAME = new DetailedEnchantment("WRONG_NAME");
+
+		List<Enchantment> vanillaEnchants = Arrays.stream(Enchantment.values()).toList();
+		vanillaEnchants.forEach(enchantment -> {
+			DetailedEnchantment ench = new DetailedEnchantment(enchantment.getKey());
+			enchantmentData.put(ench, new AbstractEnchantment(enchantment));
+		});
+
 		staticEnchantmentData.putAll(enchantmentData);
+
 		instance = this;
 		messages = new Messages(this);
 		staticConfig = getConfig();
@@ -519,20 +180,19 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 
 		FileWriter fileW = new FileWriter(filee.getAbsoluteFile());
 		writer = new BufferedWriter(fileW);
-		debugger = new Debug(config.getBoolean("debugMode"), writer);
-		staticLogger = new Debug(config.getBoolean("debugMode"), writer);
+		debugger = new Debug(getConfig().getBoolean("debugMode"), writer, this);
 		//</editor-fold>
 		//<editor-fold desc="UpdateChecker initialization.">
 		checker = UpdateChecker.init(this, id)
 			.setDownloadLink(id)
 			.setDonationLink("https://donationalerts.com/r/zbll")
 			.onFail((senders, ex) -> {
-				Bukkit.getLogger().severe("Could not check for updates, make sure your connection is stable!");
-				Bukkit.getLogger().severe(ex.getMessage());
+				this.getUnderscoreLogger().severe("Could not check for updates, make sure your connection is stable!");
+				this.getUnderscoreLogger().severe(ex.getMessage());
 			})
 			.onSuccess((senders, ex) -> {
-				Bukkit.getLogger().finest("Thanks for using UnderscoreEnchants!");
-				Bukkit.getLogger().finest("Successfully checked for updates.");
+				this.getUnderscoreLogger().finest("Thanks for using UnderscoreEnchants!");
+				this.getUnderscoreLogger().finest("Successfully checked for updates.");
 			})
 			.checkEveryXHours(getConfig().getInt("updater"))
 			.setNotifyOpsOnJoin(true)
@@ -542,18 +202,12 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 		if (getConfig().getBoolean("bStats")) {
 			metrics = new Metrics(this, metricsId);
 
-
-			metrics.addCustomChart(new Metrics.SimplePie(
-				"fireworks_launched_after_enchanting",
-				() -> String.valueOf(getConfig().getBoolean("fireworks-on-enchants"))
-			));
-
-			metrics.addCustomChart(new Metrics.SimplePie(
+			metrics.addCustomChart(new SimplePie(
 				"language",
 				() -> getConfig().getString("lang")
 			));
 
-			metrics.addCustomChart(new Metrics.SimplePie(
+			metrics.addCustomChart(new SimplePie(
 				"enchantments_count",
 				() -> String.valueOf(allEnchs.size())
 			));
@@ -581,14 +235,45 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 				throw new ConditionFailedException("This command cannot be executed by console.");
 			}
 		});
+
+		commandManager.getCommandCompletions().registerCompletion("enchant-name-completion", context -> {
+			List<String> enchants = new ArrayList<>();
+			for (DetailedEnchantment ench : enchantmentData.keySet()) {
+				enchants.add(ench.getCommandName());
+			}
+			return enchants;
+		});
+		
+		commandManager.getCommandContexts().registerContext(DetailedEnchantment.class, context -> {
+			String enchName = context.popFirstArg();
+			DetailedEnchantment ench = Utils.parseEnchantment(enchName, this);
+			if (ench == null) {
+				context.getSender().sendMessage(format(getMessages().WRONG_NAME));
+				throw new InvalidCommandArgument("Enchantment " + enchName + " does not exist!", false);
+			}
+			return ench;
+		});
+
 		commandManager.registerCommand(new UnderscoreEnchantsCommand(this));
+
+		commandManager.getCommandCompletions().registerCompletion("enchant-level-completion", context -> {
+			DetailedEnchantment enchantment = context.getContextValue(DetailedEnchantment.class);
+			if (enchantment == null || enchantment.getEnchantment() == null) {
+				throw new InvalidCommandArgument("Enchantment does not exist!", false);
+			}
+			return IntStream
+				.range(enchantment.getEnchantment().getStartLevel(), enchantment.getEnchantment().getMaxLevel() + 1)
+				.boxed()
+				.map(String::valueOf)
+				.collect(Collectors.toList());
+		});
 		//</editor-fold>
 		//<editor-fold desc="Listeners initialization.">
 		PluginManager manager = getServer().getPluginManager();
 		manager.registerEvents(new InteractListener(this), this);
 
 		manager.registerEvents(new AnvilHandler(this), this);
-		manager.registerEvents(new EnchantGUI(this), this);
+		manager.registerEvents(new EnchantTableHandler(this), this);
 
 		manager.registerEvents(new LootPopulateListener(this), this);
 
@@ -598,13 +283,13 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 		manager.registerEvents(new GeneralListener(), this);
 
 		manager.registerEvents(new JoinListener(), this);
-		manager.registerEvents(new LeaveListener(), this);
+		manager.registerEvents(new LeaveListener(this), this);
 
 		//</editor-fold>
 
 		//<editor-fold desc="Economy setup.">
 		if (!setupEconomy()) {
-			Bukkit.getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
+			this.getUnderscoreLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
@@ -826,7 +511,7 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 		positiveEffects.add(XPotion.NIGHT_VISION.getPotionEffectType());
 		positiveEffects.add(XPotion.REGENERATION.getPotionEffectType());
 
-		XPotion.DEBUFFS.forEach(pet -> negativeEffects.add(pet.getPotionEffectType()));
+		XPotion.DEBUFFS.forEach(effect -> negativeEffects.add(effect.getPotionEffectType()));
 
 		weaponsList = Arrays.asList(
 			XMaterial.WOODEN_SWORD.parseMaterial(),
@@ -953,8 +638,8 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 	 */
 	@Override
 	public ItemStack disenchant(ItemStack item, String name) throws IllegalArgumentException {
-		DetailedEnchantment enchantment = Utils.parseEnchantment(name, -1, true);
-		if (enchantment == null || enchantment.equals(UnderscoreEnchants.STATIC_EMPTY)) {
+		DetailedEnchantment enchantment = Utils.parseEnchantment(name, -1, true, this);
+		if (enchantment == null || enchantment.equals(WRONG_LEVEL) || enchantment.equals(WRONG_NAME)) {
 			throw new IllegalArgumentException(String.format("The enchantment wasn't found! Name: %s", name));
 		}
 
@@ -1028,8 +713,8 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 
 	@Override
 	public ItemStack enchant(ItemStack itemStack, String name, int level) throws IllegalArgumentException {
-		DetailedEnchantment enchantment = Utils.parseEnchantment(name, level, false);
-		if (enchantment == null || enchantment.equals(UnderscoreEnchants.STATIC_EMPTY)) {
+		DetailedEnchantment enchantment = Utils.parseEnchantment(name, level, false, this);
+		if (enchantment == null || enchantment.equals(WRONG_LEVEL) || enchantment.equals(WRONG_NAME)) {
 			throw new IllegalArgumentException(String.format("The enchantment wasn't found or the level is invalid! Name: %s, level: %d", name, level));
 		}
 
@@ -1091,8 +776,8 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 
 	@Override
 	public ItemStack enchantUnrestricted(ItemStack itemStack, String name, int level) throws IllegalArgumentException {
-		DetailedEnchantment enchantment = Utils.parseEnchantment(name, level, true);
-		if (enchantment.equals(UnderscoreEnchants.STATIC_EMPTY)) {
+		DetailedEnchantment enchantment = Utils.parseEnchantment(name, level, true, this);
+		if (enchantment.equals(WRONG_LEVEL) || enchantment.equals(WRONG_NAME)) {
 			throw new IllegalArgumentException(String.format("The enchantment wasn't found or the level is invalid! Name: %s, level: %d", name, level));
 		}
 
@@ -1164,10 +849,6 @@ public final class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI
 
 
 	// excuse me https://github.com/skjorrface/animals.txt/blob/master/animals.txt
-	/*
-	Make a string array with these lines
-
-	 */
 
 	public static String[] animals = new String[] {
 		"Aardvark",

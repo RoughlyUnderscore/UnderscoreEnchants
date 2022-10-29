@@ -3,6 +3,7 @@ package com.roughlyunderscore.enchs.listeners;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.bukkit.block.Chest;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -24,7 +25,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static com.roughlyunderscore.enchs.util.general.Utils.*;
 
-@AllArgsConstructor
+@Data
 /*
 Populate the loot where possible
  */

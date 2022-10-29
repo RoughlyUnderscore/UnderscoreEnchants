@@ -69,8 +69,8 @@ public class ConditionParsers {
 			Pair.of("damage-of", Math.floor(damage) == Utils.parseD(condition[1])),
 			Pair.of("damage-lower", damage < Utils.parseD(condition[1])),
 			Pair.of("damage-higher", damage > Utils.parseD(condition[1])),
-			Pair.of("damage-lethal", damage >= getHealth(vic)),
-			Pair.of("damage-non-lethal", damage < getHealth(vic))
+			Pair.of("damage-lethal", damage >= getHealth(vic, plugin)),
+			Pair.of("damage-non-lethal", damage < getHealth(vic, plugin))
 
 		);
 	}
@@ -94,8 +94,8 @@ public class ConditionParsers {
 			Pair.of("damage-of", Math.floor(damage) == Utils.parseD(condition[1])),
 			Pair.of("damage-lower", damage < Utils.parseD(condition[1])),
 			Pair.of("damage-higher", damage > Utils.parseD(condition[1])),
-			Pair.of("damage-lethal", damage >= getHealth(vic)),
-			Pair.of("damage-non-lethal", damage < getHealth(vic))
+			Pair.of("damage-lethal", damage >= getHealth(vic, plugin)),
+			Pair.of("damage-non-lethal", damage < getHealth(vic, plugin))
 
 		);
 
@@ -287,8 +287,8 @@ public class ConditionParsers {
 			Pair.of("damage-of", Math.floor(damage) == Utils.parseD(condition[1])),
 			Pair.of("damage-lower", damage < Utils.parseD(condition[1])),
 			Pair.of("damage-higher", damage > Utils.parseD(condition[1])),
-			Pair.of("damage-lethal", damage >= getHealth(pl)),
-			Pair.of("damage-non-lethal", damage < getHealth(pl)),
+			Pair.of("damage-lethal", damage >= getHealth(pl, plugin)),
+			Pair.of("damage-non-lethal", damage < getHealth(pl, plugin)),
 			Pair.of("caused-by-block-explosion", ev.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION),
 			Pair.of("caused-by-hazardous-block", ev.getCause() == EntityDamageEvent.DamageCause.CONTACT),
 			Pair.of("caused-by-entity-cramming", ev.getCause() == EntityDamageEvent.DamageCause.CRAMMING),
@@ -392,38 +392,38 @@ public class ConditionParsers {
 	private boolean defaultParse(String[] condition, Player pl, boolean negate, UnderscoreEnchants plugin, Pair<String, Boolean>... extra) {
 		Boolean result = null;
 
-		if ("pdc-match".equalsIgnoreCase(condition[0]))             result = getPDCValue(pl, getKey(condition[1], plugin)).equals(condition[2]);
-		else if ("sneaking".equalsIgnoreCase(condition[0]))         result = sneaking(pl);
-		else if ("sprinting".equalsIgnoreCase(condition[0]))        result = sprinting(pl);
-		else if ("swimming".equalsIgnoreCase(condition[0]))         result = swimming(pl);
-		else if ("blocking".equalsIgnoreCase(condition[0]))         result = blocking(pl);
-		else if ("flying".equalsIgnoreCase(condition[0]))           result = flying(pl);
-		else if ("onfire".equalsIgnoreCase(condition[0]))           result = onFire(pl);
-		else if ("onhighestblock".equalsIgnoreCase(condition[0]))   result = onTop(pl);
-		else if ("rain".equalsIgnoreCase(condition[0]))             result = rains(pl);
-		else if ("clear".equalsIgnoreCase(condition[0]))            result = sunshines(pl);
-		else if ("thunder".equalsIgnoreCase(condition[0]))          result = thunders(pl);
-		else if ("day".equalsIgnoreCase(condition[0]))              result = day(pl);
-		else if ("night".equalsIgnoreCase(condition[0]))            result = night(pl);
-		else if ("overworld".equalsIgnoreCase(condition[0]))        result = overworld(pl);
-		else if ("nether".equalsIgnoreCase(condition[0]))           result = nether(pl);
-		else if ("end".equalsIgnoreCase(condition[0]))              result = end(pl);
-		else if ("op".equalsIgnoreCase(condition[0]))               result = op(pl);
-		else if ("health-of".equalsIgnoreCase(condition[0]))        result = (int) getHealth(pl) == parseD(condition[1]);
-		else if ("health-lower".equalsIgnoreCase(condition[0]))     result = getHealth(pl) < parseD(condition[1]);
-		else if ("health-higher".equalsIgnoreCase(condition[0]))    result = getHealth(pl) > parseD(condition[1]);
-		else if ("healthy".equalsIgnoreCase(condition[0]))          result = getHealth(pl) == getMaximumHealth(pl);
-		else if ("food-of".equalsIgnoreCase(condition[0]))          result = getFood(pl) == parseI(condition[1]);
-		else if ("food-lower".equalsIgnoreCase(condition[0]))       result = getFood(pl) < parseI(condition[1]);
-		else if ("food-higher".equalsIgnoreCase(condition[0]))      result = getFood(pl) > parseI(condition[1]);
-		else if ("satiated".equalsIgnoreCase(condition[0]))         result = getFood(pl) == 20;
-		else if ("air-of".equalsIgnoreCase(condition[0]))           result = getAir(pl) == parseI(condition[1]);
-		else if ("air-lower".equalsIgnoreCase(condition[0]))        result = getAir(pl) < parseI(condition[1]);
-		else if ("air-higher".equalsIgnoreCase(condition[0]))       result = getAir(pl) > parseI(condition[1]);
-		else if ("oxygenated".equalsIgnoreCase(condition[0]))       result = getAir(pl) == getMaximumAir(pl);
-		else if ("godmode-of".equalsIgnoreCase(condition[0]))       result = invisibleFor(pl) == parseI(condition[1]);
-		else if ("godmode-lower".equalsIgnoreCase(condition[0]))    result = invisibleFor(pl) < parseI(condition[1]);
-		else if ("godmode-higher".equalsIgnoreCase(condition[0]))   result = invisibleFor(pl) > parseI(condition[1]);
+		if ("pdc-match".equalsIgnoreCase(condition[0]))             result = getPDCValue(pl, getKey(condition[1], plugin), plugin).equals(condition[2]);
+		else if ("sneaking".equalsIgnoreCase(condition[0]))         result = sneaking(pl, plugin);
+		else if ("sprinting".equalsIgnoreCase(condition[0]))        result = sprinting(pl, plugin);
+		else if ("swimming".equalsIgnoreCase(condition[0]))         result = swimming(pl, plugin);
+		else if ("blocking".equalsIgnoreCase(condition[0]))         result = blocking(pl, plugin);
+		else if ("flying".equalsIgnoreCase(condition[0]))           result = flying(pl, plugin);
+		else if ("onfire".equalsIgnoreCase(condition[0]))           result = onFire(pl, plugin);
+		else if ("onhighestblock".equalsIgnoreCase(condition[0]))   result = onTop(pl, plugin);
+		else if ("rain".equalsIgnoreCase(condition[0]))             result = rains(pl, plugin);
+		else if ("clear".equalsIgnoreCase(condition[0]))            result = sunshines(pl, plugin);
+		else if ("thunder".equalsIgnoreCase(condition[0]))          result = thunders(pl, plugin);
+		else if ("day".equalsIgnoreCase(condition[0]))              result = day(pl, plugin);
+		else if ("night".equalsIgnoreCase(condition[0]))            result = night(pl, plugin);
+		else if ("overworld".equalsIgnoreCase(condition[0]))        result = overworld(pl, plugin);
+		else if ("nether".equalsIgnoreCase(condition[0]))           result = nether(pl, plugin);
+		else if ("end".equalsIgnoreCase(condition[0]))              result = end(pl, plugin);
+		else if ("op".equalsIgnoreCase(condition[0]))               result = op(pl, plugin);
+		else if ("health-of".equalsIgnoreCase(condition[0]))        result = (int) getHealth(pl, plugin) == parseD(condition[1]);
+		else if ("health-lower".equalsIgnoreCase(condition[0]))     result = getHealth(pl, plugin) < parseD(condition[1]);
+		else if ("health-higher".equalsIgnoreCase(condition[0]))    result = getHealth(pl, plugin) > parseD(condition[1]);
+		else if ("healthy".equalsIgnoreCase(condition[0]))          result = getHealth(pl, plugin) == getMaximumHealth(pl, plugin);
+		else if ("food-of".equalsIgnoreCase(condition[0]))          result = getFood(pl, plugin) == parseI(condition[1]);
+		else if ("food-lower".equalsIgnoreCase(condition[0]))       result = getFood(pl, plugin) < parseI(condition[1]);
+		else if ("food-higher".equalsIgnoreCase(condition[0]))      result = getFood(pl, plugin) > parseI(condition[1]);
+		else if ("satiated".equalsIgnoreCase(condition[0]))         result = getFood(pl, plugin) == 20;
+		else if ("air-of".equalsIgnoreCase(condition[0]))           result = getAir(pl, plugin) == parseI(condition[1]);
+		else if ("air-lower".equalsIgnoreCase(condition[0]))        result = getAir(pl, plugin) < parseI(condition[1]);
+		else if ("air-higher".equalsIgnoreCase(condition[0]))       result = getAir(pl, plugin) > parseI(condition[1]);
+		else if ("oxygenated".equalsIgnoreCase(condition[0]))       result = getAir(pl, plugin) == getMaximumAir(pl, plugin);
+		else if ("godmode-of".equalsIgnoreCase(condition[0]))       result = invisibleFor(pl, plugin) == parseI(condition[1]);
+		else if ("godmode-lower".equalsIgnoreCase(condition[0]))    result = invisibleFor(pl, plugin) < parseI(condition[1]);
+		else if ("godmode-higher".equalsIgnoreCase(condition[0]))   result = invisibleFor(pl, plugin) > parseI(condition[1]);
 
 		else {
 			for (Pair<String, Boolean> pair : extra) {
@@ -443,46 +443,46 @@ public class ConditionParsers {
 
 		if (entity instanceof LivingEntity lEntity) {
 
-			if ("pdc-match".equalsIgnoreCase(condition[0])) result = getPDCValue(pl, getKey(condition[1], plugin)).equals(condition[2]);
-			else if ("sneaking".equalsIgnoreCase(condition[0])) result = sneaking(pl);
-			else if ("sprinting".equalsIgnoreCase(condition[0])) result = sprinting(pl);
-			else if ("swimming".equalsIgnoreCase(condition[0])) result = swimming(pl);
-			else if ("blocking".equalsIgnoreCase(condition[0])) result = blocking(pl);
-			else if ("flying".equalsIgnoreCase(condition[0])) result = flying(pl);
-			else if ("onfire".equalsIgnoreCase(condition[0])) result = onFire(pl);
-			else if ("onhighestblock".equalsIgnoreCase(condition[0])) result = onTop(pl);
-			else if ("rain".equalsIgnoreCase(condition[0])) result = rains(pl);
-			else if ("clear".equalsIgnoreCase(condition[0])) result = sunshines(pl);
-			else if ("thunder".equalsIgnoreCase(condition[0])) result = thunders(pl);
-			else if ("day".equalsIgnoreCase(condition[0])) result = day(pl);
-			else if ("night".equalsIgnoreCase(condition[0])) result = night(pl);
-			else if ("overworld".equalsIgnoreCase(condition[0])) result = overworld(pl);
-			else if ("nether".equalsIgnoreCase(condition[0])) result = nether(pl);
-			else if ("end".equalsIgnoreCase(condition[0])) result = end(pl);
-			else if ("op".equalsIgnoreCase(condition[0])) result = op(pl);
-			else if ("health-of".equalsIgnoreCase(condition[0])) result = (int) getHealth(pl) == parseD(condition[1]);
-			else if ("health-lower".equalsIgnoreCase(condition[0])) result = getHealth(pl) < parseD(condition[1]);
-			else if ("health-higher".equalsIgnoreCase(condition[0])) result = getHealth(pl) > parseD(condition[1]);
-			else if ("healthy".equalsIgnoreCase(condition[0])) result = getHealth(pl) == getMaximumHealth(pl);
-			else if ("food-of".equalsIgnoreCase(condition[0])) result = getFood(pl) == parseI(condition[1]);
-			else if ("food-lower".equalsIgnoreCase(condition[0])) result = getFood(pl) < parseI(condition[1]);
-			else if ("food-higher".equalsIgnoreCase(condition[0])) result = getFood(pl) > parseI(condition[1]);
-			else if ("satiated".equalsIgnoreCase(condition[0])) result = getFood(pl) == 20;
-			else if ("air-of".equalsIgnoreCase(condition[0])) result = getAir(pl) == parseI(condition[1]);
-			else if ("air-lower".equalsIgnoreCase(condition[0])) result = getAir(pl) < parseI(condition[1]);
-			else if ("air-higher".equalsIgnoreCase(condition[0])) result = getAir(pl) > parseI(condition[1]);
-			else if ("oxygenated".equalsIgnoreCase(condition[0])) result = getAir(pl) == getMaximumAir(pl);
-			else if ("godmode-of".equalsIgnoreCase(condition[0])) result = invisibleFor(pl) == parseI(condition[1]);
-			else if ("godmode-lower".equalsIgnoreCase(condition[0])) result = invisibleFor(pl) < parseI(condition[1]);
-			else if ("godmode-higher".equalsIgnoreCase(condition[0])) result = invisibleFor(pl) > parseI(condition[1]);
+			if ("pdc-match".equalsIgnoreCase(condition[0])) result = getPDCValue(pl, getKey(condition[1], plugin), plugin).equals(condition[2]);
+			else if ("sneaking".equalsIgnoreCase(condition[0])) result = sneaking(pl, plugin);
+			else if ("sprinting".equalsIgnoreCase(condition[0])) result = sprinting(pl, plugin);
+			else if ("swimming".equalsIgnoreCase(condition[0])) result = swimming(pl, plugin);
+			else if ("blocking".equalsIgnoreCase(condition[0])) result = blocking(pl, plugin);
+			else if ("flying".equalsIgnoreCase(condition[0])) result = flying(pl, plugin);
+			else if ("onfire".equalsIgnoreCase(condition[0])) result = onFire(pl, plugin);
+			else if ("onhighestblock".equalsIgnoreCase(condition[0])) result = onTop(pl, plugin);
+			else if ("rain".equalsIgnoreCase(condition[0])) result = rains(pl, plugin);
+			else if ("clear".equalsIgnoreCase(condition[0])) result = sunshines(pl, plugin);
+			else if ("thunder".equalsIgnoreCase(condition[0])) result = thunders(pl, plugin);
+			else if ("day".equalsIgnoreCase(condition[0])) result = day(pl, plugin);
+			else if ("night".equalsIgnoreCase(condition[0])) result = night(pl, plugin);
+			else if ("overworld".equalsIgnoreCase(condition[0])) result = overworld(pl, plugin);
+			else if ("nether".equalsIgnoreCase(condition[0])) result = nether(pl, plugin);
+			else if ("end".equalsIgnoreCase(condition[0])) result = end(pl, plugin);
+			else if ("op".equalsIgnoreCase(condition[0])) result = op(pl, plugin);
+			else if ("health-of".equalsIgnoreCase(condition[0])) result = (int) getHealth(pl, plugin) == parseD(condition[1]);
+			else if ("health-lower".equalsIgnoreCase(condition[0])) result = getHealth(pl, plugin) < parseD(condition[1]);
+			else if ("health-higher".equalsIgnoreCase(condition[0])) result = getHealth(pl, plugin) > parseD(condition[1]);
+			else if ("healthy".equalsIgnoreCase(condition[0])) result = getHealth(pl, plugin) == getMaximumHealth(pl, plugin);
+			else if ("food-of".equalsIgnoreCase(condition[0])) result = getFood(pl, plugin) == parseI(condition[1]);
+			else if ("food-lower".equalsIgnoreCase(condition[0])) result = getFood(pl, plugin) < parseI(condition[1]);
+			else if ("food-higher".equalsIgnoreCase(condition[0])) result = getFood(pl, plugin) > parseI(condition[1]);
+			else if ("satiated".equalsIgnoreCase(condition[0])) result = getFood(pl, plugin) == 20;
+			else if ("air-of".equalsIgnoreCase(condition[0])) result = getAir(pl, plugin) == parseI(condition[1]);
+			else if ("air-lower".equalsIgnoreCase(condition[0])) result = getAir(pl, plugin) < parseI(condition[1]);
+			else if ("air-higher".equalsIgnoreCase(condition[0])) result = getAir(pl, plugin) > parseI(condition[1]);
+			else if ("oxygenated".equalsIgnoreCase(condition[0])) result = getAir(pl, plugin) == getMaximumAir(pl, plugin);
+			else if ("godmode-of".equalsIgnoreCase(condition[0])) result = invisibleFor(pl, plugin) == parseI(condition[1]);
+			else if ("godmode-lower".equalsIgnoreCase(condition[0])) result = invisibleFor(pl, plugin) < parseI(condition[1]);
+			else if ("godmode-higher".equalsIgnoreCase(condition[0])) result = invisibleFor(pl, plugin) > parseI(condition[1]);
 
-			else if ("entity-swimming".equalsIgnoreCase(condition[0])) result = swimming(entity);
-			else if ("entity-onfire".equalsIgnoreCase(condition[0])) result = onFire(entity);
-			else if ("entity-onhighestblock".equalsIgnoreCase(condition[0])) result = onTop(entity);
+			else if ("entity-swimming".equalsIgnoreCase(condition[0])) result = swimming(entity, plugin);
+			else if ("entity-onfire".equalsIgnoreCase(condition[0])) result = onFire(entity, plugin);
+			else if ("entity-onhighestblock".equalsIgnoreCase(condition[0])) result = onTop(entity, plugin);
 			else if ("entity-health-of".equalsIgnoreCase(condition[0])) result = (int) lEntity.getHealth() == Utils.parseD(condition[1]);
 			else if ("entity-health-lower".equalsIgnoreCase(condition[0])) result = lEntity.getHealth() < Utils.parseD(condition[1]);
 			else if ("entity-health-higher".equalsIgnoreCase(condition[0])) result = lEntity.getHealth() > Utils.parseD(condition[1]);
-			else if ("entity-healthy".equalsIgnoreCase(condition[0])) result = lEntity.getHealth() == getMaximumHealth(entity);
+			else if ("entity-healthy".equalsIgnoreCase(condition[0])) result = lEntity.getHealth() == getMaximumHealth(entity, plugin);
 
 			else {
 				for (Pair<String, Boolean> pair : extra) {
@@ -501,90 +501,90 @@ public class ConditionParsers {
 	private boolean defaultParse(String[] condition, Player pl, Player vic, boolean negate, UnderscoreEnchants plugin, Pair<String, Boolean>... extra) {
 		Boolean result = null;
 
-		if ("pdc-match".equalsIgnoreCase(condition[0]))             result = getPDCValue(pl, getKey(condition[1], plugin)).equals(condition[2]);
-		if ("victim-pdc-match".equalsIgnoreCase(condition[0]))      result = getPDCValue(vic, getKey(condition[1], plugin)).equals(condition[2]);
+		if ("pdc-match".equalsIgnoreCase(condition[0]))             result = getPDCValue(pl, getKey(condition[1], plugin), plugin).equals(condition[2]);
+		if ("victim-pdc-match".equalsIgnoreCase(condition[0]))      result = getPDCValue(vic, getKey(condition[1], plugin), plugin).equals(condition[2]);
 
-		if ("sneaking".equalsIgnoreCase(condition[0]))              result = sneaking(pl);
-		if ("sprinting".equalsIgnoreCase(condition[0]))             result = sprinting(pl);
-		if ("swimming".equalsIgnoreCase(condition[0]))              result = swimming(pl);
-		if ("blocking".equalsIgnoreCase(condition[0]))              result = blocking(pl);
-		if ("flying".equalsIgnoreCase(condition[0]))                result = flying(pl);
+		if ("sneaking".equalsIgnoreCase(condition[0]))              result = sneaking(pl, plugin);
+		if ("sprinting".equalsIgnoreCase(condition[0]))             result = sprinting(pl, plugin);
+		if ("swimming".equalsIgnoreCase(condition[0]))              result = swimming(pl, plugin);
+		if ("blocking".equalsIgnoreCase(condition[0]))              result = blocking(pl, plugin);
+		if ("flying".equalsIgnoreCase(condition[0]))                result = flying(pl, plugin);
 
-		if ("onfire".equalsIgnoreCase(condition[0]))                result = onFire(pl);
-		if ("onhighestblock".equalsIgnoreCase(condition[0]))        result = onTop(pl);
+		if ("onfire".equalsIgnoreCase(condition[0]))                result = onFire(pl, plugin);
+		if ("onhighestblock".equalsIgnoreCase(condition[0]))        result = onTop(pl, plugin);
 
-		if ("rain".equalsIgnoreCase(condition[0]))                  result = rains(pl);
-		if ("clear".equalsIgnoreCase(condition[0]))                 result = sunshines(pl);
-		if ("thunder".equalsIgnoreCase(condition[0]))               result = thunders(pl);
+		if ("rain".equalsIgnoreCase(condition[0]))                  result = rains(pl, plugin);
+		if ("clear".equalsIgnoreCase(condition[0]))                 result = sunshines(pl, plugin);
+		if ("thunder".equalsIgnoreCase(condition[0]))               result = thunders(pl, plugin);
 
-		if ("day".equalsIgnoreCase(condition[0]))                   result = day(pl);
-		if ("night".equalsIgnoreCase(condition[0]))                 result = night(pl);
+		if ("day".equalsIgnoreCase(condition[0]))                   result = day(pl, plugin);
+		if ("night".equalsIgnoreCase(condition[0]))                 result = night(pl, plugin);
 
-		if ("overworld".equalsIgnoreCase(condition[0]))             result = overworld(pl);
-		if ("nether".equalsIgnoreCase(condition[0]))                result = nether(pl);
-		if ("end".equalsIgnoreCase(condition[0]))                   result = end(pl);
+		if ("overworld".equalsIgnoreCase(condition[0]))             result = overworld(pl, plugin);
+		if ("nether".equalsIgnoreCase(condition[0]))                result = nether(pl, plugin);
+		if ("end".equalsIgnoreCase(condition[0]))                   result = end(pl, plugin);
 
-		if ("op".equalsIgnoreCase(condition[0]))                    result = op(pl);
+		if ("op".equalsIgnoreCase(condition[0]))                    result = op(pl, plugin);
 
-		if ("health-of".equalsIgnoreCase(condition[0]))             result = (int) getHealth(pl) == Utils.parseD(condition[1]);
-		if ("health-lower".equalsIgnoreCase(condition[0]))          result = getHealth(pl) < Utils.parseD(condition[1]);
-		if ("health-higher".equalsIgnoreCase(condition[0]))         result = getHealth(pl) > Utils.parseD(condition[1]);
-		if ("healthy".equalsIgnoreCase(condition[0]))               result = getHealth(pl) == getMaximumHealth(pl);
+		if ("health-of".equalsIgnoreCase(condition[0]))             result = (int) getHealth(pl, plugin) == Utils.parseD(condition[1]);
+		if ("health-lower".equalsIgnoreCase(condition[0]))          result = getHealth(pl, plugin) < Utils.parseD(condition[1]);
+		if ("health-higher".equalsIgnoreCase(condition[0]))         result = getHealth(pl, plugin) > Utils.parseD(condition[1]);
+		if ("healthy".equalsIgnoreCase(condition[0]))               result = getHealth(pl, plugin) == getMaximumHealth(pl, plugin);
 
-		if ("food-of".equalsIgnoreCase(condition[0]))               result = getFood(pl) == Utils.parseI(condition[1]);
-		if ("food-lower".equalsIgnoreCase(condition[0]))            result = getFood(pl) < Utils.parseI(condition[1]);
-		if ("food-higher".equalsIgnoreCase(condition[0]))           result = getFood(pl) > Utils.parseI(condition[1]);
-		if ("satiated".equalsIgnoreCase(condition[0]))              result = getFood(pl) == 20;
+		if ("food-of".equalsIgnoreCase(condition[0]))               result = getFood(pl, plugin) == Utils.parseI(condition[1]);
+		if ("food-lower".equalsIgnoreCase(condition[0]))            result = getFood(pl, plugin) < Utils.parseI(condition[1]);
+		if ("food-higher".equalsIgnoreCase(condition[0]))           result = getFood(pl, plugin) > Utils.parseI(condition[1]);
+		if ("satiated".equalsIgnoreCase(condition[0]))              result = getFood(pl, plugin) == 20;
 
-		if ("air-of".equalsIgnoreCase(condition[0]))                result = getAir(pl) == Utils.parseI(condition[1]);
-		if ("air-lower".equalsIgnoreCase(condition[0]))             result = getAir(pl) < Utils.parseI(condition[1]);
-		if ("air-higher".equalsIgnoreCase(condition[0]))            result = getAir(pl) > Utils.parseI(condition[1]);
-		if ("oxygenated".equalsIgnoreCase(condition[0]))            result = getAir(pl) == getMaximumAir(pl);
+		if ("air-of".equalsIgnoreCase(condition[0]))                result = getAir(pl, plugin) == Utils.parseI(condition[1]);
+		if ("air-lower".equalsIgnoreCase(condition[0]))             result = getAir(pl, plugin) < Utils.parseI(condition[1]);
+		if ("air-higher".equalsIgnoreCase(condition[0]))            result = getAir(pl, plugin) > Utils.parseI(condition[1]);
+		if ("oxygenated".equalsIgnoreCase(condition[0]))            result = getAir(pl, plugin) == getMaximumAir(pl, plugin);
 
-		if ("godmode-of".equalsIgnoreCase(condition[0]))            result = invisibleFor(pl) == Utils.parseI(condition[1]);
-		if ("godmode-lower".equalsIgnoreCase(condition[0]))         result = invisibleFor(pl) < Utils.parseI(condition[1]);
-		if ("godmode-higher".equalsIgnoreCase(condition[0]))        result = invisibleFor(pl) > Utils.parseI(condition[1]);
+		if ("godmode-of".equalsIgnoreCase(condition[0]))            result = invisibleFor(pl, plugin) == Utils.parseI(condition[1]);
+		if ("godmode-lower".equalsIgnoreCase(condition[0]))         result = invisibleFor(pl, plugin) < Utils.parseI(condition[1]);
+		if ("godmode-higher".equalsIgnoreCase(condition[0]))        result = invisibleFor(pl, plugin) > Utils.parseI(condition[1]);
 
-		if ("victim-sneaking".equalsIgnoreCase(condition[0]))       result = sneaking(vic);
-		if ("victim-sprinting".equalsIgnoreCase(condition[0]))      result = sprinting(vic);
-		if ("victim-swimming".equalsIgnoreCase(condition[0]))       result = swimming(vic);
-		if ("victim-blocking".equalsIgnoreCase(condition[0]))       result = blocking(vic);
-		if ("victim-flying".equalsIgnoreCase(condition[0]))         result = flying(vic);
+		if ("victim-sneaking".equalsIgnoreCase(condition[0]))       result = sneaking(vic, plugin);
+		if ("victim-sprinting".equalsIgnoreCase(condition[0]))      result = sprinting(vic, plugin);
+		if ("victim-swimming".equalsIgnoreCase(condition[0]))       result = swimming(vic, plugin);
+		if ("victim-blocking".equalsIgnoreCase(condition[0]))       result = blocking(vic, plugin);
+		if ("victim-flying".equalsIgnoreCase(condition[0]))         result = flying(vic, plugin);
 
-		if ("victim-onfire".equalsIgnoreCase(condition[0]))         result = onFire(vic);
-		if ("victim-onhighestblock".equalsIgnoreCase(condition[0])) result = onTop(vic);
+		if ("victim-onfire".equalsIgnoreCase(condition[0]))         result = onFire(vic, plugin);
+		if ("victim-onhighestblock".equalsIgnoreCase(condition[0])) result = onTop(vic, plugin);
 
-		if ("victim-rain".equalsIgnoreCase(condition[0]))           result = rains(vic);
-		if ("victim-clear".equalsIgnoreCase(condition[0]))          result = sunshines(vic);
-		if ("victim-thunder".equalsIgnoreCase(condition[0]))        result = thunders(vic);
+		if ("victim-rain".equalsIgnoreCase(condition[0]))           result = rains(vic, plugin);
+		if ("victim-clear".equalsIgnoreCase(condition[0]))          result = sunshines(vic, plugin);
+		if ("victim-thunder".equalsIgnoreCase(condition[0]))        result = thunders(vic, plugin);
 
-		if ("victim-day".equalsIgnoreCase(condition[0]))            result = day(vic);
-		if ("victim-night".equalsIgnoreCase(condition[0]))          result = night(vic);
+		if ("victim-day".equalsIgnoreCase(condition[0]))            result = day(vic, plugin);
+		if ("victim-night".equalsIgnoreCase(condition[0]))          result = night(vic, plugin);
 
-		if ("victim-overworld".equalsIgnoreCase(condition[0]))      result = overworld(vic);
-		if ("victim-nether".equalsIgnoreCase(condition[0]))         result = nether(vic);
-		if ("victim-end".equalsIgnoreCase(condition[0]))            result = end(vic);
+		if ("victim-overworld".equalsIgnoreCase(condition[0]))      result = overworld(vic, plugin);
+		if ("victim-nether".equalsIgnoreCase(condition[0]))         result = nether(vic, plugin);
+		if ("victim-end".equalsIgnoreCase(condition[0]))            result = end(vic, plugin);
 
-		if ("victim-op".equalsIgnoreCase(condition[0]))             result = op(vic);
+		if ("victim-op".equalsIgnoreCase(condition[0]))             result = op(vic, plugin);
 
-		if ("victim-health-of".equalsIgnoreCase(condition[0]))      result = (int) getHealth(vic) == Utils.parseD(condition[1]);
-		if ("victim-health-lower".equalsIgnoreCase(condition[0]))   result = getHealth(vic) < Utils.parseD(condition[1]);
-		if ("victim-health-higher".equalsIgnoreCase(condition[0]))  result = getHealth(vic) > Utils.parseD(condition[1]);
-		if ("victim-healthy".equalsIgnoreCase(condition[0]))        result = getHealth(vic) == getMaximumHealth(vic);
+		if ("victim-health-of".equalsIgnoreCase(condition[0]))      result = (int) getHealth(vic, plugin) == Utils.parseD(condition[1]);
+		if ("victim-health-lower".equalsIgnoreCase(condition[0]))   result = getHealth(vic, plugin) < Utils.parseD(condition[1]);
+		if ("victim-health-higher".equalsIgnoreCase(condition[0]))  result = getHealth(vic, plugin) > Utils.parseD(condition[1]);
+		if ("victim-healthy".equalsIgnoreCase(condition[0]))        result = getHealth(vic, plugin) == getMaximumHealth(vic, plugin);
 
-		if ("victim-food-of".equalsIgnoreCase(condition[0]))        result = getFood(vic) == Utils.parseI(condition[1]);
-		if ("victim-food-lower".equalsIgnoreCase(condition[0]))     result = getFood(vic) < Utils.parseI(condition[1]);
-		if ("victim-food-higher".equalsIgnoreCase(condition[0]))    result = getFood(vic) > Utils.parseI(condition[1]);
-		if ("victim-satiated".equalsIgnoreCase(condition[0]))       result = getFood(vic) == 20;
+		if ("victim-food-of".equalsIgnoreCase(condition[0]))        result = getFood(vic, plugin) == Utils.parseI(condition[1]);
+		if ("victim-food-lower".equalsIgnoreCase(condition[0]))     result = getFood(vic, plugin) < Utils.parseI(condition[1]);
+		if ("victim-food-higher".equalsIgnoreCase(condition[0]))    result = getFood(vic, plugin) > Utils.parseI(condition[1]);
+		if ("victim-satiated".equalsIgnoreCase(condition[0]))       result = getFood(vic, plugin) == 20;
 
-		if ("victim-air-of".equalsIgnoreCase(condition[0]))         result = getAir(vic) == Utils.parseI(condition[1]);
-		if ("victim-air-lower".equalsIgnoreCase(condition[0]))      result = getAir(vic) < Utils.parseI(condition[1]);
-		if ("victim-air-higher".equalsIgnoreCase(condition[0]))     result = getAir(vic) > Utils.parseI(condition[1]);
-		if ("victim-oxygenated".equalsIgnoreCase(condition[0]))     result = getAir(vic) == getMaximumAir(vic);
+		if ("victim-air-of".equalsIgnoreCase(condition[0]))         result = getAir(vic, plugin) == Utils.parseI(condition[1]);
+		if ("victim-air-lower".equalsIgnoreCase(condition[0]))      result = getAir(vic, plugin) < Utils.parseI(condition[1]);
+		if ("victim-air-higher".equalsIgnoreCase(condition[0]))     result = getAir(vic, plugin) > Utils.parseI(condition[1]);
+		if ("victim-oxygenated".equalsIgnoreCase(condition[0]))     result = getAir(vic, plugin) == getMaximumAir(vic, plugin);
 
-		if ("victim-godmode-of".equalsIgnoreCase(condition[0]))     result = invisibleFor(vic) == Utils.parseI(condition[1]);
-		if ("victim-godmode-lower".equalsIgnoreCase(condition[0]))  result = invisibleFor(vic) < Utils.parseI(condition[1]);
-		if ("victim-godmode-higher".equalsIgnoreCase(condition[0])) result = invisibleFor(vic) > Utils.parseI(condition[1]);
+		if ("victim-godmode-of".equalsIgnoreCase(condition[0]))     result = invisibleFor(vic, plugin) == Utils.parseI(condition[1]);
+		if ("victim-godmode-lower".equalsIgnoreCase(condition[0]))  result = invisibleFor(vic, plugin) < Utils.parseI(condition[1]);
+		if ("victim-godmode-higher".equalsIgnoreCase(condition[0])) result = invisibleFor(vic, plugin) > Utils.parseI(condition[1]);
 
 		else {
 			for (Pair<String, Boolean> pair : extra) {

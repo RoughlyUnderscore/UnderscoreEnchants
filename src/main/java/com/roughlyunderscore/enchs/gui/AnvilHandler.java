@@ -3,9 +3,9 @@ package com.roughlyunderscore.enchs.gui;
 import com.cryptomorin.xseries.XMaterial;
 import com.roughlyunderscore.enchantsapi.events.EnchantmentsCombineEvent;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
+import com.roughlyunderscore.enchs.util.general.Utils;
 import lombok.Data;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.enchantments.Enchantment;
@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
+import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -31,115 +32,131 @@ public class AnvilHandler implements Listener {
 
     @EventHandler
     public void onAnvil(PrepareAnvilEvent ev) {
-        if (ev.getInventory().getItem(0) == null || ev.getInventory().getItem(1) == null) {
+        // <editor-fold desc="Preparations">
+        // if (!(ev.getInventory() instanceof AnvilInventory inv)) return;
+        final AnvilInventory inv = ev.getInventory();
+
+        final ItemStack item1 = inv.getItem(0);
+        final ItemStack item2 = inv.getItem(1);
+
+        // Can't combine the items yet - better yet, a player might be trying to scam the anvil by requesting a result and removing one of the items.
+        if (item1 == null || item2 == null || item1.getType() == Material.AIR || item2.getType() == Material.AIR) {
+            ev.setResult(null);
             return;
         }
-        if (ev.getResult() != null) {
-            return;
-        }
-        Player player = (Player) ev.getView().getPlayer();
+        // The items have already been combined
+        if (inv.getItem(2) != null) return;
+        // Name tags should be handled with vanilla
+        if (item1.getType() == Material.NAME_TAG || item2.getType() == Material.NAME_TAG) return;
 
-        ItemStack item1 = ev.getInventory().getItem(0);
-        ItemStack item2 = ev.getInventory().getItem(1);
+        final Player player = (Player) ev.getView().getPlayer();
 
-        Material type = item2.getType();
-        if (
-                !type.isItem() // ???
-                && type != Material.NAME_TAG
-        ) return;
+        final Material type = item2.getType();
+        if (!type.isItem()) return; // ?? I guess I need this but why
+        //</editor-fold>
 
-        if (!isSecondItemValid(item1, item2)) return;
+        switch (itemMatchesSecondItem(item1, item2)) {
+            case IDENTICAL_ITEMS, BOOK -> {
+                if (item1.getType() == XMaterial.BOOK.parseMaterial()) item1.setType(XMaterial.ENCHANTED_BOOK.parseMaterial());
 
-        ItemStack newItem = new ItemStack(item1.getType());
-        ItemMeta newMeta = Bukkit.getItemFactory().getItemMeta(newItem.getType());
+                ItemStack newItem = new ItemStack(item1.getType()); // The first item is always the result item (example: in repairs the second item isn't the same)
+                // final ItemMeta newMeta = Bukkit.getItemFactory().getItemMeta(newItem.getType());
 
-        Map<Enchantment, Integer> item1Enchants = new ConcurrentHashMap<>(item1.getEnchantments());
-        Map<Enchantment, Integer> item2Enchants = new ConcurrentHashMap<>(item2.getEnchantments());
-        Map<Enchantment, Integer> allEnchants = new ConcurrentHashMap<>();
+                final Map<Enchantment, Integer> item1Enchants = new ConcurrentHashMap<>(item1.getEnchantments());
+                final Map<Enchantment, Integer> item2Enchants = new ConcurrentHashMap<>(item2.getEnchantments());
+                final Map<Enchantment, Integer> allEnchants = new ConcurrentHashMap<>(); // This map will hold all the enchantments.
 
-        for (Map.Entry<Enchantment, Integer> combinedEntry : item1Enchants.entrySet()) {
-            for (Map.Entry<Enchantment, Integer> combineeEntry : item2Enchants.entrySet()) {
-
-                // o^2 complexity? didn't ask lol
-                if (!combinedEntry.getKey().equals(combineeEntry.getKey())) continue;
-
-                // pass
-
-                item1Enchants.remove(combinedEntry.getKey());
-                item2Enchants.remove(combineeEntry.getKey());
-
-                if (combinedEntry.getValue().equals(combineeEntry.getValue())) {
-                    allEnchants.put(combinedEntry.getKey(), Math.min(combinedEntry.getValue() + 1, combinedEntry.getKey().getMaxLevel()));
-                    continue;
+                try {
+                    newItem = Utils.generateEnchantedItem(newItem, item1Enchants, item2Enchants, plugin);
+                } catch (IllegalArgumentException ex) {
+                    sendActionbar(player, ex.getMessage(), plugin);
+                    return;
                 }
 
-                allEnchants.put(combinedEntry.getKey(), Math.min(Math.max(combinedEntry.getValue(), combineeEntry.getValue()), combinedEntry.getKey().getMaxLevel()));
+                // UnderscoreEnchants calculates the anvil cost differently.
+                final int enchants = 1 + newItem.getEnchantments().size() * 3 + (int) Math.pow(newItem.getEnchantments().size(), 1.6);
+                plugin.getServer().getScheduler().runTask(plugin, () -> inv.setRepairCost(enchants));
+
+                // final
+                final EnchantmentsCombineEvent ece = new EnchantmentsCombineEvent(player, newItem);
+                Bukkit.getPluginManager().callEvent(ece);
+                if (!ece.isCancelled()) {
+                    final ItemStack finalNewItem = newItem; // lambdas :rolled_eyes:
+                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> inv.setItem(2, finalNewItem), 1);
+                    // TODO degrade anvil: 12% chance
+                    // maybe degrading the anvil is not necessary? it should be accounted for with vanilla...
+
+                    // We don't need to set the other items to null, because the player might just think again.
+                    // inv.setItem(0, null);
+                    // inv.setItem(1, null);
+                }
             }
-        }
+            case REPAIR -> {
+                ItemStack newItem = Utils.repair(item1, 0.2 * item2.getAmount());
+                plugin.getServer().getScheduler().runTask(plugin, () -> inv.setRepairCost(1));
 
-        allEnchants.putAll(item1Enchants);
-        allEnchants.putAll(item2Enchants);
+                final EnchantmentsCombineEvent ece = new EnchantmentsCombineEvent(player, newItem);
+                Bukkit.getPluginManager().callEvent(ece);
+                if (!ece.isCancelled()) {
+                    final ItemStack finalNewItem = newItem; // lambdas :rolled_eyes:
+                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> inv.setItem(2, finalNewItem), 1);
 
-        // generic
-        newMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-
-        // making sure no enchantments conflict
-        // the method is weirdly coded so i inverse it
-
-
-        // lore
-        List<String> newLore = new ArrayList<>();
-        if (!allEnchants.isEmpty()) {
-            for (Map.Entry<Enchantment, Integer> entry : allEnchants.entrySet()) {
-                newLore.add(format("&7" + getName(entry.getKey()) + " " + toRoman(entry.getValue())));
+                }
+                // TODO test REPAIR and BOOKS
             }
+            default -> {}
         }
 
-        // tweaking and adding
-        newMeta.setLore(newLore);
-        newItem.setItemMeta(newMeta);
-
-        // adding enchantments from combined & combinee
-        allEnchants.forEach(newItem::addUnsafeEnchantment);
-
-        if (!allEnchants.isEmpty() && allEnchants.size() >= plugin.getConfig().getInt("enchantmentLimit")) {
-            sendActionbar(player, "&cYou can't have more than " + plugin.getConfig().getInt("enchantmentLimit") + " enchantments on an item!");
-            return;
-        }
-
-        // making sure has enough levels
-        int enchants = newItem.getEnchantments().size() * 3 + 3;
-        if (player.getLevel() < enchants && player.getGameMode() != GameMode.CREATIVE) {
-            sendActionbar(player, "&cNot enough levels (&6" + player.getLevel() + "/" + enchants + "&c levels)");
-            return;
-        }
-
-        // final
-        EnchantmentsCombineEvent ece = new EnchantmentsCombineEvent(player, newItem);
-        Bukkit.getPluginManager().callEvent(ece);
-        if (!ece.isCancelled()) {
-            if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - enchants);
-
-            ev.setResult(newItem);
-           // ev.getInventory().setItem(0, null);
-           // ev.getInventory().setItem(1, null);
-        }
     }
 
-    boolean isSecondItemValid(ItemStack first, ItemStack second) {
+    AnvilPlacementType itemMatchesSecondItem(ItemStack first, ItemStack second) {
         Material item = first.getType(), ingot = second.getType();
 
-        if (item == ingot) return true;
+        if (
+            item == ingot ||
+            (is(ingot, XMaterial.ENCHANTED_BOOK) || (is(item, XMaterial.BOOK) && is(item, XMaterial.ENCHANTED_BOOK))) // book/enchanted book + enchanted book
+        )
+            return AnvilPlacementType.IDENTICAL_ITEMS;
 
-        if (Tag.PLANKS.isTagged(ingot) && plugin.getPlankRepariable().contains(item)) return true;
-        if (is(ingot, XMaterial.LEATHER) && plugin.getLeatherRepariable().contains(item)) return true;
-        if (plugin.getCobbleTypes().contains(ingot) && plugin.getCobbleRepariable().contains(item)) return true;
-        if (is(ingot, XMaterial.IRON_INGOT) && plugin.getIronRepariable().contains(item)) return true;
-        if (is(ingot, XMaterial.GOLD_INGOT) && plugin.getGoldRepariable().contains(item)) return true;
-        if (is(ingot, XMaterial.DIAMOND) && plugin.getDiamondRepariable().contains(item)) return true;
-        if (is(ingot, XMaterial.NETHERITE_INGOT) && plugin.getNetheriteRepariable().contains(item)) return true;
-        if (is(ingot, XMaterial.SCUTE) && is(item, XMaterial.TURTLE_HELMET)) return true;
-        return is(ingot, XMaterial.PHANTOM_MEMBRANE) && is(item, XMaterial.ELYTRA);
+        if (
+            (Tag.PLANKS.isTagged(ingot) && plugin.getPlankRepariable().contains(item)) || // wooden item + planks
+            (is(ingot, XMaterial.LEATHER) && plugin.getLeatherRepariable().contains(item)) || // leather item + leather
+            (is(ingot, XMaterial.IRON_INGOT) && plugin.getIronRepariable().contains(item)) || // iron item + iron ingot
+            (is(ingot, XMaterial.GOLD_INGOT) && plugin.getGoldRepariable().contains(item)) || // gold item + gold ingot
+            (is(ingot, XMaterial.DIAMOND) && plugin.getDiamondRepariable().contains(item)) || // diamond item + diamond
+            (is(ingot, XMaterial.NETHERITE_INGOT) && plugin.getNetheriteRepariable().contains(item)) || // netherite item + netherite ingot
+            (is(ingot, XMaterial.SCUTE) && is(item, XMaterial.TURTLE_HELMET)) || // turtle helmet + scute
+            (is(ingot, XMaterial.PHANTOM_MEMBRANE) && is(item, XMaterial.ELYTRA)) // elytra + phantom membrane
+        )
+            return AnvilPlacementType.REPAIR;
+
+        if ((is(ingot, XMaterial.ENCHANTED_BOOK)))
+            return AnvilPlacementType.BOOK; // it can't be book + book, because that's handled in the first if statement
+
+        return AnvilPlacementType.INVALID;
+    }
+
+    // For internal purposes
+    private enum AnvilPlacementType {
+        /**
+         * When two identical items are placed into the anvil. Currently has identical behavior with {@code BOOK}.
+         */
+        IDENTICAL_ITEMS,
+
+        /**
+         * When an item and a book are placed into the anvil. Currently has identical behavior with {@code IDENTICAL_ITEMS}.
+         */
+        BOOK,
+
+        /**
+         * When an item and a successive repair ingot are placed into the anvil
+         */
+        REPAIR,
+
+        /**
+         * When the item combination could not be detected or is invalid.
+         */
+        INVALID
     }
 
 }

@@ -16,7 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class InteractListener implements Listener {
 
     private final UnderscoreEnchants plugin;
-
+/*
     @EventHandler(priority = org.bukkit.event.EventPriority.LOWEST)
     public void onInteract(PlayerInteractEvent ev) {
 
@@ -27,7 +27,7 @@ public class InteractListener implements Listener {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        Bukkit.dispatchCommand(ev.getPlayer(), "ue enchanttable");
+                        Bukkit.dispatchCommand(ev.getPlayer(), "ue enchtable");
                     }
                 }.runTaskLater(plugin, 2L);
             }
@@ -56,5 +56,5 @@ public class InteractListener implements Listener {
         return m == XMaterial.ANVIL.parseMaterial() ||
                 m == XMaterial.CHIPPED_ANVIL.parseMaterial() ||
                 m == XMaterial.DAMAGED_ANVIL.parseMaterial();
-    }
+    }*/
 }
