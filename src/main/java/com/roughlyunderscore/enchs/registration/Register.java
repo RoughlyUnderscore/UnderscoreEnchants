@@ -2,11 +2,11 @@ package com.roughlyunderscore.enchs.registration;
 
 import com.codingforcookies.armorequip.ArmorEquipEvent;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
-import com.roughlyunderscore.enchs.enchants.Cooldown;
+import com.roughlyunderscore.enchs.util.cooldownutils.Cooldown;
 import com.roughlyunderscore.enchs.enchants.EnchantmentLevel;
 import com.roughlyunderscore.enchs.enchants.abstracts.*;
 import com.roughlyunderscore.enchs.events.*;
-import com.roughlyunderscore.enchs.util.Pair;
+import com.roughlyunderscore.enchs.util.datastructures.Pair;
 import com.roughlyunderscore.enchs.util.data.DetailedEnchantment;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.roughlyunderscore.enchs.parsers.ActionParsers.*;
+import static com.roughlyunderscore.enchs.parsers.action.ActionParser.*;
 import static com.roughlyunderscore.enchs.parsers.PreparatoryParsers.*;
 import static com.roughlyunderscore.enchs.util.general.Utils.*;
 
@@ -210,18 +210,18 @@ public class Register {
 	 * <br>Also see {@link Register#parseEnchantment(YamlConfiguration, UnderscoreEnchants)}
 	 */
 	public void commonAction(
-						Event event,
-						Player player,
-						DetailedEnchantment entry,
-						EnchantmentTarget target,
-						List<String> forbidOn,
-						List<EnchantmentLevel> levels,
-						NamespacedKey key,
-						List<String> conditions,
-						String flag,
-						String name,
-						int cooldown,
-						UnderscoreEnchants plugin
+		Event event,
+		Player player,
+		DetailedEnchantment entry,
+		EnchantmentTarget target,
+		List<String> forbidOn,
+		List<EnchantmentLevel> levels,
+		NamespacedKey key,
+		List<String> conditions,
+		String flag,
+		String name,
+		int cooldown,
+		UnderscoreEnchants plugin
 	) {
 		int lvl = getEnchantLevel(player, entry, target, forbidOn, plugin);
 		if (lvl == 0) return;
@@ -230,7 +230,7 @@ public class Register {
 
 		if (flag == null) flag = "";
 
-        // plugin.getUnderscoreLogger().info("Current flag: " + flag);
+		// plugin.getUnderscoreLogger().info("Current flag: " + flag);
 
 		EnchantmentLevel level = levels.get(lvl - 1);
 
@@ -255,9 +255,9 @@ public class Register {
 		activationMessage(name, player, plugin);
 
 		// If the cooldown provided by the configuration is not 0, create that cooldown
-		if (cooldown != 0) plugin.cooldowns.add(new Cooldown(cooldown, entry.getEnchantment(), player.getUniqueId()));
+		if (cooldown != 0) plugin.getCooldowns().add(new Cooldown(cooldown, entry.getEnchantment(), player.getUniqueId()));
 		// If the enchantment level has a cooldown (it's not 0), create that cooldown
-		if (level.getCooldown() != 0) plugin.cooldowns.add(new Cooldown(level.getCooldown(), entry.getEnchantment(), player.getUniqueId()));
+		if (level.getCooldown() != 0) plugin.getCooldowns().add(new Cooldown(level.getCooldown(), entry.getEnchantment(), player.getUniqueId()));
 	}
 
 	/**
@@ -317,9 +317,9 @@ public class Register {
 		activationMessage(name, player, plugin);
 
 		// If the cooldown provided by the configuration is not 0, create that cooldown
-		if (cooldown != 0) plugin.cooldowns.add(new Cooldown(cooldown, entry.getEnchantment(), player.getUniqueId()));
+		if (cooldown != 0) plugin.getCooldowns().add(new Cooldown(cooldown, entry.getEnchantment(), player.getUniqueId()));
 		// If the enchantment level has a cooldown (it's not 0), create that cooldown
-		if (level.getCooldown() != 0) plugin.cooldowns.add(new Cooldown(level.getCooldown(), entry.getEnchantment(), player.getUniqueId()));
+		if (level.getCooldown() != 0) plugin.getCooldowns().add(new Cooldown(level.getCooldown(), entry.getEnchantment(), player.getUniqueId()));
 	}
 
 	/**
@@ -343,22 +343,22 @@ public class Register {
 	 * <br>Also see {@link Register#parseEnchantment(YamlConfiguration, UnderscoreEnchants)}
 	 */
 	public void twoPlayerDamageAction(
-					Event event,
-					Player damager,
-					Player victim,
-					DetailedEnchantment entry,
-					EnchantmentTarget target,
-					List<String> forbidOn,
-					List<EnchantmentLevel> levels,
-					NamespacedKey key,
-					List<String> conditions,
-					String flag,
-					boolean isEmpty,
-					boolean isForDamager,
-					boolean isForVictim,
-					String name,
-					int cooldown,
-					UnderscoreEnchants plugin
+		Event event,
+		Player damager,
+		Player victim,
+		DetailedEnchantment entry,
+		EnchantmentTarget target,
+		List<String> forbidOn,
+		List<EnchantmentLevel> levels,
+		NamespacedKey key,
+		List<String> conditions,
+		String flag,
+		boolean isEmpty,
+		boolean isForDamager,
+		boolean isForVictim,
+		String name,
+		int cooldown,
+		UnderscoreEnchants plugin
 	) {
 		// Create the EnchantmentLevel
 		int damagerLvl = getEnchantLevel(damager, entry, target, forbidOn, plugin), victimLvl = getEnchantLevel(victim, entry, target, forbidOn, plugin);
@@ -401,9 +401,9 @@ public class Register {
 			activationMessage(name, damager, plugin);
 
 			// If the cooldown provided by the configuration is not 0, create that cooldown
-			if (cooldown != 0) plugin.cooldowns.add(new Cooldown(cooldown, entry.getEnchantment(), damager.getUniqueId()));
+			if (cooldown != 0) plugin.getCooldowns().add(new Cooldown(cooldown, entry.getEnchantment(), damager.getUniqueId()));
 			// If the enchantment level has a cooldown (it's not 0), create that cooldown
-			if (damagerEnchLevel.getCooldown() != 0) plugin.cooldowns.add(new Cooldown(damagerEnchLevel.getCooldown(), entry.getEnchantment(), damager.getUniqueId()));
+			if (damagerEnchLevel.getCooldown() != 0) plugin.getCooldowns().add(new Cooldown(damagerEnchLevel.getCooldown(), entry.getEnchantment(), damager.getUniqueId()));
 		}
 
 		if (victimActivated) {
@@ -422,9 +422,9 @@ public class Register {
 			activationMessage(name, victim, plugin);
 
 			// If the cooldown provided by the configuration is not 0, create that cooldown
-			if (cooldown != 0) plugin.cooldowns.add(new Cooldown(cooldown, entry.getEnchantment(), victim.getUniqueId()));
+			if (cooldown != 0) plugin.getCooldowns().add(new Cooldown(cooldown, entry.getEnchantment(), victim.getUniqueId()));
 			// If the enchantment level has a cooldown (it's not 0), create that cooldown
-			if (victimEnchLevel.getCooldown() != 0) plugin.cooldowns.add(new Cooldown(victimEnchLevel.getCooldown(), entry.getEnchantment(), victim.getUniqueId()));
+			if (victimEnchLevel.getCooldown() != 0) plugin.getCooldowns().add(new Cooldown(victimEnchLevel.getCooldown(), entry.getEnchantment(), victim.getUniqueId()));
 		}
 	}
 
