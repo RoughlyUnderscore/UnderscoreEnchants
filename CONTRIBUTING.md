@@ -22,20 +22,22 @@ Once again, thanks for being with us! If you are here to contribute any code, ex
 ### Expectations
 You should not be contributing if you have nothing to bring to the table. Here are the general guidelines:
 
+###### What's not welcome
+Contributions that...
+* only focus on fixing code style;
+* only optimize something;
+* only add unit tests;
+* add/remove easter eggs
+are **not welcome**.<br>
+In addition, contributions that largely refactor a big part of the code just for the sake of structuring are **frowned upon, but not forbidden**. However, care to document the new code structure in the commit message for it to have a chance to be accepted.
+
 ###### What's welcome
-
-1) Making a contribution that only focuses on fixing code style is **not welcome**.
-2) Making a contribution that only optimizes something is **not welcome**.
-3) Making a contribution that only adds unit tests is **not welcome**.
-4) Making a contribution that adds/removes an easter egg is **not welcome**.
-5) Making a contribution that largely refactors a big part of the code is **frowned upon, but not forbidden**. However, care to document the new code structure in the commit message for it to have a chance to be accepted.
-
-###### What isn't welcome
-
-1) Making a contribution that fixes a bug is **welcome**.
-2) Making a contribution that adds a new API method or fixes its implementation is **welcome**.
-3) Making a contribution that adds a feature is **welcome**.
-4) Making a contribution that refactors a minor but tedious part of the code (such as removing a clearly redundant variable in 100 places) is **welcome**.
+Contributions that...
+* fix bugs;
+* add new API methods or fix its implementations;
+* add features;
+* refactor a minor but tedious part of the code (such as removing a clearly redundant variable in 100 places)
+are **welcome**.
 
 ###### What should every contribution have
 
