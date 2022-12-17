@@ -42,6 +42,7 @@ You should not be contributing if you have nothing to bring to the table. Here a
 1) If a new feature can have a unit test, it should have a unit test. This also applies to API implementations.
 2) If a new feature can be optimized, it should be optimized. This also applies to API implementations.
 3) If a new feature can be written in Kotlin, it should be written in Kotlin. While Java code is still welcome, the project is slowly moving to fully Kotlin.
+4) If the new code is untested (including any unit tests failing), it will not be accepted.
 
 ### Requirements
 * `Java 19`
@@ -94,7 +95,7 @@ A commit message must be fairly small, yet informative.
 
 Example of a good commit message:
 ```
-sum: Adding a new condition flag
+sum: Adding a new trigger
 
 A new trigger, "PLAYERLEAVEBED", has been added. This will allow for users detect
 players leaving their beds. Can be useful for some armor enchantments.
