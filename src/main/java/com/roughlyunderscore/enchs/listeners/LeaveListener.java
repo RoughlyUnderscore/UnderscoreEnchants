@@ -10,13 +10,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 // Just remove the player from gods if is present there
 public class LeaveListener implements Listener {
 
-    private final UnderscoreEnchants plugin;
+  private final UnderscoreEnchants plugin;
 
-    @EventHandler
-    public void onLeave(PlayerQuitEvent ev) {
-        if (plugin.getGods().containsKey(ev.getPlayer().getUniqueId())) {
-            plugin.getGods().remove(ev.getPlayer().getUniqueId());
-            ev.getPlayer().setInvulnerable(false);
-        }
+  @EventHandler
+  public void onLeave(PlayerQuitEvent ev) {
+    if (plugin.getGods().containsKey(ev.getPlayer().getUniqueId())) {
+      plugin.getGods().remove(ev.getPlayer().getUniqueId());
+      ev.getPlayer().setInvulnerable(false);
     }
+  }
 }

@@ -9,14 +9,14 @@ import org.bukkit.inventory.ItemStack;
 
 public class PlayerShootBowEvent extends EntityShootBowEvent {
 
-	private final Player shooter;
+  private final Player shooter;
 
-	public PlayerShootBowEvent(@NonNull Player shooter, ItemStack bow, ItemStack consumable, @NonNull Entity projectile, @NonNull EquipmentSlot hand, float force, boolean consumeItem) {
-		super(shooter, bow, consumable, projectile, hand, force, consumeItem);
-		this.shooter = shooter;
-	}
+  public PlayerShootBowEvent(@NonNull Player shooter, ItemStack bow, ItemStack consumable, @NonNull Entity projectile, @NonNull EquipmentSlot hand, float force, boolean consumeItem) {
+    super(shooter, bow, consumable, projectile, hand, force, consumeItem);
+    this.shooter = shooter;
+  }
 
-	public Player getShooter() {
-		return this.shooter;
-	}
+  public Player getShooter() {
+    return this.shooter;
+  }
 }

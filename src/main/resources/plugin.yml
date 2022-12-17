@@ -9,6 +9,7 @@ awareness:
   - !@UTF8
 depend:
   - Vault
+  - PlaceholderAPI
 commands:
   underscoreenchants:
     description: Core
@@ -36,8 +37,11 @@ permissions:
     default: op
     description: Allows you to use /ue help.
   underscoreenchants.load:
-      default: op
-      description: Allows you to use /ue load.
+    default: op
+    description: Allows you to use /ue load.
+  underscoreenchants.reload:
+    default: op
+    description: Allows you to use /ue reload.
   underscoreenchants.*:
     default: op
     description: Allows you to use all the Underscore Enchants commands.
@@ -50,3 +54,4 @@ permissions:
       - underscoreenchants.download
       - underscoreenchants.help
       - underscoreenchants.load
+      - underscoreenchants.reload

@@ -8,14 +8,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 public abstract class GotHurtEnchantment extends AbstractEnchantment implements Listener {
-    public GotHurtEnchantment(NamespacedKey key, String name, int maxLevel, EnchantmentTarget target) {
-        super(key, name, maxLevel, 1, target, false, false, null, null);
-    }
+  public GotHurtEnchantment(NamespacedKey key, String name, int maxLevel, EnchantmentTarget target) {
+    super(key, name, maxLevel, 1, target, false, false, null, null);
+  }
 
-    public abstract void onHurt(PlayerGotHurtEvent ev);
+  public abstract void onHurt(PlayerGotHurtEvent ev);
 
-    @EventHandler (priority = EventPriority.HIGHEST)
-    public void event(PlayerGotHurtEvent ev) {
-        if (!ev.isCancelled()) onHurt(ev);
-    }
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void event(PlayerGotHurtEvent ev) {
+    if (!ev.isCancelled()) onHurt(ev);
+  }
 }

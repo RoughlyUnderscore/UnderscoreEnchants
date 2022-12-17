@@ -8,14 +8,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 public abstract class HurtsEntityEnchantment extends AbstractEnchantment implements Listener {
-    public HurtsEntityEnchantment(NamespacedKey key, String name, int maxLevel, EnchantmentTarget target) {
-        super(key, name, maxLevel, 1, target, false, false, null, null);
-    }
+  public HurtsEntityEnchantment(NamespacedKey key, String name, int maxLevel, EnchantmentTarget target) {
+    super(key, name, maxLevel, 1, target, false, false, null, null);
+  }
 
-    public abstract void onAttack(PlayerHurtsEntityEvent ev);
+  public abstract void onAttack(PlayerHurtsEntityEvent ev);
 
-    @EventHandler (priority = EventPriority.HIGHEST)
-    public void event(PlayerHurtsEntityEvent ev) {
-        if (!ev.isCancelled()) onAttack(ev);
-    }
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void event(PlayerHurtsEntityEvent ev) {
+    if (!ev.isCancelled()) onAttack(ev);
+  }
 }

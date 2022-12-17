@@ -8,14 +8,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 public abstract class ShootBowEnchantment extends AbstractEnchantment implements Listener {
-    public ShootBowEnchantment(NamespacedKey key, String name, int maxLevel, EnchantmentTarget target) {
-        super(key, name, maxLevel, 1, target, false, false, null, null);
-    }
+  public ShootBowEnchantment(NamespacedKey key, String name, int maxLevel, EnchantmentTarget target) {
+    super(key, name, maxLevel, 1, target, false, false, null, null);
+  }
 
-    public abstract void onShoot(PlayerShootBowEvent ev);
+  public abstract void onShoot(PlayerShootBowEvent ev);
 
-    @EventHandler (priority = EventPriority.HIGHEST)
-    public void event(PlayerShootBowEvent ev) {
-        if (!ev.isCancelled()) onShoot(ev);
-    }
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void event(PlayerShootBowEvent ev) {
+    if (!ev.isCancelled()) onShoot(ev);
+  }
 }

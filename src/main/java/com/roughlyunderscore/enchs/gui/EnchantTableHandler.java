@@ -4,8 +4,10 @@ import com.roughlyunderscore.enchantsapi.events.PreEnchantEvent;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import com.roughlyunderscore.enchs.util.general.Utils;
 import lombok.Data;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
@@ -16,18 +18,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static com.roughlyunderscore.enchs.util.general.PlayerUtils.sendActionbar;
+import static com.roughlyunderscore.enchs.util.general.PlayerUtils.*;
 
 @Data
 public class EnchantTableHandler implements Listener {
-	private final UnderscoreEnchants plugin;
+  private final UnderscoreEnchants plugin;
 
-	@EventHandler
-	public void preEnchant(final PrepareItemEnchantEvent ev) {
-		// It seems like replacing offers is not possible right now? Super unfortunate.
-		// Unless I fuck with reflection, that is!
+  @EventHandler
+  public void preEnchant(final PrepareItemEnchantEvent ev) {
+    // It seems like replacing offers is not possible right now? Super unfortunate.
+    // Unless I fuck with reflection, that is!
 
-		// Nevermind, I gave up for now. This does indeed replace the offers, but doesn't go much further.
+    // Nevermind, I gave up for now. This does indeed replace the offers, but doesn't go much further.
 		/*
 
 		ItemStack item = ev.getItem();
@@ -62,37 +64,44 @@ public class EnchantTableHandler implements Listener {
 		plugin.getUnderscoreLogger().info("Event offers: " + ev.getOffers()[0].getEnchantment().getName() + ", " + ev.getOffers()[1].getEnchantment().getName() + ", " + ev.getOffers()[2].getEnchantment().getName());
 
 		 */
-	}
+  }
 
-	@EventHandler
-	public void onEnchant(final EnchantItemEvent ev) {
-		if (!plugin.getConfig().getBoolean("addExtraEnchantment")) return;
-		final int chance = plugin.getConfig().getInt("extraEnchantmentChance");
+  @EventHandler
+  public void onEnchant(final EnchantItemEvent ev) {
+    Player enchanter = ev.getEnchanter();
 
-		if (new Random().nextInt(chance) + 1 != chance) return;
+    if (!plugin.getConfig().getBoolean("addExtraEnchantment")) return;
+    final int chance = plugin.getConfig().getInt("extraEnchantmentChance");
 
-		final ItemStack item = ev.getItem();
+    if (new Random().nextInt(chance) + 1 != chance) return;
 
-		final List<Enchantment> enchs = Utils.getTypicalEnchantments(item);
-		final List<Enchantment> list = Utils.getPossibleEnchantments(item, enchs, 1);
+    final ItemStack item = ev.getItem();
 
-		final Enchantment enchantment = list.get(0);
-		final int level = new Random().nextInt(enchantment.getMaxLevel()) + 1;
+    if (item.getEnchantments().size() == plugin.getConfig().getInt("enchantmentLimit")) {  // This will probably never happen, because the enchantment table only allows unenchanted items
+      enchanter.sendMessage(PlaceholderAPI.setPlaceholders(enchanter, plugin.getMessages().OVER_THE_LIMIT));
+      ev.setCancelled(true);                                                                  // but perhaps someone will use a 0 limit.
+      return;
+    }
 
-		final Map<Enchantment, Integer> currentEnchants = item.getEnchantments(),
-			newEnchants = ev.getEnchantsToAdd();
+    final List<Enchantment> enchs = Utils.getTypicalEnchantments(item);
+    final List<Enchantment> list = Utils.getPossibleEnchantments(item, enchs, 1);
 
-		try {
-			final ItemStack resultItem = Utils.generateEnchantedItem(item, Utils.mergeEnchantments(currentEnchants, newEnchants), Map.of(enchantment, level), plugin);
-			final PreEnchantEvent pee = new PreEnchantEvent(ev.getEnchanter(), enchantment, level, resultItem); // haha pee
-			Bukkit.getPluginManager().callEvent(pee);
+    final Enchantment enchantment = list.get(0);
+    final int level = new Random().nextInt(enchantment.getMaxLevel()) + 1;
 
-			if (!pee.isCancelled())
-				ev.getInventory().setItem(0, resultItem);
-		} catch (final IllegalArgumentException ex) {
-			sendActionbar(ev.getEnchanter(), ex.getMessage(), plugin);
-		}
+    final Map<Enchantment, Integer> currentEnchants = item.getEnchantments(),
+      newEnchants = ev.getEnchantsToAdd();
 
+    try {
+      final ItemStack resultItem = Utils.generateEnchantedItemWithMergedEnchantments(item, Utils.mergeEnchantments(currentEnchants, newEnchants), Map.of(enchantment, level), plugin);
+      final PreEnchantEvent pee = new PreEnchantEvent(ev.getEnchanter(), enchantment, level, resultItem); // haha pee
+      Bukkit.getPluginManager().callEvent(pee);
 
-	}
+      if (!pee.isCancelled())
+        ev.getInventory().setItem(0, resultItem);
+    } catch (final IllegalArgumentException ex) {
+      sendActionbar(ev.getEnchanter(), ex.getMessage(), plugin);
+    }
+
+  }
 }

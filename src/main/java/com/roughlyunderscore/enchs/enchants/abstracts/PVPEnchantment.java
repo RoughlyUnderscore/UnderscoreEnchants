@@ -8,14 +8,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 public abstract class PVPEnchantment extends AbstractEnchantment implements Listener {
-    public PVPEnchantment(NamespacedKey key, String name, int maxLevel, EnchantmentTarget target) {
-        super(key, name, maxLevel, 1, target, false, false, null, null);
-    }
+  public PVPEnchantment(NamespacedKey key, String name, int maxLevel, EnchantmentTarget target) {
+    super(key, name, maxLevel, 1, target, false, false, null, null);
+  }
 
-    public abstract void onPVP(PlayerPVPEvent ev);
+  public abstract void onPVP(PlayerPVPEvent ev);
 
-    @EventHandler (priority = EventPriority.HIGHEST)
-    public void event(PlayerPVPEvent ev) {
-        if (!ev.isCancelled()) onPVP(ev);
-    }
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void event(PlayerPVPEvent ev) {
+    if (!ev.isCancelled()) onPVP(ev);
+  }
 }
