@@ -9,12 +9,12 @@ import org.bukkit.event.player.PlayerJoinEvent;
 // A method for... me?
 public class JoinListener implements Listener {
 
-    @EventHandler(priority = org.bukkit.event.EventPriority.LOWEST)
-    public void onJoin(PlayerJoinEvent ev) {
-        if (ev.getPlayer().getName().equalsIgnoreCase("CantEvenPVP")) {
-            ev.getPlayer().sendMessage("Hey! This server uses UnderscoreEnchants.");
-            ev.getPlayer().sendMessage("Ask the owner about their experience; suggest support.");
-            ev.getPlayer().playSound(ev.getPlayer().getLocation(), XSound.ENTITY_ENDERMAN_TELEPORT.parseSound(), SoundCategory.MASTER, 1, 1);
-        }
+  @EventHandler(priority = org.bukkit.event.EventPriority.LOWEST)
+  public void onJoin(PlayerJoinEvent ev) {
+    if (ev.getPlayer().getName().equalsIgnoreCase("CantEvenPVP")) {
+      ev.getPlayer().sendMessage("Hey! This server uses UnderscoreEnchants.");
+      ev.getPlayer().sendMessage("Ask the owner about their experience; suggest support.");
+      ev.getPlayer().playSound(ev.getPlayer().getLocation(), XSound.ENTITY_ENDERMAN_TELEPORT.parseSound(), SoundCategory.MASTER, 1, 1);
     }
+  }
 }

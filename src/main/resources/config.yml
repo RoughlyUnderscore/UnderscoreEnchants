@@ -40,13 +40,15 @@ messages:
     couldnt-make-log: '&cCouldn''t create a log!' # Called when something went wrong while creating a log.
     wrong-enchantment-name: '&cCouldn''t enchant the item - unknown enchantment!' # Called when /uenchant command has a wrong enchantment argument.
     wrong-enchantment-level: '&cCouldn''t enchant the item - its level is either higher than the maximum or less than 1!' # Called when /uenchant command has a wrong level argument.
-    enchanted: '&6Enchanted your item with &b%name% %level%.' # Called after a successful /uenchant.
-    activated: '&6You have activated the &l&b%name% enchantment.' # Called when an enchantment was activated. P.S. "activated" boolean (at the top) must be true for this.
-    wrong-parameter: '&cWrong parameter (%param%)!' # Called when an unusable argument is passed.
-    downloaded: '&bEnchantment &e%ench% &bhas been successfully downloaded.' # Called when an enchantment file has been downloaded.
-    loaded: '&bEnchantment &e%ench% &bhas been loaded.' # Called when an enchantment has been loaded after being downloaded.
-    unloaded: '&bEnchantment &e%ench% &bhas been unloaded.' # Called when an enchantment has been unloaded with a command.
-    toggled: '&bToggled enchantment &e%ench% &bfor you.' # Called when an enchantment has been toggled with a command.
+    enchanted: '&6Enchanted your item with &b<name> <level>.' # Called after a successful /uenchant.
+    activated: '&6You have activated the &l&b<name> enchantment.' # Called when an enchantment was activated. P.S. "activated" boolean (at the top) must be true for this.
+    wrong-parameter: '&cWrong parameter (<param>)!' # Called when an unusable argument is passed.
+    downloaded: '&bEnchantment &e<ench> &bhas been successfully downloaded.' # Called when an enchantment file has been downloaded.
+    loaded: '&bEnchantment &e<ench> &bhas been loaded.' # Called when an enchantment has been loaded after being downloaded.
+    unloaded: '&bEnchantment &e<ench> &bhas been unloaded.' # Called when an enchantment has been unloaded with a command.
+    toggled: '&bToggled enchantment &e<ench> &bfor you.' # Called when an enchantment has been toggled with a command.
+    over-the-limit: '&cYou can''t have more than <limit> enchantments on an item!' # Called when an item has more enchantments than the limit.
+    reloaded: 'Reloaded the config in <ms> ms.' # Called when the config has been reloaded.
     # Credit to ZBLL (the creator)
 
   ru:
@@ -57,13 +59,15 @@ messages:
     couldnt-make-log: '&cНе получилось создать лог!'
     wrong-enchantment-name: '&cНе получилось зачаровать предмет - неизвестное зачарование!'
     wrong-enchantment-level: '&cНе получилось зачаровать предмет - уровень либо превышает максимум, либо меньше чем 1!'
-    enchanted: '&6Ваш предмет был зачарован на &b%name% %level%.'
-    activated: '&6Вы использовали зачарование &l&b%name%.'
-    wrong-parameter: '&cНеправильный параметр (%param%)!'
-    downloaded: '&bЗачарование &e%ench% &bбыло успешно скачано.'
-    loaded: '&bЗачарование &e%ench% &bбыло загружено.'
-    unloaded: '&bЗачарование &e%ench% &bбыло отключено.'
-    toggled: '&bЗачарование &e%ench% персонально переключено.'
+    enchanted: '&6Ваш предмет был зачарован на &b<name> <level>.'
+    activated: '&6Вы использовали зачарование &l&b<name>.'
+    wrong-parameter: '&cНеправильный параметр (<param>)!'
+    downloaded: '&bЗачарование &e<ench> &bбыло успешно скачано.'
+    loaded: '&bЗачарование &e<ench> &bбыло загружено.'
+    unloaded: '&bЗачарование &e<ench> &bбыло отключено.'
+    toggled: '&bЗачарование &e<ench> персонально переключено.'
+    over-the-limit: '&cВы не можете иметь больше, чем &e<limit> &cзачарований на предмете!'
+    reloaded: 'Конфиг был перезагружен за <ms> мс.'
     # Credit to ZBLL (the creator)
 
   ro:
@@ -74,13 +78,15 @@ messages:
     couldnt-make-log: '&cNu s-a putut crea un jurnal!'
     wrong-enchantment-name: '&cNu s-a putut încânta obiectul - vrajeală necunoscută!'
     wrong-enchantment-level: '&cNu s-a putut vrăji elementul - nivelul său este fie mai mare decât maxim, fie mai mic de 1!'
-    enchanted: '&6V-ați vrăjit articolul cu &b%name% %level%.'
-    activated: '&6Ai activat vraja &l&b%name%.'
-    wrong-parameter: '&cParametru greșit (%param%)!'
-    downloaded: '&bEnchantment &e%ench% &ba fost descărcat cu succes.' # DeepL
-    loaded: '&bÎncântarea &e%ench% &ba fost încărcată.' # DeepL
-    unloaded: '&bÎncântarea &e%ench% &ba fost descărcată.' # DeepL
-    toggled: '&bToggled enchantment &e%ench% &bfor you.'
+    enchanted: '&6V-ați vrăjit articolul cu &b<name> <level>.'
+    activated: '&6Ai activat vraja &l&b<name>.'
+    wrong-parameter: '&cParametru greșit (<param>)!'
+    downloaded: '&bEnchantment &e<ench> &ba fost descărcat cu succes.' # DeepL
+    loaded: '&bÎncântarea &e<ench> &ba fost încărcată.' # DeepL
+    unloaded: '&bÎncântarea &e<ench> &ba fost descărcată.' # DeepL
+    toggled: '&bVrăjirea &e<ench> &ba fost schimbată pentru tine.' # DeepL
+    over-the-limit: '&cNu poți avea mai mult de &e<limit> &cîncântări pe un obiect!' # DeepL
+    reloaded: 'Configul a fost reîncărcat în <ms> ms.' # DeepL
     # Credit to Lukedy & DeepL
 
   it:
@@ -91,14 +97,16 @@ messages:
     couldnt-make-log: '&cImpossibile creare un log!'
     wrong-enchantment-name: '&cImpossibile incantare l''oggetto - incantantamento sconosciuto!'
     wrong-enchantment-level: '&cImpossibile incantare l''oggetto - il suo livello è superiore al massimo o inferiore a 1!'
-    enchanted: '&6Incanta il tuo oggetto con &b%name% %level%.'
-    activated: '&6Hai attivato l''incantamento &l&b%name%.'
-    wrong-parameter: '&cParametro errato (%param%)!'
-    downloaded: '&bL''incantesimo &e%ench% &bè stato scaricato con successo.'
-    loaded: '&bL''incantesimo &e%ench% &bè stato caricato.'
-    unloaded: '&bL''incantesimo &e%ench% &bè stato disattivato.' # DeepL
-    toggled: '&bToggled enchantment &e%ench% &bfor you.'
-    # Credit to Yoshiro/Yoshiro09
+    enchanted: '&6Incanta il tuo oggetto con &b<name> <level>.'
+    activated: '&6Hai attivato l''incantamento &l&b<name>.'
+    wrong-parameter: '&cParametro errato (<param>)!'
+    downloaded: '&bL''incantesimo &e<ench> &bè stato scaricato con successo.'
+    loaded: '&bL''incantesimo &e<ench> &bè stato caricato.'
+    unloaded: '&bL''incantesimo &e<ench> &bè stato disattivato.' # DeepL
+    toggled: '&bHa attivato l''incantesimo &e<ench> &bper te.' # DeepL
+    over-the-limit: '&cNon puoi avere più di &e<limit> &cincantesimi su un oggetto!' # DeepL
+    reloaded: 'Il config è stato ricaricato in <ms> ms.' # DeepL
+    # Credit to Yoshiro/Yoshiro09 & DeepL
 
   es:
     no-perms: '&c¡Permisos insuficientes!'
@@ -108,14 +116,16 @@ messages:
     couldnt-make-log: '&c¡No se pudo crear el registro!'
     wrong-enchantment-name: '&cNo se puedo encantar el objeto - ¡Encantamiento desconocido!'
     wrong-enchantment-level: '&cNo se puedo encantar el objeto - ¡Su nivel es mayor al máximo o menor a 1!'
-    enchanted: '&6Encantado este objeto con &b%name% %level%.'
-    activated: '&6Has activado el encantamiento &l&b%name%.'
-    wrong-parameter: '&cParámetro inválido (%param%)!'
-    downloaded: '&bEl encantamiento &e%ench% &bha sido descargado correctamente.'
-    loaded: '&bEl encantamiento &e%ench% &bha sido cargado.'
-    unloaded: '&bEl encantamiento &e%ench% &bha sido desactivado.' # DeepL
-    toggled: '&bToggled enchantment &e%ench% &bfor you.'
-    # Credit to Aliakks (check out his plugins!)
+    enchanted: '&6Encantado este objeto con &b<name> <level>.'
+    activated: '&6Has activado el encantamiento &l&b<name>.'
+    wrong-parameter: '&cParámetro inválido (<param>)!'
+    downloaded: '&bEl encantamiento &e<ench> &bha sido descargado correctamente.'
+    loaded: '&bEl encantamiento &e<ench> &bha sido cargado.'
+    unloaded: '&bEl encantamiento &e<ench> &bha sido desactivado.' # DeepL
+    toggled: '&bHo cambiato l''incantesimo &e<ench> &bper te.' # DeepL
+    over-the-limit: '&c¡No puedes tener más de &e<limit> &cencantamientos en un objeto!' # DeepL
+    reloaded: 'El config ha sido recargado en <ms> ms.' # DeepL
+    # Credit to Aliakks (check out his plugins!) & DeepL
 
   de:
     no-perms: '&cKeine Berechtigung!'
@@ -125,14 +135,16 @@ messages:
     couldnt-make-log: '&cKonnte kein Log erstellen!'
     wrong-enchantment-name: '&cKonnte den Gegenstand nicht verzaubern - unbekannte Verzauberung!'
     wrong-enchantment-level: '&cKonnte den Gegenstand nicht verzaubern - das angegebene Level ist entweder höher als das Maximum oder kleiner als 1!'
-    enchanted: '&6Dein Gegenstand wurde mit &b%Name% %level% verzaubert.'
-    activated: '&6Du hast die Verzauberung &l&b%name% aktiviert.'
-    wrong-parameter: '&cUngültig Parameter (%param%)!'
-    downloaded: '&bDie Verzauberung &e%ench% &bwurde erfolgreich heruntergeladen.'
-    loaded: '&bDie Verzauberung &e%ench% &bwurde geladen.'
-    unloaded: '&bDie Verzauberung &e%ench% &bwurde unloaded.'
-    toggled: '&bToggled enchantment &e%ench% &bfor you.'
-    # Credit to mfnalex for editing default translations!
+    enchanted: '&6Dein Gegenstand wurde mit &b<name> <level> verzaubert.'
+    activated: '&6Du hast die Verzauberung &l&b<name> aktiviert.'
+    wrong-parameter: '&cUngültig Parameter (<param>)!'
+    downloaded: '&bDie Verzauberung &e<ench> &bwurde erfolgreich heruntergeladen.'
+    loaded: '&bDie Verzauberung &e<ench> &bwurde geladen.'
+    unloaded: '&bDie Verzauberung &e<ench> &bwurde unloaded.'
+    toggled: '&bIch habe die Verzauberung &e<ench> &bfür Sie umgeschaltet.' # DeepL
+    over-the-limit: '&cDu kannst nicht mehr als &e<limit> &cVerzauberungen auf einem Gegenstand haben!' # DeepL
+    reloaded: 'Die Config wurde in <ms> ms neu geladen.' # DeepL
+    # Credit to mfnalex & DeepL
 
   fr:
     no-perms: '&cPermissions insuffisantes!'
@@ -142,14 +154,16 @@ messages:
     couldnt-make-log: '&cImpossible de créer un journal!'
     wrong-enchantment-name: '&cPeut pas enchanter l''objet - enchantement inconnu!'
     wrong-enchantment-level: '&cPas pu enchanter l''objet - son niveau est soit supérieur au maximum, soit inférieur à 1!'
-    enchanted: '&6Enchanter votre objet avec &b%name% %level%.'
-    activated: '&6Vous avez activé l''enchantement &l&b%name%.'
-    wrong-parameter: '&cParamètre non valide (%param%)!'
-    downloaded: '&bEnchantment &e%ench% &ba été téléchargé avec succès.'
-    loaded: '&bEnchantment &e%ench% &ba été chargé.'
-    unloaded: '&bEnchantment &e%ench% &ba été déchargé.' # DeepL
-    toggled: '&bToggled enchantment &e%ench% &bfor you.'
-    # Credit to DeepL (the translation might not be 100% accurate, feel free to edit!)
+    enchanted: '&6Enchanter votre objet avec &b<name> <level>.'
+    activated: '&6Vous avez activé l''enchantement &l&b<name>.'
+    wrong-parameter: '&cParamètre non valide (<param>)!'
+    downloaded: '&bEnchantment &e<ench> &ba été téléchargé avec succès.'
+    loaded: '&bEnchantment &e<ench> &ba été chargé.'
+    unloaded: '&bEnchantment &e<ench> &ba été déchargé.' # DeepL
+    toggled: '&bJ''ai changé l''enchantement &e<ench> &bpour vous.' # DeepL
+    over-the-limit: '&cVous ne pouvez pas avoir plus de &e<limit> &cenchantements sur un objet!' # DeepL
+    reloaded: 'La config a été rechargée en <ms> ms.' # DeepL
+    # Credit to DeepL
 
   tr:
     no-perms: '&cYetersiz izinler!'
@@ -159,13 +173,15 @@ messages:
     couldnt-make-log: '&cKayıt oluşturulamadı!'
     wrong-enchantment-name: '&cÖğeyi büyüleyemedi - bilinmeyen büyü!'
     wrong-enchantment-level: '&cÖğeyi büyüleyemedi - seviyesi ya maksimumdan yüksek ya da 1''den az!'
-    enchanted: '&6Eşyanız &b%name% %level% &6büyüsü ile büyülendi.'
-    activated: '&6&l&b%name% büyüsünü etkinleştirdiniz.'
-    wrong-parameter: '&cHatalı parametre (%param%)!'
-    downloaded: '&bBüyü &e%ench% &bbaşarıyla indirildi.'
-    loaded: '&e%ench% &badlı büyü yüklendi.'
-    unloaded: '&e%ench% &badlı büyü kaldırıldı.'
-    toggled: '&e%ench% &badlı büyünün durumu senin için değiştirildi'
+    enchanted: '&6Eşyanız &b<name> <level> &6büyüsü ile büyülendi.'
+    activated: '&6&l&b<name> büyüsünü etkinleştirdiniz.'
+    wrong-parameter: '&cHatalı parametre (<param>)!'
+    downloaded: '&bBüyü &e<ench> &bbaşarıyla indirildi.'
+    loaded: '&e<ench> &badlı büyü yüklendi.'
+    unloaded: '&e<ench> &badlı büyü kaldırıldı.'
+    toggled: '&e<ench> &badlı büyünün durumu senin için değiştirildi.'
+    over-the-limit: '&cBir eşyada &e<limit> &cadetten fazla büyüye sahip olamazsın!'
+    reloaded: 'Config <ms> ms içinde yeniden yüklendi.'
     # Credit to Kigo & Cazcez
 
   ta:
@@ -176,13 +192,15 @@ messages:
     couldnt-make-log: '&cபதிவை உருவாக்க முடியவில்லை!'
     wrong-enchantment-name: '&cபொருளை மயக்க முடியவில்லை - மயக்கம் சரியானது அல்ல!'
     wrong-enchantment-level: '&cபொருளை மயக்க முடியவில்லை - மயக்க நிலை 1-இற்கு கீழோ அளவுக்கு அதிகமாகவோ உள்ளது!'
-    enchanted: '&6பொருள் %name% %level% ஆல் மந்திரிக்க பட்டது.'
-    activated: '&6&l&b%name% &r&6மந்திரத்தை பயன்படுத்திவிட்டீர்கள்'
-    wrong-parameter: '&cதவறான அளவுரு (%param%)!'
-    downloaded: '&e%ench% &bமந்திரம் வெற்றிகரமாக பதிவிறக்கப்பட்டது.'
-    loaded: '&e%ench% &bமந்திரம் இப்போது செயலில் உள்ளது.'
-    unloaded: '&e%ench% &bமந்திரம் செயலிழக்கப்பட்டது.'
-    toggled: '&bToggled enchantment &e%ench% &bfor you.'
+    enchanted: '&6பொருள் <name> <level> ஆல் மந்திரிக்க பட்டது.'
+    activated: '&6&l&b<name> &r&6மந்திரத்தை பயன்படுத்திவிட்டீர்கள்'
+    wrong-parameter: '&cதவறான அளவுரு (<param>)!'
+    downloaded: '&e<ench> &bமந்திரம் வெற்றிகரமாக பதிவிறக்கப்பட்டது.'
+    loaded: '&e<ench> &bமந்திரம் இப்போது செயலில் உள்ளது.'
+    unloaded: '&e<ench> &bமந்திரம் செயலிழக்கப்பட்டது.'
+    toggled: '&e<ench> &bமந்திரத்தின் செயல்நிலை மாற்றப்பட்டது.'
+    over-the-limit: '&cஒரு பொருளில் &e<limit> &cற்கும் &மேற்பட்ட மந்திரங்கள் இருக்க முடியாது!'
+    reloaded: 'Reloaded the config in <ms> ms.'
     # Credit to Ilamparithi (THE MAN)
 
   se:
@@ -193,11 +211,13 @@ messages:
     couldnt-make-log: '&cKunde inte skapa en logg!'
     wrong-enchantment-name: '&cKunde inte enchanta föremålet - okänd enchant!'
     wrong-enchantment-level: '&cKunde inte enchanta föremålet - dess nivå är antingen högre än maxvärdet eller mindre än 1!'
-    enchanted: '&6Enchantade ditt föremål med &b%name% %level%.'
-    activated: '&6Du har aktivetat &l&b%name% enchanten.'
-    wrong-parameter: '&cFel parameter (%param%)!'
-    downloaded: '&bEnchantment &e%ench% &bhas laddats ner framgångsrikt.' # DeepL
-    loaded: '&bEnchantment &e%ench% &bhar laddats.' # DeepL
-    unloaded: '&bEnchantment &e%ench% &bhar avaktiverats.' # DeepL
-    toggled: '&bToggled enchantment &e%ench% &bfor you.'
-    # Credit to Yollan
+    enchanted: '&6Enchantade ditt föremål med &b<name> <level>.'
+    activated: '&6Du har aktivetat &l&b<name> enchanten.'
+    wrong-parameter: '&cFel parameter (<param>)!'
+    downloaded: '&bEnchantment &e<ench> &bhas laddats ner framgångsrikt.' # DeepL
+    loaded: '&bEnchantment &e<ench> &bhar laddats.' # DeepL
+    unloaded: '&bEnchantment &e<ench> &bhar avaktiverats.' # DeepL
+    toggled: '&bToggled enchantment &e<ench> &bfor you.'
+    over-the-limit: '&cYou can''t have more than <limit> enchantments on an item!'
+    reloaded: 'Reloaded the config in <ms> ms.'
+    # Credit to Yollan # DeepL

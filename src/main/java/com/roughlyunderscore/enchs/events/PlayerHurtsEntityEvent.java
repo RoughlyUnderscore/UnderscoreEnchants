@@ -7,15 +7,15 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public class PlayerHurtsEntityEvent extends EntityDamageByEntityEvent {
-	private final Player damager;
+  private final Player damager;
 
-	public PlayerHurtsEntityEvent(@NonNull Player damager, @NonNull Entity damagee, @NonNull EntityDamageEvent.DamageCause cause, double damage) {
-		super(damager, damagee, cause, damage);
-		this.damager = damager;
-	}
+  public PlayerHurtsEntityEvent(@NonNull Player damager, @NonNull Entity damagee, @NonNull EntityDamageEvent.DamageCause cause, double damage) {
+    super(damager, damagee, cause, damage);
+    this.damager = damager;
+  }
 
-	@NonNull
-	public Player getDamager() {
-		return damager;
-	}
+  @NonNull
+  public Player getDamager() {
+    return damager;
+  }
 }

@@ -8,6 +8,10 @@
 # IntelliJ
 out/
 
+# Other
+*.javaLOMBOK
+*.preconvert
+
 # Compiled class file
 *.class
 

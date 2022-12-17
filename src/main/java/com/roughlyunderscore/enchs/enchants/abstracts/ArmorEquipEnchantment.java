@@ -8,14 +8,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 public abstract class ArmorEquipEnchantment extends AbstractEnchantment implements Listener {
-	public ArmorEquipEnchantment(NamespacedKey key, String name, int maxLevel, EnchantmentTarget target) {
-		super(key, name, maxLevel, 1, target, false, false, null, null);
-	}
+  public ArmorEquipEnchantment(NamespacedKey key, String name, int maxLevel, EnchantmentTarget target) {
+    super(key, name, maxLevel, 1, target, false, false, null, null);
+  }
 
-	public abstract void onEquip(ArmorEquipEvent ev);
+  public abstract void onEquip(ArmorEquipEvent ev);
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void event(ArmorEquipEvent ev) {
-		if (!ev.isCancelled()) onEquip(ev);
-	}
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void event(ArmorEquipEvent ev) {
+    if (!ev.isCancelled()) onEquip(ev);
+  }
 }

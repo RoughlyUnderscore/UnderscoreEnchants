@@ -8,14 +8,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
 public abstract class BlockBreakEnchantment extends AbstractEnchantment implements Listener {
-    public BlockBreakEnchantment(NamespacedKey key, String name, int maxLevel, EnchantmentTarget target) {
-        super(key, name, maxLevel, 1, target, false, false, null, null);
-    }
+  public BlockBreakEnchantment(NamespacedKey key, String name, int maxLevel, EnchantmentTarget target) {
+    super(key, name, maxLevel, 1, target, false, false, null, null);
+  }
 
-    public abstract void onBreak(BlockBreakEvent ev);
+  public abstract void onBreak(BlockBreakEvent ev);
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void event(BlockBreakEvent ev) {
-        if (!ev.isCancelled()) onBreak(ev);
-    }
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void event(BlockBreakEvent ev) {
+    if (!ev.isCancelled()) onBreak(ev);
+  }
 }
