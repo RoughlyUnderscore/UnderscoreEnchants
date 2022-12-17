@@ -28,8 +28,7 @@ You should not be contributing if you have nothing to bring to the table. Here a
 2) Making a contribution that only optimizes something is **not welcome**.
 3) Making a contribution that only adds unit tests is **not welcome**.
 4) Making a contribution that adds/removes an easter egg is **not welcome**.
-5) Making a contribution that largely refactors is **frowned upon, but not forbidden**. However, care to document the new code structure in the commit message
-for it to have a chance to be accepted.
+5) Making a contribution that largely refactors a big part of the code is **frowned upon, but not forbidden**. However, care to document the new code structure in the commit message for it to have a chance to be accepted.
 
 ###### What isn't welcome
 
