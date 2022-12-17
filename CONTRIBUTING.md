@@ -22,7 +22,7 @@ Once again, thanks for being with us! If you are here to contribute any code, ex
 ### Expectations
 You should not be contributing if you have nothing to bring to the table. Here are the general guidelines:
 
-###### What's not welcome
+#### What's not welcome
 Contributions that...
 * only focus on fixing code style;
 * only optimize something;
@@ -31,7 +31,7 @@ Contributions that...
 are **not welcome**.<br>
 In addition, contributions that largely refactor a big part of the code just for the sake of structuring are **frowned upon, but not forbidden**. However, care to document the new code structure in the commit message for it to have a chance to be accepted.
 
-###### What's welcome
+#### What's welcome
 Contributions that...
 * fix bugs;
 * add new API methods or fix its implementations;
@@ -39,12 +39,12 @@ Contributions that...
 * refactor a minor but tedious part of the code (such as removing a clearly redundant variable in 100 places)
 are **welcome**.
 
-###### What should every contribution have
+#### What should every contribution have
 
-1) If a new feature can have a unit test, it should have a unit test. This also applies to API implementations.
-2) If a new feature can be optimized, it should be optimized. This also applies to API implementations.
-3) If a new feature can be written in Kotlin, it should be written in Kotlin. While Java code is still welcome, the project is slowly moving to fully Kotlin.
-4) If the new code is untested (including any unit tests failing), it will not be accepted.
+1) The added code must be tested in game.
+2) That said, if a new feature can have a unit test, it should have a unit test. This also applies to API implementations.
+3) The code should be as optimized as possible.
+5) If Kotlin can be used, it should be used. While Java code is still welcome, it's frowned upon, for the project is slowly moving to fully Kotlin.
 
 ### Requirements
 * `Java 19`
