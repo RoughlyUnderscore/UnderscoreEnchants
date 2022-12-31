@@ -2,6 +2,7 @@ package com.roughlyunderscore.enchs.parsers.action.generic.doubleplayer;
 
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import com.roughlyunderscore.enchs.parsers.action.generic.AbstractActionParser;
+import com.roughlyunderscore.enchs.util.Constants;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -525,8 +526,8 @@ public class DoublePlayerActionParser extends AbstractActionParser<Player> {
           }
         }
 
-        case RANDOM_NEGATIVE_EFFECT -> args = args.replace(str, plugin.getPositiveEffects().get(new Random().nextInt(plugin.getPositiveEffects().size())).getName());
-        case RANDOM_POSITIVE_EFFECT -> args = args.replace(str, plugin.getNegativeEffects().get(new Random().nextInt(plugin.getNegativeEffects().size())).getName());
+        case RANDOM_NEGATIVE_EFFECT -> args = args.replace(str, Constants.BUFFS.get(new Random().nextInt(Constants.BUFFS.size())).getName());
+        case RANDOM_POSITIVE_EFFECT -> args = args.replace(str, Constants.DEBUFFS.get(new Random().nextInt(Constants.DEBUFFS.size())).getName());
 
         
         

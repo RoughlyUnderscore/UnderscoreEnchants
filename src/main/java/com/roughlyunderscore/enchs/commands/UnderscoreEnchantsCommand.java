@@ -180,7 +180,7 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
     final File enchantment = new File(name);
 
     try {
-      downloadWithJavaNIO(link, name, plugin);
+      downloadWithJavaNIO(link, name);
     } catch (final MalformedURLException ex) {
       ex.printStackTrace();
     }

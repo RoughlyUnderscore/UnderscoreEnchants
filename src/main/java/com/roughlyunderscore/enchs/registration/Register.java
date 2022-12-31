@@ -117,11 +117,15 @@ public class Register {
     plugin.debugger.log("Registering enchantment: " + file.getAbsolutePath());
     plugin.debugger.log("Enchantment file name: " + file.getName());
     plugin.debugger.log("Enchantment path: " + file.getPath());
+
     final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
     final Pair<DetailedEnchantment, AbstractEnchantment> enchant = parseEnchantment(configuration, plugin);
     if (enchant == null) return;
+
     final AbstractEnchantment enchantment = enchant.getValue();
     wrapEnchantment(enchantment, enchant.getKey(), plugin);
+
+    plugin.getCachedAutocompleteEnchantments().add(enchant.getKey().getCommandName().toLowerCase().replace(" ", "_"));
     UnderscoreEnchants.staticEnchantmentData.put(enchant.getKey(), enchantment);
   }
 
@@ -137,6 +141,7 @@ public class Register {
     plugin.debugger.log("Attempting to unload an enchantment: " + file.getAbsolutePath());
     plugin.debugger.log("Enchantment file name: " + file.getName());
     plugin.debugger.log("Enchantment path: " + file.getPath());
+
     final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
     // Pair<DetailedEnchantment, AbstractEnchantment> enchant = plugin.parseEnchantment(configuration);
     final DetailedEnchantment enchantment = findEnchantment(file, plugin);
@@ -165,6 +170,7 @@ public class Register {
     HandlerList.unregisterAll(listener);
     UnderscoreEnchants.staticEnchantmentData.remove(enchantment);
 
+    plugin.getCachedAutocompleteEnchantments().remove(name.toLowerCase().replace(" ", "_"));
     plugin.getEnchantmentData().remove(enchantment);
   }
 

@@ -7,6 +7,7 @@ import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.particles.XParticle;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import com.roughlyunderscore.enchs.util.ArmorPiece;
+import com.roughlyunderscore.enchs.util.Constants;
 import com.roughlyunderscore.enchs.util.cooldownutils.ActionbarCooldown;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatMessageType;
@@ -834,12 +835,12 @@ public class PlayerUtils<T, Z> {
 
   public void removeBuffs(Player player, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("removeBuffs was called on player " + player.getName() + ".");
-    plugin.getPositiveEffects().forEach(player::removePotionEffect);
+    Constants.BUFFS.forEach(player::removePotionEffect);
   }
 
   public void removeDebuffs(Player player, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("removeDebuffs was called on player " + player.getName() + ".");
-    plugin.getNegativeEffects().forEach(player::removePotionEffect);
+    Constants.DEBUFFS.forEach(player::removePotionEffect);
   }
   
 

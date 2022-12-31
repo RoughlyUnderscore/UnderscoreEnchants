@@ -3,6 +3,7 @@ package com.roughlyunderscore.enchs.gui;
 import com.cryptomorin.xseries.XMaterial;
 import com.roughlyunderscore.enchantsapi.events.EnchantmentsCombineEvent;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
+import com.roughlyunderscore.enchs.util.Constants;
 import com.roughlyunderscore.enchs.util.general.Utils;
 import lombok.Data;
 import org.bukkit.Bukkit;
@@ -115,12 +116,12 @@ public class AnvilHandler implements Listener {
       return AnvilPlacementType.IDENTICAL_ITEMS;
 
     if (
-      (Tag.PLANKS.isTagged(ingot) && plugin.getPlankRepariable().contains(item)) || // wooden item + planks
-        (is(ingot, XMaterial.LEATHER) && plugin.getLeatherRepariable().contains(item)) || // leather item + leather
-        (is(ingot, XMaterial.IRON_INGOT) && plugin.getIronRepariable().contains(item)) || // iron item + iron ingot
-        (is(ingot, XMaterial.GOLD_INGOT) && plugin.getGoldRepariable().contains(item)) || // gold item + gold ingot
-        (is(ingot, XMaterial.DIAMOND) && plugin.getDiamondRepariable().contains(item)) || // diamond item + diamond
-        (is(ingot, XMaterial.NETHERITE_INGOT) && plugin.getNetheriteRepariable().contains(item)) || // netherite item + netherite ingot
+      (Tag.PLANKS.isTagged(ingot) && Constants.REPAIRED_BY_PLANKS.contains(item)) || // wooden item + planks
+        (is(ingot, XMaterial.LEATHER) && Constants.REPAIRED_BY_LEATHER.contains(item)) || // leather item + leather
+        (is(ingot, XMaterial.IRON_INGOT) && Constants.REPAIRED_BY_IRON.contains(item)) || // iron item + iron ingot
+        (is(ingot, XMaterial.GOLD_INGOT) && Constants.REPAIRED_BY_GOLD.contains(item)) || // gold item + gold ingot
+        (is(ingot, XMaterial.DIAMOND) && Constants.REPAIRED_BY_DIAMOND.contains(item)) || // diamond item + diamond
+        (is(ingot, XMaterial.NETHERITE_INGOT) && Constants.REPAIRED_BY_NETHERITE.contains(item)) || // netherite item + netherite ingot
         (is(ingot, XMaterial.SCUTE) && is(item, XMaterial.TURTLE_HELMET)) || // turtle helmet + scute
         (is(ingot, XMaterial.PHANTOM_MEMBRANE) && is(item, XMaterial.ELYTRA)) // elytra + phantom membrane
     )

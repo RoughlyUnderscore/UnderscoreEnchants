@@ -1,16 +1,15 @@
 package com.roughlyunderscore.enchs.util.general;
 
-import com.cryptomorin.xseries.XEnchantment;
 import com.cryptomorin.xseries.XMaterial;
 import com.google.common.collect.ImmutableMap;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import com.roughlyunderscore.enchs.enchants.abstracts.AbstractEnchantment;
 import com.roughlyunderscore.enchs.events.PlayerPVPEvent;
 import com.roughlyunderscore.enchs.parsers.condition.ComparativeOperator;
+import com.roughlyunderscore.enchs.util.Constants;
 import com.roughlyunderscore.enchs.util.RomanNumber;
 import com.roughlyunderscore.enchs.util.DetailedEnchantment;
 import com.roughlyunderscore.enchs.util.datastructures.Pair;
-import com.roughlyunderscore.enchs.util.datastructures.Triple;
 import com.roughlyunderscore.enchs.util.enums.Type;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.apache.commons.collections4.ListUtils;
@@ -22,9 +21,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -39,7 +36,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
-import org.mariuszgromada.math.mxparser.Expression;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,8 +45,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.roughlyunderscore.enchs.UnderscoreEnchants.WRONG_LEVEL;
 import static com.roughlyunderscore.enchs.UnderscoreEnchants.WRONG_NAME;
@@ -92,181 +86,7 @@ public final class Utils {
    * @return the name in a form of {@link String}
    */
   public static String getName(final Enchantment ench) {
-    if (ench.equals(XEnchantment.ARROW_DAMAGE.getEnchant())) return "Power";
-    else if (ench.equals(XEnchantment.DAMAGE_ARTHROPODS.getEnchant())) return "Bane of Arthropods";
-    else if (ench.equals(XEnchantment.ARROW_KNOCKBACK.getEnchant())) return "Punch";
-    else if (ench.equals(XEnchantment.DAMAGE_ALL.getEnchant())) return "Sharpness";
-    else if (ench.equals(XEnchantment.THORNS.getEnchant())) return "Thorns";
-    else if (ench.equals(XEnchantment.WATER_WORKER.getEnchant())) return "Aqua Affinity";
-    else if (ench.equals(XEnchantment.KNOCKBACK.getEnchant())) return "Knockback";
-    else if (ench.equals(XEnchantment.ARROW_INFINITE.getEnchant())) return "Infinity";
-    else if (ench.equals(XEnchantment.PROTECTION_ENVIRONMENTAL.getEnchant())) return "Protection";
-    else if (ench.equals(XEnchantment.ARROW_FIRE.getEnchant())) return "Flame";
-    else if (ench.equals(XEnchantment.SILK_TOUCH.getEnchant())) return "Silk Touch";
-    else if (ench.equals(XEnchantment.PROTECTION_PROJECTILE.getEnchant())) return "Projectile Protection";
-    else if (ench.equals(XEnchantment.PROTECTION_FIRE.getEnchant())) return "Fire Protection";
-    else if (ench.equals(XEnchantment.PROTECTION_EXPLOSIONS.getEnchant())) return "Blast Protection";
-    else if (ench.equals(XEnchantment.PROTECTION_FALL.getEnchant())) return "Feather Falling";
-    else if (ench.equals(XEnchantment.OXYGEN.getEnchant())) return "Respiration";
-    else if (ench.equals(XEnchantment.LURE.getEnchant())) return "Lure";
-    else if (ench.equals(XEnchantment.LUCK.getEnchant())) return "Luck of the Sea";
-    else if (ench.equals(XEnchantment.FIRE_ASPECT.getEnchant())) return "Fire Aspect";
-    else if (ench.equals(XEnchantment.DEPTH_STRIDER.getEnchant())) return "Depth Strider";
-    else if (ench.equals(XEnchantment.DAMAGE_UNDEAD.getEnchant())) return "Smite";
-    else if (ench.equals(XEnchantment.DIG_SPEED.getEnchant())) return "Efficiency";
-    else if (ench.equals(XEnchantment.LOOT_BONUS_BLOCKS.getEnchant())) return "Fortune";
-    else if (ench.equals(XEnchantment.LOOT_BONUS_MOBS.getEnchant())) return "Looting";
-    else if (ench.equals(XEnchantment.DURABILITY.getEnchant())) return "Unbreaking";
-    else if (ench.equals(XEnchantment.VANISHING_CURSE.getEnchant())) return "Curse of Vanishing";
-    else if (ench.equals(XEnchantment.BINDING_CURSE.getEnchant())) return "Curse of Binding";
-    else if (ench.equals(XEnchantment.SWEEPING_EDGE.getEnchant())) return "Sweeping Edge";
-    else if (ench.equals(XEnchantment.MENDING.getEnchant())) return "Mending";
-    else if (ench.equals(XEnchantment.SOUL_SPEED.getEnchant())) return "Soul Speed";
-    else if (ench.equals(XEnchantment.FROST_WALKER.getEnchant())) return "Frost Walker";
-    else if (ench.equals(XEnchantment.RIPTIDE.getEnchant())) return "Riptide";
-    else if (ench.equals(XEnchantment.IMPALING.getEnchant())) return "Impaling";
-    else if (ench.equals(XEnchantment.LOYALTY.getEnchant())) return "Loyalty";
-    else if (ench.equals(XEnchantment.CHANNELING.getEnchant())) return "Channeling";
-    else if (ench.equals(XEnchantment.SWIFT_SNEAK.getEnchant())) return "Swift Sneak";
-    else return ench.getName();
-  }
-
-  /**
-   * Checks if a certain {@link ItemStack} object is a glass pane.
-   *
-   * @param itemStack the {@link ItemStack} object to check
-   * @return {@code true} if is pane, {@code false} otherwise
-   */
-  public static boolean isPane(final ItemStack itemStack) {
-    if (itemStack == null) return false;
-    return itemStack.getType().name().endsWith("PANE");
-  }
-
-  /**
-   * A utility for action parsers to parse the %random% placeholders and numerical expressions.
-   *
-   * @param action  an action to parse in the form of {@link String}
-   * @param world   the {@link World} to work with while parsing max Y
-   * @param players a {@link List} object to parse the PDC placeholders
-   * @param plugin  UnderscoreEnchants
-   * @return an array of {@link String} objects, containing the parsed values separated with a space
-   */
-  public static String[] parseRegex(String action, final World world, final List<Player> players, final UnderscoreEnchants plugin) {
-    final Matcher intMatcher = Pattern.compile("<random_int_([-]?[0-9]+)_([-]?[0-9]+)>").matcher(action);
-    final StringBuilder intBuffer = new StringBuilder();
-
-    while (intMatcher.find()) {
-      final int min = parseI(intMatcher.group(1));
-      final int max = parseI(intMatcher.group(2));
-      intMatcher.appendReplacement(intBuffer, String.valueOf(ThreadLocalRandom.current().nextInt(min, max)));
-    }
-
-    intMatcher.appendTail(intBuffer);
-    action = intBuffer.toString();
-
-    final Matcher doubleMatcher = Pattern.compile("<random_double_([-]?[0-9]+[.][0-9]+)_([-]?[0-9]+[.][0-9]+)>").matcher(action);
-    final StringBuilder doubleBuffer = new StringBuilder();
-
-    while (doubleMatcher.find()) {
-      final double min = parseD(doubleMatcher.group(1));
-      final double max = parseD(doubleMatcher.group(2));
-      doubleMatcher.appendReplacement(doubleBuffer, String.valueOf(ThreadLocalRandom.current().nextDouble(min, max)));
-    }
-
-    doubleMatcher.appendTail(doubleBuffer);
-    action = doubleBuffer.toString();
-
-
-    final Matcher maxYMatcher = Pattern.compile("<max_y_at_([-]?[0-9]+)_([-]?[0-9]+)>").matcher(action);
-    final StringBuilder maxYBuilder = new StringBuilder();
-
-    while (maxYMatcher.find()) {
-      final double x = parseD(maxYMatcher.group(1));
-      final double z = parseD(maxYMatcher.group(2));
-      maxYMatcher.appendReplacement(maxYBuilder, String.valueOf(world.getHighestBlockYAt((int) x, (int) z)));
-    }
-
-    maxYMatcher.appendTail(maxYBuilder);
-    action = maxYBuilder.toString();
-
-    if (players.size() == 1) {
-      final Matcher playerMatcher = Pattern.compile("<player_pdc_(.+)>").matcher(action);
-
-      final StringBuilder playerBuilder = new StringBuilder();
-
-      while (playerMatcher.find()) {
-        final String arg = playerMatcher.group(1);
-        final String val = String.valueOf(getPDCValue(players.get(0), getKey(arg, plugin), plugin));
-        playerMatcher.appendReplacement(playerBuilder, val);
-      }
-
-      playerMatcher.appendTail(playerBuilder);
-      action = playerBuilder.toString();
-    } else {
-      final Matcher victimMatcher = Pattern.compile("<victim_pdc_(.+)>").matcher(action);
-      final StringBuilder victimBuilder = new StringBuilder();
-
-      while (victimMatcher.find()) {
-        final String arg = victimMatcher.group(1);
-        final String val = String.valueOf(getPDCValue(players.get(0), getKey(arg, plugin), plugin));
-        victimMatcher.appendReplacement(victimBuilder, val);
-      }
-
-      victimMatcher.appendTail(victimBuilder);
-      action = victimBuilder.toString();
-
-      final Matcher damagerMatcher = Pattern.compile("<damager_pdc_(.+)>").matcher(action);
-      final StringBuilder damagerBuilder = new StringBuilder();
-
-      while (damagerMatcher.find()) {
-        final String arg = damagerMatcher.group(1);
-        final String val = String.valueOf(getPDCValue(players.get(1), getKey(arg, plugin), plugin));
-        damagerMatcher.appendReplacement(damagerBuilder, val);
-      }
-
-      damagerMatcher.appendTail(damagerBuilder);
-      action = damagerBuilder.toString();
-    }
-
-    final String[] split0 = action.split(" ");
-    final String[] split = new String[split0.length];
-
-
-    for (int i = 0; i < split0.length; i++) {
-      final String test = String.valueOf(new Expression(split0[i]).calculate());
-      if (!test.equals(String.valueOf(Double.NaN))) split[i] = test;
-      else split[i] = split0[i];
-    }
-
-    return split;
-  }
-
-  /**
-   * A utility for parsers to quickly replace placeholders.
-   *
-   * @param input a {@link String} to replace the entries in
-   * @param pairs an array of {@link Pair} objects, containing a replacee and a replacer.
-   * @return a resulting {@link String}
-   */
-  @SafeVarargs
-  public static String replacePlaceholders(String input, final Pair<String, String>... pairs) {
-    for (final Pair<String, String> pair : pairs) {
-      input = input.replace(pair.getKey(), pair.getValue());
-    }
-
-    return input;
-  }
-
-  /**
-   * A utility, combining {@link #replacePlaceholders(String, Pair[])} and {@link #parseRegex(String, World, List, UnderscoreEnchants)}.
-   *
-   * @param input a {@link String} to parse
-   * @param pairs {@link #replacePlaceholders(String, Pair[])}
-   * @return the result of parsing in the form of a {@link String} array
-   */
-  @SafeVarargs
-  public static String[] completeParse(final List<Player> players, final String input, final World world, final UnderscoreEnchants plugin, final Pair<String, String>... pairs) {
-    return parseRegex(replacePlaceholders(input, pairs), world, players, plugin);
+    return Constants.DEFAULT_ENCH_NAMES.get(ench);
   }
 
   /**
@@ -311,7 +131,6 @@ public final class Utils {
    * @see #parseI(String)
    * @see #parseF(String)
    * @see #parseL(String)
-   * @see #parseB(String)
    */
   public static double parseD(final String string) {
     try {
@@ -329,7 +148,6 @@ public final class Utils {
    * @see #parseD(String)
    * @see #parseF(String)
    * @see #parseL(String)
-   * @see #parseB(String)
    */
   public static int parseI(final String string) {
     try {
@@ -347,7 +165,6 @@ public final class Utils {
    * @see #parseD(String)
    * @see #parseI(String)
    * @see #parseL(String)
-   * @see #parseB(String)
    */
   public static float parseF(final String string) {
     try {
@@ -365,7 +182,6 @@ public final class Utils {
    * @see #parseD(String)
    * @see #parseI(String)
    * @see #parseF(String)
-   * @see #parseB(String)
    */
   public static long parseL(final String string) {
     try {
@@ -373,20 +189,6 @@ public final class Utils {
     } catch (final Exception ex) {
       return Long.MIN_VALUE;
     }
-  }
-
-  /**
-   * Quickly parses a boolean from a {@link String}, best used in other parsers for shortening the code.
-   *
-   * @param string the {@link String} to parse.
-   * @return the resulting boolean
-   * @see #parseD(String)
-   * @see #parseI(String)
-   * @see #parseF(String)
-   * @see #parseL(String)
-   */
-  public static boolean parseB(final String string) {
-    return Boolean.parseBoolean(string);
   }
 
   /**
@@ -429,9 +231,9 @@ public final class Utils {
   public static boolean isEnchantable(final ItemStack item) {
     if (item == null || item.getType() == Material.AIR) return false;
     final Material material = item.getType();
-    if (UnderscoreEnchants.weaponsList.contains(material)) return true;
-    else if (UnderscoreEnchants.armorList.contains(material)) return true;
-    else if (UnderscoreEnchants.toolsList.contains(material)) return true;
+    if (Constants.WEAPONS.contains(material)) return true;
+    else if (Constants.ARMOR.contains(material)) return true;
+    else if (Constants.TOOLS.contains(material)) return true;
     else if (material.equals(XMaterial.BOW.parseMaterial())) return true;
     else return material.equals(XMaterial.BOOK.parseMaterial());
   }
@@ -479,9 +281,9 @@ public final class Utils {
     Type itemType;
     final Material material = item.getType();
 
-    if (UnderscoreEnchants.weaponsList.contains(material)) itemType = Type.WEAPON;
-    else if (UnderscoreEnchants.armorList.contains(material)) itemType = Type.ARMOR;
-    else if (UnderscoreEnchants.toolsList.contains(material)) itemType = Type.TOOL;
+    if (Constants.WEAPONS.contains(material)) itemType = Type.WEAPON;
+    else if (Constants.ARMOR.contains(material)) itemType = Type.ARMOR;
+    else if (Constants.TOOLS.contains(material)) itemType = Type.TOOL;
     else if (material.equals(XMaterial.BOW.parseMaterial())) itemType = Type.BOW;
     else if (material.equals(XMaterial.BOOK.parseMaterial()))
       itemType = Type.values()[new Random().nextInt(Type.values().length)];
@@ -597,17 +399,6 @@ public final class Utils {
   /**
    * Checks whether an {@link ItemStack} is enchanted or not.
    *
-   * @param item the {@link ItemStack} to check
-   * @param ench the {@link DetailedEnchantment} object to get the {@link Enchantment} from
-   * @return {@code true} if the {@link ItemStack} is enchanted, {@code false} otherwise
-   */
-  public static boolean enchanted(final ItemStack item, final DetailedEnchantment ench) {
-    return item.getEnchantments().containsKey(ench.getEnchantment());
-  }
-
-  /**
-   * Checks whether an {@link ItemStack} is enchanted or not.
-   *
    * @param player the {@link Player}, whose main hand is checked
    * @param ench   the {@link DetailedEnchantment} object to get the {@link Enchantment} from
    * @return {@code true} if the {@link ItemStack} is enchanted, {@code false} otherwise
@@ -645,16 +436,6 @@ public final class Utils {
       case BOW, WEAPON, TOOL -> enchanted(pl, ench, plugin);
       default -> false;
     };
-  }
-
-  /**
-   * Checks if an {@link EntityDamageByEntityEvent} is a result of a {@link Player} shooting a {@link Player}
-   *
-   * @param ev the {@link EntityDamageByEntityEvent} to check
-   * @return {@code true} if the {@link EntityDamageByEntityEvent} is a result of a {@link Player} shooting a {@link Player}, {@code false} otherwise
-   */
-  public static boolean areArrowAndPlayerInEvent(final EntityDamageByEntityEvent ev) {
-    return ev.getDamager() instanceof Arrow arrow && arrow.getShooter() != null && arrow.getShooter() instanceof Player;
   }
 
   /**
@@ -762,16 +543,6 @@ public final class Utils {
   }
 
   /**
-   * Checks whether an {@link ItemStack} is {@link lombok.NonNull} and is not AIR.
-   *
-   * @param itemStack the {@link ItemStack} to check
-   * @return {@code true} if the conditions match, {@code false} otherwise
-   */
-  public static boolean validItem(final ItemStack itemStack) {
-    return itemStack != null && itemStack.getType() != Material.AIR;
-  }
-
-  /**
    * encahnt <br>
    * banana banana banana banana
    */
@@ -866,7 +637,7 @@ public final class Utils {
    * @param enchantments a map of enchantments and their corresponding enchantments
    * @return the generated lore line
    */
-  public static List<String> generateLoreLine(final HashMap<Enchantment, Integer> enchantments) {
+  public static List<String> generateLoreLine(final Map<Enchantment, Integer> enchantments) {
     final List<String> lore = new ArrayList<>();
     enchantments.forEach((ench, level) -> lore.add(generateLoreLine(ench, level)));
     return lore;
@@ -1100,7 +871,7 @@ public final class Utils {
   }
 
 
-  public static void downloadWithJavaNIO(final String fileURL, final String localFilename, final UnderscoreEnchants plugin) throws MalformedURLException {
+  public static void downloadWithJavaNIO(final String fileURL, final String localFilename) throws MalformedURLException {
     // github.com/eugenp/tutorials/blob/master/core-java-modules/core-java-networking-2/src/main/java/com/baeldung/download/FileDownload.java#L52
 
     int CONNECT_TIMEOUT = 10000;
@@ -1143,7 +914,7 @@ public final class Utils {
       if (current >= limit) {
         async(plugin, () -> {
           try {
-            downloadWithJavaNIO(link + "/" + filename, name, plugin);
+            downloadWithJavaNIO(link + "/" + filename, name);
 
             final File enchantment = new File(name);
 
@@ -1167,7 +938,7 @@ public final class Utils {
       } else {
         async(plugin, () -> {
           try {
-            downloadWithJavaNIO(link + "/" + filename, name, plugin);
+            downloadWithJavaNIO(link + "/" + filename, name);
 
             final File enchantment = new File(name);
 
@@ -1259,34 +1030,6 @@ public final class Utils {
    */
   public static double clamp(final double min, final double max, final double val) {
     return Math.max(min, Math.min(max, val));
-  }
-
-  /**
-   * Generates an array of {@code EnchantmentOffer}s from given enchantments.
-   *
-   * @param enchs the enchantments to generate offers from
-   * @return the generated offers
-   */
-  @SafeVarargs
-  public static EnchantmentOffer[] generateOffers(final Triple<Enchantment, Integer, Integer>... enchs) {
-    return generateOffersList(enchs).toArray(new EnchantmentOffer[0]);
-  }
-
-  /**
-   * Generates a list of {@code EnchantmentOffer}s from given enchantments.
-   *
-   * @param enchs the enchantments to generate offers from
-   * @return the generated offers
-   */
-  @SafeVarargs
-  public static List<EnchantmentOffer> generateOffersList(final Triple<Enchantment, Integer, Integer>... enchs) {
-    final List<EnchantmentOffer> offers = new ArrayList<>();
-
-    for (final Triple<Enchantment, Integer, Integer> ench : enchs) {
-      offers.add(new EnchantmentOffer(ench.getA(), ench.getB(), ench.getC()));
-    }
-
-    return offers;
   }
 
   /**
@@ -1402,20 +1145,6 @@ public final class Utils {
   public static boolean arrayContains(final Object[] array, final Object key) {
     for (final Object o : array) {
       if (o.equals(key)) return true;
-    }
-    return false;
-  }
-
-  /**
-   * Checks if an array of strings contains a case-insensitive string.
-   *
-   * @param array the array to check
-   * @param key   the string to check for
-   * @return whether the array contains the string
-   */
-  public static boolean arrayOfStringsContains(final String[] array, final String key) {
-    for (final String s : array) {
-      if (s.equalsIgnoreCase(key)) return true;
     }
     return false;
   }

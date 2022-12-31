@@ -5,9 +5,6 @@ import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.InvalidCommandArgument;
 import com.codingforcookies.armorequip.ArmorListener;
 import com.codingforcookies.armorequip.DispenserArmorListener;
-import com.cryptomorin.xseries.XEnchantment;
-import com.cryptomorin.xseries.XMaterial;
-import com.cryptomorin.xseries.XPotion;
 import com.roughlyunderscore.enchantsapi.EnchantmentLoadResponse;
 import com.roughlyunderscore.enchantsapi.EnchantmentUnloadResponse;
 import com.roughlyunderscore.enchantsapi.UEnchantsAPI;
@@ -32,7 +29,6 @@ import com.roughlyunderscore.enchs.util.general.Utils;
 import de.jeff_media.updatechecker.UpdateChecker;
 import lombok.Getter;
 import lombok.Setter;
-import me.clip.placeholderapi.PlaceholderAPI;
 import net.milkbowl.vault.economy.Economy;
 import org.apache.commons.io.FileUtils;
 import org.bstats.bukkit.Metrics;
@@ -51,7 +47,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -66,7 +61,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.roughlyunderscore.enchs.registration.Register.*;
-import static com.roughlyunderscore.enchs.registration.Register.unloadEnchantment;
+import static com.roughlyunderscore.enchs.util.general.Utils.*;
 
 public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
 
@@ -80,11 +75,6 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
 
   public static DetailedEnchantment WRONG_LEVEL, WRONG_NAME;
 
-  @Getter
-  public final List<PotionEffectType> positiveEffects = new ArrayList<>();
-  @Getter
-  public final List<PotionEffectType> negativeEffects = new ArrayList<>();
-
   public static Economy econ;
 
   @Getter
@@ -95,11 +85,6 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
   private final List<ActionbarCooldown> actionbars = new ArrayList<>();
   @Getter
   private final List<Cooldown> cooldowns = new ArrayList<>();
-
-  // this is not top tier init code for sure
-  public static List<Material> weaponsList = new ArrayList<>();
-  public static List<Material> toolsList = new ArrayList<>();
-  public static List<Material> armorList = new ArrayList<>();
   @Getter
   public List<Enchantment> allEnchs = new ArrayList<>();
   @Getter
@@ -121,23 +106,6 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
   public static List<Enchantment> bootsEnchantments = new ArrayList<>();
   public static List<Enchantment> tridentEnchantments = new ArrayList<>();
 
-  @Getter
-  public final List<Material> plankRepariable = new ArrayList<>();
-  @Getter
-  public final List<Material> leatherRepariable = new ArrayList<>();
-  @Getter
-  public final List<Material> cobbleRepariable = new ArrayList<>();
-  @Getter
-  public final List<Material> cobbleTypes = new ArrayList<>();
-  @Getter
-  public final List<Material> ironRepariable = new ArrayList<>();
-  @Getter
-  public final List<Material> goldRepariable = new ArrayList<>();
-  @Getter
-  public final List<Material> diamondRepariable = new ArrayList<>();
-  @Getter
-  public final List<Material> netheriteRepariable = new ArrayList<>();
-
   private final String serverVersion = Bukkit.getBukkitVersion();
 
   private void regTest() {
@@ -154,6 +122,9 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
   @Getter
   @Setter
   UpdateChecker checker;
+
+  @Getter
+  final List<String> cachedAutocompleteEnchantments = new ArrayList<>();
   @Getter
   @Setter
   Metrics metrics;
@@ -180,7 +151,14 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
     saveDefaultConfig();
     reloadConfig();
 
-    this.init();
+    weaponEnchantments.addAll(Constants.DEFAULT_WEAPON_ENCHANTMENTS);
+    toolEnchantments.addAll(Constants.DEFAULT_TOOL_ENCHANTMENTS);
+    bowEnchantments.addAll(Constants.DEFAULT_BOW_ENCHANTMENTS);
+    helmetEnchantments.addAll(Constants.DEFAULT_HELMET_ENCHANTMENTS);
+    chestplateEnchantments.addAll(Constants.DEFAULT_CHESTPLATE_ENCHANTMENTS);
+    leggingsEnchantments.addAll(Constants.DEFAULT_LEGGINGS_ENCHANTMENTS);
+    bootsEnchantments.addAll(Constants.DEFAULT_BOOTS_ENCHANTMENTS);
+
     mainConfig = new MainConfig(this);
     messages = new Messages(this);
 
@@ -245,8 +223,10 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
         () -> String.valueOf(allEnchs.size())
       ));
     }
-    
 
+    for (final String name : Constants.DEFAULT_ENCH_NAMES.values()) {
+      cachedAutocompleteEnchantments.add(name.toLowerCase().replace(" ", "_"));
+    }
     
     final File file0 = new File(this.getDataFolder().getPath() + File.separator + "enchantments");
     if (!file0.exists()) file0.mkdirs();
@@ -266,24 +246,15 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
       }
     });
 
-    commandManager.getCommandCompletions().registerCompletion("enchant-name-completion", context -> {
-      final List<String> enchants = new ArrayList<>();
-      for (DetailedEnchantment ench : enchantmentData.keySet()) {
-        enchants.add(ench.getCommandName());
-      }
-      return enchants;
-    });
+    commandManager.getCommandCompletions().registerCompletion("enchant-name-completion", ignored -> cachedAutocompleteEnchantments);
 
-    commandManager.getCommandCompletions().registerCompletion("yes-no-completion", context -> Arrays.asList("yes", "no"));
+    commandManager.getCommandCompletions().registerCompletion("yes-no-completion", ignored -> Arrays.asList("yes", "no"));
 
     commandManager.getCommandContexts().registerContext(DetailedEnchantment.class, context -> {
       final String enchName = context.popFirstArg();
       final DetailedEnchantment ench = Utils.parseEnchantment(enchName, this);
       if (ench == null) {
-        String message = getMessages().WRONG_NAME;
-        if (context.getSender() instanceof Player player) message = PlaceholderAPI.setPlaceholders(player, message);
-        context.getSender().sendMessage(message);
-
+        context.getSender().sendMessage(replacePAPI(context.getSender(), getMessages().WRONG_NAME));
         throw new InvalidCommandArgument("Enchantment " + enchName + " does not exist!", false);
       }
       return ench;
@@ -373,254 +344,6 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
     }
     econ = rsp.getProvider();
     return true;
-  }
-
-  private void init() {
-    weaponEnchantments.addAll(Arrays.asList(
-      XEnchantment.DAMAGE_ALL.getEnchant(),
-      XEnchantment.DAMAGE_ARTHROPODS.getEnchant(),
-      XEnchantment.FIRE_ASPECT.getEnchant(),
-      XEnchantment.KNOCKBACK.getEnchant(),
-      XEnchantment.LOOT_BONUS_MOBS.getEnchant(),
-      XEnchantment.DAMAGE_UNDEAD.getEnchant(),
-      XEnchantment.DURABILITY.getEnchant(),
-      XEnchantment.MENDING.getEnchant(),
-      XEnchantment.SWEEPING_EDGE.getEnchant(),
-      XEnchantment.VANISHING_CURSE.getEnchant()
-    ));
-    bowEnchantments.addAll(Arrays.asList(
-      XEnchantment.ARROW_FIRE.getEnchant(),
-      XEnchantment.ARROW_DAMAGE.getEnchant(),
-      XEnchantment.ARROW_KNOCKBACK.getEnchant(),
-      XEnchantment.ARROW_INFINITE.getEnchant(),
-      XEnchantment.DURABILITY.getEnchant(),
-      XEnchantment.MENDING.getEnchant(),
-      XEnchantment.VANISHING_CURSE.getEnchant()
-    ));
-    toolEnchantments.addAll(Arrays.asList(
-      XEnchantment.DURABILITY.getEnchant(),
-      XEnchantment.DIG_SPEED.getEnchant(),
-      XEnchantment.LOOT_BONUS_BLOCKS.getEnchant(),
-      XEnchantment.SILK_TOUCH.getEnchant(),
-      XEnchantment.LURE.getEnchant(),
-      XEnchantment.LUCK.getEnchant(),
-      XEnchantment.MENDING.getEnchant(),
-      XEnchantment.VANISHING_CURSE.getEnchant()
-    ));
-    helmetEnchantments.addAll(Arrays.asList(
-      XEnchantment.WATER_WORKER.getEnchant(),
-      XEnchantment.PROTECTION_EXPLOSIONS.getEnchant(),
-      XEnchantment.PROTECTION_FIRE.getEnchant(),
-      XEnchantment.PROTECTION_PROJECTILE.getEnchant(),
-      XEnchantment.PROTECTION_ENVIRONMENTAL.getEnchant(),
-      XEnchantment.OXYGEN.getEnchant(),
-      XEnchantment.THORNS.getEnchant(),
-      XEnchantment.DURABILITY.getEnchant(),
-      XEnchantment.VANISHING_CURSE.getEnchant(),
-      XEnchantment.BINDING_CURSE.getEnchant(),
-      XEnchantment.MENDING.getEnchant()
-    ));
-    chestplateEnchantments.addAll(Arrays.asList(
-      XEnchantment.PROTECTION_EXPLOSIONS.getEnchant(),
-      XEnchantment.PROTECTION_FIRE.getEnchant(),
-      XEnchantment.PROTECTION_PROJECTILE.getEnchant(),
-      XEnchantment.PROTECTION_ENVIRONMENTAL.getEnchant(),
-      XEnchantment.THORNS.getEnchant(),
-      XEnchantment.DURABILITY.getEnchant(),
-      XEnchantment.VANISHING_CURSE.getEnchant(),
-      XEnchantment.BINDING_CURSE.getEnchant(),
-      XEnchantment.MENDING.getEnchant()
-    ));
-    leggingsEnchantments.addAll(Arrays.asList(
-      XEnchantment.PROTECTION_EXPLOSIONS.getEnchant(),
-      XEnchantment.PROTECTION_FIRE.getEnchant(),
-      XEnchantment.PROTECTION_PROJECTILE.getEnchant(),
-      XEnchantment.PROTECTION_ENVIRONMENTAL.getEnchant(),
-      XEnchantment.THORNS.getEnchant(),
-      XEnchantment.DURABILITY.getEnchant(),
-      XEnchantment.VANISHING_CURSE.getEnchant(),
-      XEnchantment.BINDING_CURSE.getEnchant(),
-      XEnchantment.MENDING.getEnchant()
-    ));
-    bootsEnchantments.addAll(Arrays.asList(
-      XEnchantment.DEPTH_STRIDER.getEnchant(),
-      XEnchantment.PROTECTION_FALL.getEnchant(),
-      XEnchantment.PROTECTION_FIRE.getEnchant(),
-      XEnchantment.PROTECTION_PROJECTILE.getEnchant(),
-      XEnchantment.PROTECTION_ENVIRONMENTAL.getEnchant(),
-      XEnchantment.THORNS.getEnchant(),
-      XEnchantment.DURABILITY.getEnchant(),
-      XEnchantment.PROTECTION_EXPLOSIONS.getEnchant(),
-      XEnchantment.DEPTH_STRIDER.getEnchant(),
-      XEnchantment.VANISHING_CURSE.getEnchant(),
-      XEnchantment.BINDING_CURSE.getEnchant(),
-      XEnchantment.FROST_WALKER.getEnchant(),
-      XEnchantment.MENDING.getEnchant(),
-      XEnchantment.SOUL_SPEED.getEnchant()
-    ));
-
-    plankRepariable.addAll(Arrays.asList(
-      XMaterial.WOODEN_SWORD.parseMaterial(),
-      XMaterial.WOODEN_SHOVEL.parseMaterial(),
-      XMaterial.WOODEN_PICKAXE.parseMaterial(),
-      XMaterial.WOODEN_AXE.parseMaterial(),
-      XMaterial.WOODEN_HOE.parseMaterial(),
-      XMaterial.SHIELD.parseMaterial()
-    ));
-    leatherRepariable.addAll(Arrays.asList(
-      XMaterial.LEATHER_HELMET.parseMaterial(),
-      XMaterial.LEATHER_CHESTPLATE.parseMaterial(),
-      XMaterial.LEATHER_LEGGINGS.parseMaterial(),
-      XMaterial.LEATHER_BOOTS.parseMaterial()
-    ));
-    cobbleRepariable.addAll(Arrays.asList(
-      XMaterial.STONE_SWORD.parseMaterial(),
-      XMaterial.STONE_SHOVEL.parseMaterial(),
-      XMaterial.STONE_PICKAXE.parseMaterial(),
-      XMaterial.STONE_AXE.parseMaterial(),
-      XMaterial.STONE_HOE.parseMaterial()
-    ));
-    cobbleTypes.addAll(Arrays.asList(
-      XMaterial.COBBLESTONE.parseMaterial(),
-      XMaterial.COBBLED_DEEPSLATE.parseMaterial(),
-      XMaterial.BLACKSTONE.parseMaterial()
-    ));
-    ironRepariable.addAll(Arrays.asList(
-      XMaterial.IRON_SWORD.parseMaterial(),
-      XMaterial.IRON_SHOVEL.parseMaterial(),
-      XMaterial.IRON_PICKAXE.parseMaterial(),
-      XMaterial.IRON_AXE.parseMaterial(),
-      XMaterial.IRON_HOE.parseMaterial(),
-      XMaterial.IRON_HELMET.parseMaterial(),
-      XMaterial.IRON_CHESTPLATE.parseMaterial(),
-      XMaterial.IRON_LEGGINGS.parseMaterial(),
-      XMaterial.IRON_BOOTS.parseMaterial(),
-      XMaterial.CHAINMAIL_HELMET.parseMaterial(),
-      XMaterial.CHAINMAIL_CHESTPLATE.parseMaterial(),
-      XMaterial.CHAINMAIL_LEGGINGS.parseMaterial(),
-      XMaterial.CHAINMAIL_BOOTS.parseMaterial()
-    ));
-    goldRepariable.addAll(Arrays.asList(
-      XMaterial.GOLDEN_HELMET.parseMaterial(),
-      XMaterial.GOLDEN_CHESTPLATE.parseMaterial(),
-      XMaterial.GOLDEN_LEGGINGS.parseMaterial(),
-      XMaterial.GOLDEN_BOOTS.parseMaterial(),
-      XMaterial.GOLDEN_SWORD.parseMaterial(),
-      XMaterial.GOLDEN_SHOVEL.parseMaterial(),
-      XMaterial.GOLDEN_PICKAXE.parseMaterial(),
-      XMaterial.GOLDEN_AXE.parseMaterial(),
-      XMaterial.GOLDEN_HOE.parseMaterial()
-    ));
-    diamondRepariable.addAll(Arrays.asList(
-      XMaterial.DIAMOND_HELMET.parseMaterial(),
-      XMaterial.DIAMOND_CHESTPLATE.parseMaterial(),
-      XMaterial.DIAMOND_LEGGINGS.parseMaterial(),
-      XMaterial.DIAMOND_BOOTS.parseMaterial(),
-      XMaterial.DIAMOND_SWORD.parseMaterial(),
-      XMaterial.DIAMOND_SHOVEL.parseMaterial(),
-      XMaterial.DIAMOND_PICKAXE.parseMaterial(),
-      XMaterial.DIAMOND_AXE.parseMaterial(),
-      XMaterial.DIAMOND_HOE.parseMaterial()
-    ));
-    netheriteRepariable.addAll(Arrays.asList(
-      XMaterial.NETHERITE_HELMET.parseMaterial(),
-      XMaterial.NETHERITE_CHESTPLATE.parseMaterial(),
-      XMaterial.NETHERITE_LEGGINGS.parseMaterial(),
-      XMaterial.NETHERITE_BOOTS.parseMaterial(),
-      XMaterial.NETHERITE_SWORD.parseMaterial(),
-      XMaterial.NETHERITE_SHOVEL.parseMaterial(),
-      XMaterial.NETHERITE_PICKAXE.parseMaterial(),
-      XMaterial.NETHERITE_AXE.parseMaterial(),
-      XMaterial.NETHERITE_HOE.parseMaterial()
-    ));
-
-    positiveEffects.add(XPotion.DAMAGE_RESISTANCE.getPotionEffectType());
-    positiveEffects.add(XPotion.FIRE_RESISTANCE.getPotionEffectType());
-    positiveEffects.add(XPotion.INCREASE_DAMAGE.getPotionEffectType());
-    positiveEffects.add(XPotion.ABSORPTION.getPotionEffectType());
-    positiveEffects.add(XPotion.FAST_DIGGING.getPotionEffectType());
-    positiveEffects.add(XPotion.HEAL.getPotionEffectType());
-    positiveEffects.add(XPotion.HEALTH_BOOST.getPotionEffectType());
-    positiveEffects.add(XPotion.INVISIBILITY.getPotionEffectType());
-    positiveEffects.add(XPotion.CONDUIT_POWER.getPotionEffectType());
-    positiveEffects.add(XPotion.HERO_OF_THE_VILLAGE.getPotionEffectType());
-    positiveEffects.add(XPotion.DOLPHINS_GRACE.getPotionEffectType());
-    positiveEffects.add(XPotion.GLOWING.getPotionEffectType());
-    positiveEffects.add(XPotion.LUCK.getPotionEffectType());
-    positiveEffects.add(XPotion.WATER_BREATHING.getPotionEffectType());
-    positiveEffects.add(XPotion.SATURATION.getPotionEffectType());
-    positiveEffects.add(XPotion.SPEED.getPotionEffectType());
-    positiveEffects.add(XPotion.JUMP.getPotionEffectType());
-    positiveEffects.add(XPotion.NIGHT_VISION.getPotionEffectType());
-    positiveEffects.add(XPotion.REGENERATION.getPotionEffectType());
-
-    XPotion.DEBUFFS.forEach(effect -> negativeEffects.add(effect.getPotionEffectType()));
-
-    weaponsList = Arrays.asList(
-      XMaterial.WOODEN_SWORD.parseMaterial(),
-      XMaterial.STONE_SWORD.parseMaterial(),
-      XMaterial.GOLDEN_SWORD.parseMaterial(),
-      XMaterial.IRON_SWORD.parseMaterial(),
-      XMaterial.DIAMOND_SWORD.parseMaterial(),
-      XMaterial.NETHERITE_SWORD.parseMaterial()
-    );
-    toolsList = Arrays.asList(
-      XMaterial.IRON_SHOVEL.parseMaterial(),
-      XMaterial.IRON_PICKAXE.parseMaterial(),
-      XMaterial.IRON_AXE.parseMaterial(),
-      XMaterial.WOODEN_SHOVEL.parseMaterial(),
-      XMaterial.WOODEN_PICKAXE.parseMaterial(),
-      XMaterial.WOODEN_AXE.parseMaterial(),
-      XMaterial.STONE_SHOVEL.parseMaterial(),
-      XMaterial.STONE_PICKAXE.parseMaterial(),
-      XMaterial.STONE_AXE.parseMaterial(),
-      XMaterial.DIAMOND_SHOVEL.parseMaterial(),
-      XMaterial.DIAMOND_PICKAXE.parseMaterial(),
-      XMaterial.DIAMOND_AXE.parseMaterial(),
-      XMaterial.GOLDEN_SHOVEL.parseMaterial(),
-      XMaterial.GOLDEN_PICKAXE.parseMaterial(),
-      XMaterial.GOLDEN_AXE.parseMaterial(),
-      XMaterial.WOODEN_HOE.parseMaterial(),
-      XMaterial.STONE_HOE.parseMaterial(),
-      XMaterial.IRON_HOE.parseMaterial(),
-      XMaterial.DIAMOND_HOE.parseMaterial(),
-      XMaterial.GOLDEN_HOE.parseMaterial(),
-      XMaterial.NETHERITE_HOE.parseMaterial(),
-      XMaterial.NETHERITE_SHOVEL.parseMaterial(),
-      XMaterial.NETHERITE_AXE.parseMaterial(),
-      XMaterial.NETHERITE_PICKAXE.parseMaterial(),
-      XMaterial.FISHING_ROD.parseMaterial(),
-      XMaterial.FLINT_AND_STEEL.parseMaterial()
-    );
-    armorList = Arrays.asList(
-      XMaterial.DIAMOND_HELMET.parseMaterial(),
-      XMaterial.DIAMOND_CHESTPLATE.parseMaterial(),
-      XMaterial.DIAMOND_LEGGINGS.parseMaterial(),
-      XMaterial.DIAMOND_BOOTS.parseMaterial(),
-      XMaterial.GOLDEN_HELMET.parseMaterial(),
-      XMaterial.GOLDEN_CHESTPLATE.parseMaterial(),
-      XMaterial.GOLDEN_LEGGINGS.parseMaterial(),
-      XMaterial.GOLDEN_BOOTS.parseMaterial(),
-      XMaterial.IRON_HELMET.parseMaterial(),
-      XMaterial.IRON_CHESTPLATE.parseMaterial(),
-      XMaterial.IRON_LEGGINGS.parseMaterial(),
-      XMaterial.IRON_BOOTS.parseMaterial(),
-      XMaterial.CHAINMAIL_HELMET.parseMaterial(),
-      XMaterial.CHAINMAIL_CHESTPLATE.parseMaterial(),
-      XMaterial.CHAINMAIL_LEGGINGS.parseMaterial(),
-      XMaterial.CHAINMAIL_BOOTS.parseMaterial(),
-      XMaterial.LEATHER_BOOTS.parseMaterial(),
-      XMaterial.LEATHER_CHESTPLATE.parseMaterial(),
-      XMaterial.LEATHER_LEGGINGS.parseMaterial(),
-      XMaterial.LEATHER_BOOTS.parseMaterial(),
-      XMaterial.NETHERITE_HELMET.parseMaterial(),
-      XMaterial.NETHERITE_CHESTPLATE.parseMaterial(),
-      XMaterial.NETHERITE_LEGGINGS.parseMaterial(),
-      XMaterial.NETHERITE_BOOTS.parseMaterial(),
-      XMaterial.TURTLE_HELMET.parseMaterial()
-    );
-
-
   }
   
 
@@ -941,26 +664,17 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
   public @NotNull String toString() {
     return "UnderscoreEnchants{" +
       "messages=" + messages +
-      ", positiveEffects=" + positiveEffects +
-      ", negativeEffects=" + negativeEffects +
       ", debugger=" + debugger +
       ", actionbars=" + actionbars +
       ", cooldowns=" + cooldowns +
       ", allEnchs=" + allEnchs +
       ", enchantmentData=" + enchantmentData +
       ", gods=" + gods +
-      ", plankRepariable=" + plankRepariable +
-      ", leatherRepariable=" + leatherRepariable +
-      ", cobbleRepariable=" + cobbleRepariable +
-      ", cobbleTypes=" + cobbleTypes +
-      ", ironRepariable=" + ironRepariable +
-      ", goldRepariable=" + goldRepariable +
-      ", diamondRepariable=" + diamondRepariable +
-      ", netheriteRepariable=" + netheriteRepariable +
       ", serverVersion='" + serverVersion + '\'' +
       ", checker=" + checker +
       ", metrics=" + metrics +
       ", mainConfig=" + mainConfig +
+      ", cachedAutocompleteEnchantments=" + cachedAutocompleteEnchantments +
       '}';
   }
 }

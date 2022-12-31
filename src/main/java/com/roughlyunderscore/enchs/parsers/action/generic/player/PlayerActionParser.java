@@ -2,6 +2,7 @@ package com.roughlyunderscore.enchs.parsers.action.generic.player;
 
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import com.roughlyunderscore.enchs.parsers.action.generic.AbstractActionParser;
+import com.roughlyunderscore.enchs.util.Constants;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.bukkit.Bukkit;
@@ -344,8 +345,8 @@ public class PlayerActionParser extends AbstractActionParser<Player> {
         case PLAYER_AIR_LEVEL -> args = args.replace(str, getAirString(player, plugin));
         case PLAYER_MAX_AIR_LEVEL -> args = args.replace(str, getMaximumAirString(player, plugin));
         case PLAYER_GODMODE -> args = args.replace(str, invisibleForString(player, plugin));
-        case RANDOM_NEGATIVE_EFFECT -> args = args.replace(str, plugin.getPositiveEffects().get(new Random().nextInt(plugin.getPositiveEffects().size())).getName());
-        case RANDOM_POSITIVE_EFFECT -> args = args.replace(str, plugin.getNegativeEffects().get(new Random().nextInt(plugin.getNegativeEffects().size())).getName());
+        case RANDOM_NEGATIVE_EFFECT -> args = args.replace(str, Constants.BUFFS.get(new Random().nextInt(Constants.BUFFS.size())).getName());
+        case RANDOM_POSITIVE_EFFECT -> args = args.replace(str, Constants.DEBUFFS.get(new Random().nextInt(Constants.DEBUFFS.size())).getName());
         case PLAYER_WORLD -> args = args.replace(str, getWorldName(player, plugin));
         case PLAYER_IP -> args = args.replace(str, getIP(player, plugin));
         case PLAYER_PING -> args = args.replace(str, getPingString(player, plugin));

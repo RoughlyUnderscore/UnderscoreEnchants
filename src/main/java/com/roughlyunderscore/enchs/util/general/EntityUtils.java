@@ -3,6 +3,7 @@ package com.roughlyunderscore.enchs.util.general;
 import com.cryptomorin.xseries.XPotion;
 import com.cryptomorin.xseries.particles.XParticle;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
+import com.roughlyunderscore.enchs.util.Constants;
 import lombok.experimental.UtilityClass;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -208,14 +209,14 @@ public class EntityUtils {
   public void removeBuffs(Entity entityy, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
       plugin.getDebugger().log("removeBuffs was called on entity " + entity.getName() + ".");
-      plugin.getPositiveEffects().forEach(entity::removePotionEffect);
+      Constants.BUFFS.forEach(entity::removePotionEffect);
     }
   }
 
   public void removeDebuffs(Entity entityy, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
       plugin.getDebugger().log("removeDebuffs was called on entity " + entity.getName() + ".");
-      plugin.getNegativeEffects().forEach(entity::removePotionEffect);
+      Constants.DEBUFFS.forEach(entity::removePotionEffect);
     }
   }
   
