@@ -1,4 +1,5 @@
 # UnderscoreEnchants
+[![wakatime](https://wakatime.com/badge/user/19138aa2-1487-421c-9561-14ecdff554f8/project/dfe481f2-7aa9-4c4f-9841-86facc281ba3.svg)](https://wakatime.com/badge/user/19138aa2-1487-421c-9561-14ecdff554f8/project/dfe481f2-7aa9-4c4f-9841-86facc281ba3)
 This repository is the head repository of UnderscoreEnchants.
 
 # Default enchantment list
