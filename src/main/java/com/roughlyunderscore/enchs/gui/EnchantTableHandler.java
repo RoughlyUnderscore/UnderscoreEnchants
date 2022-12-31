@@ -68,7 +68,7 @@ public class EnchantTableHandler implements Listener {
 
   @EventHandler
   public void onEnchant(final EnchantItemEvent ev) {
-    Player enchanter = ev.getEnchanter();
+    final Player enchanter = ev.getEnchanter();
 
     if (!plugin.getMainConfig().ADD_ENCHANTMENTS_TO_ENCHANTMENT_TABLE) return;
     final int chance = plugin.getMainConfig().ENCHANTMENT_TABLE_CHANCE;
@@ -97,8 +97,7 @@ public class EnchantTableHandler implements Listener {
       final PreEnchantEvent pee = new PreEnchantEvent(ev.getEnchanter(), enchantment, level, resultItem); // haha pee
       Bukkit.getPluginManager().callEvent(pee);
 
-      if (!pee.isCancelled())
-        ev.getInventory().setItem(0, resultItem);
+      if (!pee.isCancelled()) ev.getInventory().setItem(0, resultItem);
     } catch (final IllegalArgumentException ex) {
       sendActionbar(ev.getEnchanter(), ex.getMessage(), plugin);
     }

@@ -106,6 +106,11 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
       return;
     }
 
+    if (preEnchantment == null) {
+      player.sendMessage(PlaceholderAPI.setPlaceholders(player, plugin.getMessages().WRONG_NAME));
+      return;
+    }
+
     // make sure that the level is in the bounds
     final DetailedEnchantment ench = parseEnchantment(preEnchantment.getName(), level, false, plugin);
 

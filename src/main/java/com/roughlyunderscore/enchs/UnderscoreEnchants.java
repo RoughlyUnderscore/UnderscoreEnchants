@@ -224,7 +224,7 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
       ));
     }
 
-    for (final String name : Constants.DEFAULT_ENCH_NAMES.values()) {
+    for (final String name : Arrays.stream(Enchantment.values()).map(Enchantment::getName).toList()) {
       cachedAutocompleteEnchantments.add(name.toLowerCase().replace(" ", "_"));
     }
     

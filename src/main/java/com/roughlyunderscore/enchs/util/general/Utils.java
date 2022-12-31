@@ -36,6 +36,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -86,7 +87,9 @@ public final class Utils {
    * @return the name in a form of {@link String}
    */
   public static String getName(final Enchantment ench) {
-    return Constants.DEFAULT_ENCH_NAMES.get(ench);
+    final @Nullable String name = Constants.DEFAULT_ENCH_NAMES.get(ench);
+    if (name == null) return ench.getName();
+    return name;
   }
 
   /**
