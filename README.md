@@ -69,4 +69,3 @@ This repository is the head repository of UnderscoreEnchants.
 |Vampire|All levels (1): 100%|[PLAYERHITPLAYER](https://github.com/RoughlyUnderscore/UnderscoreEnchants/wiki/Trigger-PLAYERHITPLAYER)|None|Upon killing a player, get Regeneration.|
 |Vegan|All levels (1-3): 100%|[PLAYEREAT](https://github.com/RoughlyUnderscore/UnderscoreEnchants/wiki/Trigger-PLAYEREAT)|None|Pesceterian for vegans.|
 |Wither|Level 1: 15%<br>Level 2-3: 20%|[PLAYERHITPLAYER](https://github.com/RoughlyUnderscore/UnderscoreEnchants/wiki/Trigger-PLAYERHITPLAYER)|None|Upon hitting a player, there's a chance to wither them.|
-Automated with [this](https://onlinegdb.com/GSZ06c644)
