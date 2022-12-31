@@ -41,7 +41,7 @@ public enum DoublePlayerActionPlaceholders {
   PLAYER_TWO_Z("<player_two_z>", "<player_two_location_z>", "<player_two_loc_z>"),
   PLAYER_TWO_YAW("<player_two_yaw>", "<player_two_location_yaw>", "<player_two_loc_yaw>"),
   PLAYER_TWO_PITCH("<player_two_pitch>", "<player_two_location_pitch>", "<player_two_loc_pitch>"),
-  PLAYER_TWO_MONEY("<player_two_mtwoy>", "<player_two_balance>", "<player_two_cash>", "<player_two_economy>", "<player_two_eco>", "<player_two_economy_balance>", "<player_two_eco_balance>"),
+  PLAYER_TWO_MONEY("<player_two_money>", "<player_two_balance>", "<player_two_cash>", "<player_two_economy>", "<player_two_eco>", "<player_two_economy_balance>", "<player_two_eco_balance>"),
   PLAYER_TWO_HEALTH("<player_two_health>", "<player_two_hp>"),
   PLAYER_TWO_MAX_HEALTH("<player_two_max_health>", "<player_two_max_hp>"),
   PLAYER_TWO_FOOD_LEVEL("<player_two_food_level>", "<player_two_food>"),

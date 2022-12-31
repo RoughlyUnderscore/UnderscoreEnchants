@@ -5,12 +5,16 @@ import co.aikar.commands.annotation.*;
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
-import com.roughlyunderscore.enchs.util.data.DetailedEnchantment;
-import com.roughlyunderscore.enchs.util.data.Permissions;
+import com.roughlyunderscore.enchs.config.MainConfig;
+import com.roughlyunderscore.enchs.config.Messages;
+import com.roughlyunderscore.enchs.easter_eggs.EasterEggs;
+import com.roughlyunderscore.enchs.util.DetailedEnchantment;
+import com.roughlyunderscore.enchs.util.Permissions;
 import com.roughlyunderscore.enchs.util.datastructures.Pair;
 import com.roughlyunderscore.enchs.util.general.Utils;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
@@ -41,8 +45,9 @@ import static com.roughlyunderscore.enchs.util.general.PlayerUtils.*;
 import static com.roughlyunderscore.enchs.util.general.Utils.*;
 
 @EqualsAndHashCode(callSuper = true)
-@Data
+@ToString
 @CommandAlias("ue|underscoreenchants|underscoree|uenchants|uenchs|underscoreenchs")
+@AllArgsConstructor
 @SuppressWarnings("unused")
 public class UnderscoreEnchantsCommand extends BaseCommand {
   private final UnderscoreEnchants plugin;
@@ -52,13 +57,11 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
   @Subcommand("help")
   public void defaultCommand(CommandSender sender) {
     if (!sender.hasPermission(Permissions.HELP)) {
-      String message = plugin.getMessages().NO_PERMS;
-      if (sender instanceof Player player) message = PlaceholderAPI.setPlaceholders(player, message);
-      sender.sendMessage(message);
+      sender.sendMessage(replacePAPI(sender, plugin.getMessages().NO_PERMS));
       return;
     }
 
-    sender.sendMessage(format(plugin.getConfig().getString("prefix") + "&r" + plugin.getDescription().getVersion()));
+    sender.sendMessage(format(plugin.getMainConfig().PREFIX + "&r" + plugin.getDescription().getVersion()));
     sender.sendMessage(format("&b&n&m----------------------------------"));
     sender.sendMessage(" ");
     sender.sendMessage(format("&9/ue log - &bCreates a plugin log for the support team to review"));
@@ -67,16 +70,14 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
     sender.sendMessage(format("&9/ue download <link> <name> <load or not (true/false)> - &bDownloads an enchantment from that link"));
     sender.sendMessage(format("&9/ue default <load or not (true/false)> - &bDownloads the default enchantment set"));
     sender.sendMessage(format("&9/ue load <name> - &bTries to load an enchantment with the given file name"));
-    sender.sendMessage(format("&9/ue unload <name> - &bTries to unload an enchamtment with the given file name"));
+    sender.sendMessage(format("&9/ue unload <name> - &bTries to unload an enchantment with the given file name"));
   }
 
   @Subcommand("log")
   // @CommandPermission(Permissions.LOG)
   public void onLog(CommandSender sender) {
     if (!sender.hasPermission(Permissions.LOG)) {
-      String message = plugin.getMessages().NO_PERMS;
-      if (sender instanceof Player player) message = PlaceholderAPI.setPlaceholders(player, message);
-      sender.sendMessage(message);
+      sender.sendMessage(replacePAPI(sender, plugin.getMessages().NO_PERMS));
       return;
     }
 
@@ -86,7 +87,7 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
   @Subcommand("duck")
   @Private
   public void onDuck(CommandSender sender) {
-    sender.sendMessage(UnderscoreEnchants.animals[(int) (Math.random() * UnderscoreEnchants.animals.length)]);
+    sender.sendMessage(EasterEggs.animals[(int) (Math.random() * EasterEggs.animals.length)]);
   }
 
   @Subcommand("enchant|ench|addenchant|addenchantment|absolutelyobliteratethisitemwiththisnewoverpoweredenchantment")
@@ -99,14 +100,14 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
       return;
     }
 
-    ItemStack handItem = getMainHand(player, plugin);
+    final ItemStack handItem = getMainHand(player, plugin);
     if (handItem.getType() == XMaterial.AIR.parseMaterial()) {
       playSound(player, XSound.ENTITY_VILLAGER_NO, plugin);
       return;
     }
 
-    // This is a dirty workaround, but I need to make sure that the level is in the bounds
-    DetailedEnchantment ench = parseEnchantment(preEnchantment.getName(), level, false, plugin);
+    // make sure that the level is in the bounds
+    final DetailedEnchantment ench = parseEnchantment(preEnchantment.getName(), level, false, plugin);
 
     if (ench.equals(UnderscoreEnchants.WRONG_LEVEL)) {
       player.sendMessage(PlaceholderAPI.setPlaceholders(player, plugin.getMessages().WRONG_LEVEL));
@@ -123,7 +124,7 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
       handItem.setType(XMaterial.ENCHANTED_BOOK.parseMaterial());
     }
 
-    Pair<ItemStack, Map<Enchantment, Integer>> pair = enchant(handItem, ench.getEnchantment(), level);
+    final Pair<ItemStack, Map<Enchantment, Integer>> pair = enchant(handItem, ench.getEnchantment(), level, plugin);
     if (pair.getValue() != null && !pair.getValue().isEmpty()) {
       playSound(player, XSound.ENTITY_VILLAGER_NO, plugin);
       return;
@@ -144,10 +145,10 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
       return;
     }
 
-    PersistentDataContainer pdc = player.getPersistentDataContainer();
+    final PersistentDataContainer pdc = player.getPersistentDataContainer();
 
     // Attempt to parse the proposed enchantment
-    DetailedEnchantment parsed = parseEnchantment(name, plugin);
+    final DetailedEnchantment parsed = parseEnchantment(name, plugin);
     if (parsed.equals(UnderscoreEnchants.WRONG_LEVEL)) {
       player.sendMessage(PlaceholderAPI.setPlaceholders(player, plugin.getMessages().WRONG_LEVEL));
       return;
@@ -173,14 +174,14 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
       return;
     }
 
-    File file0 = new File(plugin.getDataFolder().getPath() + File.separator + "enchantments");
+    final File file0 = new File(plugin.getDataFolder().getPath() + File.separator + "enchantments");
     if (!file0.exists()) file0.mkdirs();
 
-    File enchantment = new File(name);
+    final File enchantment = new File(name);
 
     try {
-      downloadWithJavaNIO(link, name, plugin);
-    } catch (MalformedURLException ex) {
+      downloadWithJavaNIO(link, name);
+    } catch (final MalformedURLException ex) {
       ex.printStackTrace();
     }
     player.sendMessage(PlaceholderAPI.setPlaceholders(player, plugin.getMessages().DOWNLOADED.replace("<ench>", enchantment.getName())));
@@ -193,28 +194,35 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
 
   @Subcommand("reload|rl|rel")
   public void reload(CommandSender sender) {
+    final long start = System.currentTimeMillis();
+
     if (!sender.hasPermission(Permissions.RELOAD)) {
-      String message = plugin.getMessages().NO_PERMS;
-      if (sender instanceof Player player) {
-        message = PlaceholderAPI.setPlaceholders(player, message);
-      }
-      sender.sendMessage(message);
+      sender.sendMessage(replacePAPI(sender, plugin.getMessages().NO_PERMS));
       return;
     }
 
-    // plugin.reloadConfig();
-    // plugin.reloadMessages();
-    // plugin.reloadEnchantments();
+    try {
+      final MainConfig newConfig = new MainConfig(plugin);
+      final Messages newMessages = new Messages(plugin);
 
-    sender.sendMessage(PlaceholderAPI.setPlaceholders((Player) sender, plugin.getMessages().RELOADED));
+      plugin.setMainConfig(newConfig);
+      plugin.setMessages(newMessages);
+
+      plugin.reloadEnchantments();
+      final long end = System.currentTimeMillis();
+
+      sender.sendMessage(replacePAPI(sender, newMessages.RELOADED).replace("<ms>", String.valueOf(end - start)));
+    } catch (final Exception ex) {
+      ex.printStackTrace();
+    }
+
+
   }
 
   @Subcommand("default|def|standard|normal|getdefault|defaultget|getstandard|standardget|normalget|getnormal|getdef|defget")
   public void onDownloadDefault(CommandSender sender, Boolean load) {
     if (!sender.hasPermission(Permissions.DOWNLOAD)) {
-      String message = plugin.getMessages().NO_PERMS;
-      if (sender instanceof Player player) message = PlaceholderAPI.setPlaceholders(player, message);
-      sender.sendMessage(message);
+      sender.sendMessage(replacePAPI(sender, plugin.getMessages().NO_PERMS));
       return;
     }
 
@@ -226,21 +234,21 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
     Document doc; // gets the document
     try {
       doc = Jsoup.connect(linkBase).get();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       e.printStackTrace();
       return;
     }
-    Elements links = doc.getElementsByTag("a"); // gets all "a" objects
-    List<String> files = new ArrayList<>();
+    final Elements links = doc.getElementsByTag("a"); // gets all "a" objects
+    final List<String> files = new ArrayList<>();
 
     for (final var link : links) {
-      String res = link.attr("href"); // gets the href attribute
+      final String res = link.attr("href"); // gets the href attribute
       if (res.endsWith(".yaml") || res.endsWith(".yml"))
         files.add(res); // makes sure that it's a YML file and adds it to the resources
     }
 
-    int LIMIT = 50;
-    int WAIT = 25;
+    final int LIMIT = 50;
+    final int WAIT = 25;
     downloadEnchantmentLimitedAndLoad(files, dir, LIMIT, WAIT, linkBase, load, sender, plugin);
   }
 
@@ -252,7 +260,7 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
     }
 
     // get file from plugin's folder with given address
-    File file = new File(plugin.getDataFolder().getPath() + File.separator + "enchantments" + File.separator +
+    final File file = new File(plugin.getDataFolder().getPath() + File.separator + "enchantments" + File.separator +
       address.replace("/", File.separator).replace("\\", File.separator)
     );
     if (!file.exists()) {
@@ -275,7 +283,7 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
     }
 
     // get file from plugin's folder with given address
-    File file = new File(plugin.getDataFolder().getPath() + File.separator + "enchantments" + File.separator +
+    final File file = new File(plugin.getDataFolder().getPath() + File.separator + "enchantments" + File.separator +
       address.replace("/", File.separator).replace("\\", File.separator)
     );
     if (!file.exists()) {
@@ -295,17 +303,17 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
    * @param sender someone to notify if something fails
    * @param plugin UnderscoreEnchants
    */
-  protected void createLog(CommandSender sender, UnderscoreEnchants plugin) {
+  protected void createLog(final CommandSender sender, final UnderscoreEnchants plugin) {
     try {
-      String path = plugin.getDataFolder() + "/logfile.log";
-      File file = new File(path);
+      final String path = plugin.getDataFolder() + "/logfile.log";
+      final File file = new File(path);
       if (file.exists()) {
         file.delete();
       }
       file.createNewFile();
 
-      FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
-      BufferedWriter writer = new BufferedWriter(fileWriter);
+      final FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
+      final BufferedWriter writer = new BufferedWriter(fileWriter);
 
       String message = plugin.getMessages().CREATING_LOG;
       if (sender instanceof Player player) message = PlaceholderAPI.setPlaceholders(player, message);
@@ -317,7 +325,7 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
 
       if (w == null) throw new IllegalStateException("No worlds present!");
 
-      Server server = Bukkit.getServer();
+      final Server server = Bukkit.getServer();
 
       write0(sender, writer, Arrays.asList(
         "-World parameters-",
@@ -371,7 +379,7 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
         "Enchantments:"
       ), plugin);
 
-      for (DetailedEnchantment ench : plugin.getEnchantmentData().keySet()) {
+      for (final DetailedEnchantment ench : plugin.getEnchantmentData().keySet()) {
         write0(sender, writer, Arrays.asList(
           " - Key: " + ench.getKey(),
           " - Name: " + ench.getName(),
@@ -391,7 +399,7 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
       String logCreatedMessage = plugin.getMessages().LOG_CREATED;
       if (sender instanceof Player player) logCreatedMessage = PlaceholderAPI.setPlaceholders(player, message);
       sender.sendMessage(logCreatedMessage);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       String message = plugin.getMessages().NO_LOG;
       if (sender instanceof Player player) message = PlaceholderAPI.setPlaceholders(player, message);
       sender.sendMessage(message);
@@ -407,9 +415,9 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
    * @param contents the contents to write
    * @param plugin   UnderscoreEnchants
    */
-  private void write0(CommandSender sender, BufferedWriter writer, List<String> contents, UnderscoreEnchants plugin) {
+  private void write0(final CommandSender sender, final BufferedWriter writer, final List<String> contents, final UnderscoreEnchants plugin) {
     try {
-      for (String string : contents) {
+      for (final String string : contents) {
         writer.write(string);
         writer.write("\n");
       }

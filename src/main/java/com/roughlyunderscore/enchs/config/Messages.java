@@ -1,4 +1,4 @@
-package com.roughlyunderscore.enchs.util.data;
+package com.roughlyunderscore.enchs.config;
 
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import lombok.EqualsAndHashCode;
@@ -32,10 +32,10 @@ public class Messages {
     OVER_THE_LIMIT,
     RELOADED;
 
-  public Messages(String string, UnderscoreEnchants enchants) {
+  public Messages(final String string, final UnderscoreEnchants enchants) {
     if (string.equals("Default")) {
       this.enchants = enchants;
-      String prefix = format(enchants.getConfig().getString("prefix", ""));
+      String prefix = enchants.getMainConfig().PREFIX;
 
       NO_PERMS = prefix + getMessage("no-perms");
       NO_CONSOLE = prefix + getMessage("no-console");
@@ -56,21 +56,11 @@ public class Messages {
     }
   }
 
-  public Messages(UnderscoreEnchants enchants) {
+  public Messages(final UnderscoreEnchants enchants) {
     this("Default", enchants);
   }
 
-  String getMessage(String arg) {
-    return format(
-      enchants.getConfig().getString(
-        "messages." +
-          enchants.getConfig().getString(
-            "lang"
-          ) +
-          "." +
-          arg,
-        "Message not found"
-      )
-    );
+  String getMessage(final String arg) {
+    return format(enchants.getConfig().getString(String.format("messages.%s.%s", enchants.getMainConfig().LANGUAGE, arg), "Message " + arg + " not found"));
   }
 }

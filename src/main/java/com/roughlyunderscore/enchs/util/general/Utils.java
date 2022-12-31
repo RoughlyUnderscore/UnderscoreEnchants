@@ -1,16 +1,15 @@
 package com.roughlyunderscore.enchs.util.general;
 
-import com.cryptomorin.xseries.XEnchantment;
 import com.cryptomorin.xseries.XMaterial;
 import com.google.common.collect.ImmutableMap;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import com.roughlyunderscore.enchs.enchants.abstracts.AbstractEnchantment;
 import com.roughlyunderscore.enchs.events.PlayerPVPEvent;
 import com.roughlyunderscore.enchs.parsers.condition.ComparativeOperator;
+import com.roughlyunderscore.enchs.util.Constants;
 import com.roughlyunderscore.enchs.util.RomanNumber;
-import com.roughlyunderscore.enchs.util.data.DetailedEnchantment;
+import com.roughlyunderscore.enchs.util.DetailedEnchantment;
 import com.roughlyunderscore.enchs.util.datastructures.Pair;
-import com.roughlyunderscore.enchs.util.datastructures.Triple;
 import com.roughlyunderscore.enchs.util.enums.Type;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.apache.commons.collections4.ListUtils;
@@ -22,9 +21,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -39,7 +36,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
-import org.mariuszgromada.math.mxparser.Expression;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,8 +45,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.roughlyunderscore.enchs.UnderscoreEnchants.WRONG_LEVEL;
 import static com.roughlyunderscore.enchs.UnderscoreEnchants.WRONG_NAME;
@@ -92,181 +86,7 @@ public final class Utils {
    * @return the name in a form of {@link String}
    */
   public static String getName(final Enchantment ench) {
-    if (ench.equals(XEnchantment.ARROW_DAMAGE.getEnchant())) return "Power";
-    else if (ench.equals(XEnchantment.DAMAGE_ARTHROPODS.getEnchant())) return "Bane of Arthropods";
-    else if (ench.equals(XEnchantment.ARROW_KNOCKBACK.getEnchant())) return "Punch";
-    else if (ench.equals(XEnchantment.DAMAGE_ALL.getEnchant())) return "Sharpness";
-    else if (ench.equals(XEnchantment.THORNS.getEnchant())) return "Thorns";
-    else if (ench.equals(XEnchantment.WATER_WORKER.getEnchant())) return "Aqua Affinity";
-    else if (ench.equals(XEnchantment.KNOCKBACK.getEnchant())) return "Knockback";
-    else if (ench.equals(XEnchantment.ARROW_INFINITE.getEnchant())) return "Infinity";
-    else if (ench.equals(XEnchantment.PROTECTION_ENVIRONMENTAL.getEnchant())) return "Protection";
-    else if (ench.equals(XEnchantment.ARROW_FIRE.getEnchant())) return "Flame";
-    else if (ench.equals(XEnchantment.SILK_TOUCH.getEnchant())) return "Silk Touch";
-    else if (ench.equals(XEnchantment.PROTECTION_PROJECTILE.getEnchant())) return "Projectile Protection";
-    else if (ench.equals(XEnchantment.PROTECTION_FIRE.getEnchant())) return "Fire Protection";
-    else if (ench.equals(XEnchantment.PROTECTION_EXPLOSIONS.getEnchant())) return "Blast Protection";
-    else if (ench.equals(XEnchantment.PROTECTION_FALL.getEnchant())) return "Feather Falling";
-    else if (ench.equals(XEnchantment.OXYGEN.getEnchant())) return "Respiration";
-    else if (ench.equals(XEnchantment.LURE.getEnchant())) return "Lure";
-    else if (ench.equals(XEnchantment.LUCK.getEnchant())) return "Luck of the Sea";
-    else if (ench.equals(XEnchantment.FIRE_ASPECT.getEnchant())) return "Fire Aspect";
-    else if (ench.equals(XEnchantment.DEPTH_STRIDER.getEnchant())) return "Depth Strider";
-    else if (ench.equals(XEnchantment.DAMAGE_UNDEAD.getEnchant())) return "Smite";
-    else if (ench.equals(XEnchantment.DIG_SPEED.getEnchant())) return "Efficiency";
-    else if (ench.equals(XEnchantment.LOOT_BONUS_BLOCKS.getEnchant())) return "Fortune";
-    else if (ench.equals(XEnchantment.LOOT_BONUS_MOBS.getEnchant())) return "Looting";
-    else if (ench.equals(XEnchantment.DURABILITY.getEnchant())) return "Unbreaking";
-    else if (ench.equals(XEnchantment.VANISHING_CURSE.getEnchant())) return "Curse of Vanishing";
-    else if (ench.equals(XEnchantment.BINDING_CURSE.getEnchant())) return "Curse of Binding";
-    else if (ench.equals(XEnchantment.SWEEPING_EDGE.getEnchant())) return "Sweeping Edge";
-    else if (ench.equals(XEnchantment.MENDING.getEnchant())) return "Mending";
-    else if (ench.equals(XEnchantment.SOUL_SPEED.getEnchant())) return "Soul Speed";
-    else if (ench.equals(XEnchantment.FROST_WALKER.getEnchant())) return "Frost Walker";
-    else if (ench.equals(XEnchantment.RIPTIDE.getEnchant())) return "Riptide";
-    else if (ench.equals(XEnchantment.IMPALING.getEnchant())) return "Impaling";
-    else if (ench.equals(XEnchantment.LOYALTY.getEnchant())) return "Loyalty";
-    else if (ench.equals(XEnchantment.CHANNELING.getEnchant())) return "Channeling";
-    else if (ench.equals(XEnchantment.SWIFT_SNEAK.getEnchant())) return "Swift Sneak";
-    else return ench.getName();
-  }
-
-  /**
-   * Checks if a certain {@link ItemStack} object is a glass pane.
-   *
-   * @param itemStack the {@link ItemStack} object to check
-   * @return {@code true} if is pane, {@code false} otherwise
-   */
-  public static boolean isPane(final ItemStack itemStack) {
-    if (itemStack == null) return false;
-    return itemStack.getType().name().endsWith("PANE");
-  }
-
-  /**
-   * A utility for action parsers to parse the %random% placeholders and numerical expressions.
-   *
-   * @param action  an action to parse in the form of {@link String}
-   * @param world   the {@link World} to work with while parsing max Y
-   * @param players a {@link List} object to parse the PDC placeholders
-   * @param plugin  UnderscoreEnchants
-   * @return an array of {@link String} objects, containing the parsed values separated with a space
-   */
-  public static String[] parseRegex(String action, final World world, final List<Player> players, final UnderscoreEnchants plugin) {
-    final Matcher intMatcher = Pattern.compile("<random_int_([-]?[0-9]+)_([-]?[0-9]+)>").matcher(action);
-    final StringBuilder intBuffer = new StringBuilder();
-
-    while (intMatcher.find()) {
-      final int min = parseI(intMatcher.group(1));
-      final int max = parseI(intMatcher.group(2));
-      intMatcher.appendReplacement(intBuffer, String.valueOf(ThreadLocalRandom.current().nextInt(min, max)));
-    }
-
-    intMatcher.appendTail(intBuffer);
-    action = intBuffer.toString();
-
-    final Matcher doubleMatcher = Pattern.compile("<random_double_([-]?[0-9]+[.][0-9]+)_([-]?[0-9]+[.][0-9]+)>").matcher(action);
-    final StringBuilder doubleBuffer = new StringBuilder();
-
-    while (doubleMatcher.find()) {
-      final double min = parseD(doubleMatcher.group(1));
-      final double max = parseD(doubleMatcher.group(2));
-      doubleMatcher.appendReplacement(doubleBuffer, String.valueOf(ThreadLocalRandom.current().nextDouble(min, max)));
-    }
-
-    doubleMatcher.appendTail(doubleBuffer);
-    action = doubleBuffer.toString();
-
-
-    final Matcher maxYMatcher = Pattern.compile("<max_y_at_([-]?[0-9]+)_([-]?[0-9]+)>").matcher(action);
-    final StringBuilder maxYBuilder = new StringBuilder();
-
-    while (maxYMatcher.find()) {
-      final double x = parseD(maxYMatcher.group(1));
-      final double z = parseD(maxYMatcher.group(2));
-      maxYMatcher.appendReplacement(maxYBuilder, String.valueOf(world.getHighestBlockYAt((int) x, (int) z)));
-    }
-
-    maxYMatcher.appendTail(maxYBuilder);
-    action = maxYBuilder.toString();
-
-    if (players.size() == 1) {
-      final Matcher playerMatcher = Pattern.compile("<player_pdc_(.+)>").matcher(action);
-
-      final StringBuilder playerBuilder = new StringBuilder();
-
-      while (playerMatcher.find()) {
-        final String arg = playerMatcher.group(1);
-        final String val = String.valueOf(getPDCValue(players.get(0), getKey(arg, plugin), plugin));
-        playerMatcher.appendReplacement(playerBuilder, val);
-      }
-
-      playerMatcher.appendTail(playerBuilder);
-      action = playerBuilder.toString();
-    } else {
-      final Matcher victimMatcher = Pattern.compile("<victim_pdc_(.+)>").matcher(action);
-      final StringBuilder victimBuilder = new StringBuilder();
-
-      while (victimMatcher.find()) {
-        final String arg = victimMatcher.group(1);
-        final String val = String.valueOf(getPDCValue(players.get(0), getKey(arg, plugin), plugin));
-        victimMatcher.appendReplacement(victimBuilder, val);
-      }
-
-      victimMatcher.appendTail(victimBuilder);
-      action = victimBuilder.toString();
-
-      final Matcher damagerMatcher = Pattern.compile("<damager_pdc_(.+)>").matcher(action);
-      final StringBuilder damagerBuilder = new StringBuilder();
-
-      while (damagerMatcher.find()) {
-        final String arg = damagerMatcher.group(1);
-        final String val = String.valueOf(getPDCValue(players.get(1), getKey(arg, plugin), plugin));
-        damagerMatcher.appendReplacement(damagerBuilder, val);
-      }
-
-      damagerMatcher.appendTail(damagerBuilder);
-      action = damagerBuilder.toString();
-    }
-
-    final String[] split0 = action.split(" ");
-    final String[] split = new String[split0.length];
-
-
-    for (int i = 0; i < split0.length; i++) {
-      final String test = String.valueOf(new Expression(split0[i]).calculate());
-      if (!test.equals(String.valueOf(Double.NaN))) split[i] = test;
-      else split[i] = split0[i];
-    }
-
-    return split;
-  }
-
-  /**
-   * A utility for parsers to quickly replace placeholders.
-   *
-   * @param input a {@link String} to replace the entries in
-   * @param pairs an array of {@link Pair} objects, containing a replacee and a replacer.
-   * @return a resulting {@link String}
-   */
-  @SafeVarargs
-  public static String replacePlaceholders(String input, final Pair<String, String>... pairs) {
-    for (final Pair<String, String> pair : pairs) {
-      input = input.replace(pair.getKey(), pair.getValue());
-    }
-
-    return input;
-  }
-
-  /**
-   * A utility, combining {@link #replacePlaceholders(String, Pair[])} and {@link #parseRegex(String, World, List, UnderscoreEnchants)}.
-   *
-   * @param input a {@link String} to parse
-   * @param pairs {@link #replacePlaceholders(String, Pair[])}
-   * @return the result of parsing in the form of a {@link String} array
-   */
-  @SafeVarargs
-  public static String[] completeParse(final List<Player> players, final String input, final World world, final UnderscoreEnchants plugin, final Pair<String, String>... pairs) {
-    return parseRegex(replacePlaceholders(input, pairs), world, players, plugin);
+    return Constants.DEFAULT_ENCH_NAMES.get(ench);
   }
 
   /**
@@ -311,7 +131,6 @@ public final class Utils {
    * @see #parseI(String)
    * @see #parseF(String)
    * @see #parseL(String)
-   * @see #parseB(String)
    */
   public static double parseD(final String string) {
     try {
@@ -329,7 +148,6 @@ public final class Utils {
    * @see #parseD(String)
    * @see #parseF(String)
    * @see #parseL(String)
-   * @see #parseB(String)
    */
   public static int parseI(final String string) {
     try {
@@ -347,7 +165,6 @@ public final class Utils {
    * @see #parseD(String)
    * @see #parseI(String)
    * @see #parseL(String)
-   * @see #parseB(String)
    */
   public static float parseF(final String string) {
     try {
@@ -365,7 +182,6 @@ public final class Utils {
    * @see #parseD(String)
    * @see #parseI(String)
    * @see #parseF(String)
-   * @see #parseB(String)
    */
   public static long parseL(final String string) {
     try {
@@ -376,20 +192,6 @@ public final class Utils {
   }
 
   /**
-   * Quickly parses a boolean from a {@link String}, best used in other parsers for shortening the code.
-   *
-   * @param string the {@link String} to parse.
-   * @return the resulting boolean
-   * @see #parseD(String)
-   * @see #parseI(String)
-   * @see #parseF(String)
-   * @see #parseL(String)
-   */
-  public static boolean parseB(final String string) {
-    return Boolean.parseBoolean(string);
-  }
-
-  /**
    * Sends an activation message to the {@link Player} if the message is enabled.
    *
    * @param name     the {@link Enchantment} name in a form of {@link String}
@@ -397,7 +199,7 @@ public final class Utils {
    * @param plugin   an {@link UnderscoreEnchants} object, used for configuration access
    */
   public static void activationMessage(final String name, final Player receiver, final UnderscoreEnchants plugin) {
-    if (plugin.getConfig().getBoolean("activated")) {
+    if (plugin.getMainConfig().ACTIVATED_MESSAGE_ENABLED) {
       activationMessage(receiver, name, plugin);
     }
   }
@@ -411,7 +213,7 @@ public final class Utils {
    * @param plugin an {@link UnderscoreEnchants} object, used for configuration access
    */
   public static void activationMessage(final EnchantmentTarget target, final PlayerPVPEvent ev, final String name, final UnderscoreEnchants plugin) {
-    if (plugin.getConfig().getBoolean("activated")) {
+    if (plugin.getMainConfig().ACTIVATED_MESSAGE_ENABLED) {
       switch (target) {
         case BOW, WEAPON, TOOL -> activationMessage(ev.getDamager(), name, plugin);
         default -> activationMessage(ev.getVictim(), name, plugin);
@@ -429,9 +231,9 @@ public final class Utils {
   public static boolean isEnchantable(final ItemStack item) {
     if (item == null || item.getType() == Material.AIR) return false;
     final Material material = item.getType();
-    if (UnderscoreEnchants.weaponsList.contains(material)) return true;
-    else if (UnderscoreEnchants.armorList.contains(material)) return true;
-    else if (UnderscoreEnchants.toolsList.contains(material)) return true;
+    if (Constants.WEAPONS.contains(material)) return true;
+    else if (Constants.ARMOR.contains(material)) return true;
+    else if (Constants.TOOLS.contains(material)) return true;
     else if (material.equals(XMaterial.BOW.parseMaterial())) return true;
     else return material.equals(XMaterial.BOOK.parseMaterial());
   }
@@ -479,9 +281,9 @@ public final class Utils {
     Type itemType;
     final Material material = item.getType();
 
-    if (UnderscoreEnchants.weaponsList.contains(material)) itemType = Type.WEAPON;
-    else if (UnderscoreEnchants.armorList.contains(material)) itemType = Type.ARMOR;
-    else if (UnderscoreEnchants.toolsList.contains(material)) itemType = Type.TOOL;
+    if (Constants.WEAPONS.contains(material)) itemType = Type.WEAPON;
+    else if (Constants.ARMOR.contains(material)) itemType = Type.ARMOR;
+    else if (Constants.TOOLS.contains(material)) itemType = Type.TOOL;
     else if (material.equals(XMaterial.BOW.parseMaterial())) itemType = Type.BOW;
     else if (material.equals(XMaterial.BOOK.parseMaterial()))
       itemType = Type.values()[new Random().nextInt(Type.values().length)];
@@ -540,7 +342,7 @@ public final class Utils {
    * @param plugin   an {@link UnderscoreEnchants} object, used for configuration access
    */
   public static void activationMessage(final Player receiver, final String name, final UnderscoreEnchants plugin) {
-    if (plugin.getConfig().getBoolean("activated")) {
+    if (plugin.getMainConfig().ACTIVATED_MESSAGE_ENABLED) {
 
       // build a unique namespace for the bossbar creation
       final String player = ChatColor.stripColor(receiver.getName());
@@ -597,17 +399,6 @@ public final class Utils {
   /**
    * Checks whether an {@link ItemStack} is enchanted or not.
    *
-   * @param item the {@link ItemStack} to check
-   * @param ench the {@link DetailedEnchantment} object to get the {@link Enchantment} from
-   * @return {@code true} if the {@link ItemStack} is enchanted, {@code false} otherwise
-   */
-  public static boolean enchanted(final ItemStack item, final DetailedEnchantment ench) {
-    return item.getEnchantments().containsKey(ench.getEnchantment());
-  }
-
-  /**
-   * Checks whether an {@link ItemStack} is enchanted or not.
-   *
    * @param player the {@link Player}, whose main hand is checked
    * @param ench   the {@link DetailedEnchantment} object to get the {@link Enchantment} from
    * @return {@code true} if the {@link ItemStack} is enchanted, {@code false} otherwise
@@ -645,16 +436,6 @@ public final class Utils {
       case BOW, WEAPON, TOOL -> enchanted(pl, ench, plugin);
       default -> false;
     };
-  }
-
-  /**
-   * Checks if an {@link EntityDamageByEntityEvent} is a result of a {@link Player} shooting a {@link Player}
-   *
-   * @param ev the {@link EntityDamageByEntityEvent} to check
-   * @return {@code true} if the {@link EntityDamageByEntityEvent} is a result of a {@link Player} shooting a {@link Player}, {@code false} otherwise
-   */
-  public static boolean areArrowAndPlayerInEvent(final EntityDamageByEntityEvent ev) {
-    return ev.getDamager() instanceof Arrow arrow && arrow.getShooter() != null && arrow.getShooter() instanceof Player;
   }
 
   /**
@@ -700,7 +481,7 @@ public final class Utils {
 
     switch (target) {
       case ARMOR -> {
-        for (ItemStack item : armor) {
+        for (final ItemStack item : armor) {
           if (hasEnchantment(item, enchant, forbidden)) {
             level = item.getEnchantments().get(ench.getEnchantment());
             break;
@@ -708,22 +489,22 @@ public final class Utils {
         }
       }
       case ARMOR_HEAD -> {
-        ItemStack piece = player.getInventory().getHelmet();
+        final ItemStack piece = player.getInventory().getHelmet();
         if (hasEnchantment(piece, enchant, forbidden))
           level = piece.getEnchantments().get(ench.getEnchantment());
       }
       case ARMOR_TORSO -> {
-        ItemStack piece = player.getInventory().getChestplate();
+        final ItemStack piece = player.getInventory().getChestplate();
         if (hasEnchantment(piece, enchant, forbidden))
           level = piece.getEnchantments().get(ench.getEnchantment());
       }
       case ARMOR_LEGS -> {
-        ItemStack piece = player.getInventory().getLeggings();
+        final ItemStack piece = player.getInventory().getLeggings();
         if (hasEnchantment(piece, enchant, forbidden))
           level = piece.getEnchantments().get(ench.getEnchantment());
       }
       case ARMOR_FEET -> {
-        ItemStack piece = player.getInventory().getBoots();
+        final ItemStack piece = player.getInventory().getBoots();
         if (hasEnchantment(piece, enchant, forbidden))
           level = piece.getEnchantments().get(ench.getEnchantment());
       }
@@ -762,26 +543,16 @@ public final class Utils {
   }
 
   /**
-   * Checks whether an {@link ItemStack} is {@link lombok.NonNull} and is not AIR.
-   *
-   * @param itemStack the {@link ItemStack} to check
-   * @return {@code true} if the conditions match, {@code false} otherwise
-   */
-  public static boolean validItem(final ItemStack itemStack) {
-    return itemStack != null && itemStack.getType() != Material.AIR;
-  }
-
-  /**
    * encahnt <br>
    * banana banana banana banana
    */
-  public static Pair<ItemStack, Map<Enchantment, Integer>> enchant(final ItemStack item0, final Enchantment enchantment, final int level) {
+  public static Pair<ItemStack, Map<Enchantment, Integer>> enchant(final ItemStack item0, final Enchantment enchantment, final int level, final UnderscoreEnchants instance) {
     if (item0 == null || item0.getType() == Material.AIR)                                       // Deal will null and AIR
       return Pair.of(null, ImmutableMap.of(enchantment, level));                           // Return a pair of null item and same enchantments
 
     final ItemStack item = item0.clone();                                                       // Clone the itemstack for further work
 
-    if (item.getEnchantments().size() >= UnderscoreEnchants.staticConfig.getInt("enchantmentLimit")) // Can't enchant due to the limit
+    if (item.getEnchantments().size() >= instance.getMainConfig().MAXIMUM_ENCHANTMENTS) // Can't enchant due to the limit
       return Pair.of(item, ImmutableMap.of(enchantment, level));                              // Return a pair of same item and same enchantments
 
 
@@ -814,6 +585,17 @@ public final class Utils {
   }
 
   /**
+   * Replaces PAPI placeholders on any object if it's a player to save some code lines.
+   * @param entity the potential player to use for placeholders
+   * @param string the string to replace
+   * @return the replaced string
+   */
+  public static String replacePAPI(final Object entity, final String string) {
+    if (entity instanceof Player player) return PlaceholderAPI.setPlaceholders(player, string);
+    return string;
+  }
+
+  /**
    * Enchant an {@link ItemStack} with multiple {@link Enchantment}s.
    *
    * @param item         an {@link ItemStack} to enchant
@@ -821,14 +603,14 @@ public final class Utils {
    * @return a {@link Pair} of the (possibly) enchanted {@link ItemStack} and the leftover {@link Enchantment}s along with their levels. If the amount of
    * enchantments does not exceed the limit, the {@link Map} will be empty.
    */
-  public static Pair<ItemStack, Map<Enchantment, Integer>> enchant(ItemStack item, final Map<Enchantment, Integer> enchantments) {
+  public static Pair<ItemStack, Map<Enchantment, Integer>> enchant(ItemStack item, final Map<Enchantment, Integer> enchantments, final UnderscoreEnchants instance) {
     if (item == null || item.getType() == Material.AIR)                                         // Deal will null and AIR
       return Pair.of(null, enchantments);                                                  // Return a pair of null item and same enchantments
 
     final Map<Enchantment, Integer> leftovers = new HashMap<>();                                // Prepare a leftovers storage
 
     for (final Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-      final Pair<ItemStack, Map<Enchantment, Integer>> pair = enchant(item, entry.getKey(), entry.getValue());
+      final Pair<ItemStack, Map<Enchantment, Integer>> pair = enchant(item, entry.getKey(), entry.getValue(), instance);
       if (pair.getValue() != null)
         leftovers.putAll(pair.getValue());                         // An enchantment iteration resulted in non-null (has leftovers);
         // need to put everything in the leftovers storage
@@ -855,7 +637,7 @@ public final class Utils {
    * @param enchantments a map of enchantments and their corresponding enchantments
    * @return the generated lore line
    */
-  public static List<String> generateLoreLine(final HashMap<Enchantment, Integer> enchantments) {
+  public static List<String> generateLoreLine(final Map<Enchantment, Integer> enchantments) {
     final List<String> lore = new ArrayList<>();
     enchantments.forEach((ench, level) -> lore.add(generateLoreLine(ench, level)));
     return lore;
@@ -1031,11 +813,11 @@ public final class Utils {
     } else return new DetailedEnchantment(ench.getKey());
   }
 
-  // two debug methods, used before and maybe will be used later
+  // two debug methods
   private static String tellMeTheStaticEnchantmentData(final UnderscoreEnchants plugin) {
     final StringBuilder builder = new StringBuilder();
     for (final DetailedEnchantment en : plugin.getEnchantmentData().keySet()) {
-      builder.append(en.getName()).append(" / ").append(en.getKey()).append("\n");
+      builder.append(en.getName()).append(" / ").append(en.getKey()).append("  |===|***|===|  ");
     }
     return builder.toString();
   }
@@ -1043,7 +825,7 @@ public final class Utils {
   private static String tellMeTheDefaultEnchantmentData() {
     final StringBuilder builder = new StringBuilder();
     for (final Enchantment en : Enchantment.values()) {
-      builder.append(en.getName()).append(" / ").append(en.getKey()).append("\n");
+      builder.append(en.getName()).append(" / ").append(en.getKey()).append("  |===|***|===|  ");
     }
     return builder.toString();
   }
@@ -1055,30 +837,16 @@ public final class Utils {
    * @return the enchantment, or {@code UnderscoreEnchants.STATIC_EMPTY} (identical to EMPTY) if such enchantment doesn't exist
    */
   public static DetailedEnchantment parseEnchantment(final String name, final UnderscoreEnchants plugin) {
-
-    if (plugin.getEnchantmentData().keySet().stream().noneMatch(ench -> ench.getCommandName().equalsIgnoreCase(name))) {
-      if (Arrays.stream(Enchantment.values()).noneMatch(ench -> getName(ench).replace(" ", "_").equalsIgnoreCase(name))) {
-        return WRONG_NAME; // returns the placeholder if there's no enchantment with such name
-      }
+    if (plugin.getEnchantmentData().keySet().stream().noneMatch(ench -> ench.getCommandName().equalsIgnoreCase(name.replace(" ", "_")))) {
+      //if (Arrays.stream(Enchantment.values()).noneMatch(ench -> getName(ench).replace(" ", "_").equalsIgnoreCase(name))) {
+      return WRONG_NAME; // returns the placeholder if there's no enchantment with such name
+      //}
     }
 
-    Enchantment ench;
-
-    final Optional<DetailedEnchantment> optional = plugin.getEnchantmentData().keySet().stream().filter(en -> en.getCommandName().equalsIgnoreCase(name)).findFirst();
-    if (optional.isPresent()) {
-      ench = optional.get().getEnchantment(); // sets the enchantment to the received one (this is a custom enchantment)
-    } else {
-      ench = Arrays
-        .stream(Enchantment.values())
-        .filter(en -> getName(en)
-          .replace(" ", "_")
-          .equalsIgnoreCase(name))
-        .findFirst()
-        .orElse(WRONG_NAME.getEnchantment());
-    }
-
-    return new DetailedEnchantment(ench.getKey()); // returns a DetailedEnchantment object, built from the received enchantment
-
+    return plugin.getEnchantmentData().keySet().stream()
+      .filter(e -> e.getCommandName().equalsIgnoreCase(name.replace(" ", "_")))
+      .findFirst()
+      .orElse(null); // Should never end up here.
   }
 
   /**
@@ -1103,7 +871,7 @@ public final class Utils {
   }
 
 
-  public static void downloadWithJavaNIO(final String fileURL, final String localFilename, final UnderscoreEnchants plugin) throws MalformedURLException {
+  public static void downloadWithJavaNIO(final String fileURL, final String localFilename) throws MalformedURLException {
     // github.com/eugenp/tutorials/blob/master/core-java-modules/core-java-networking-2/src/main/java/com/baeldung/download/FileDownload.java#L52
 
     int CONNECT_TIMEOUT = 10000;
@@ -1146,7 +914,7 @@ public final class Utils {
       if (current >= limit) {
         async(plugin, () -> {
           try {
-            downloadWithJavaNIO(link + "/" + filename, name, plugin);
+            downloadWithJavaNIO(link + "/" + filename, name);
 
             final File enchantment = new File(name);
 
@@ -1170,7 +938,7 @@ public final class Utils {
       } else {
         async(plugin, () -> {
           try {
-            downloadWithJavaNIO(link + "/" + filename, name, plugin);
+            downloadWithJavaNIO(link + "/" + filename, name);
 
             final File enchantment = new File(name);
 
@@ -1265,34 +1033,6 @@ public final class Utils {
   }
 
   /**
-   * Generates an array of {@code EnchantmentOffer}s from given enchantments.
-   *
-   * @param enchs the enchantments to generate offers from
-   * @return the generated offers
-   */
-  @SafeVarargs
-  public static EnchantmentOffer[] generateOffers(final Triple<Enchantment, Integer, Integer>... enchs) {
-    return generateOffersList(enchs).toArray(new EnchantmentOffer[0]);
-  }
-
-  /**
-   * Generates a list of {@code EnchantmentOffer}s from given enchantments.
-   *
-   * @param enchs the enchantments to generate offers from
-   * @return the generated offers
-   */
-  @SafeVarargs
-  public static List<EnchantmentOffer> generateOffersList(final Triple<Enchantment, Integer, Integer>... enchs) {
-    final List<EnchantmentOffer> offers = new ArrayList<>();
-
-    for (final Triple<Enchantment, Integer, Integer> ench : enchs) {
-      offers.add(new EnchantmentOffer(ench.getA(), ench.getB(), ench.getC()));
-    }
-
-    return offers;
-  }
-
-  /**
    * Properly generates an enchanted item (lore, etc)
    *
    * @param oldItem      the item to copy
@@ -1351,8 +1091,8 @@ public final class Utils {
       }
     }
 
-    if (!enchantments.isEmpty() && enchantments.size() >= plugin.getConfig().getInt("enchantmentLimit")) {
-      throw new IllegalArgumentException("You can't have more than " + plugin.getConfig().getInt("enchantmentLimit") + " enchantments on an item!");
+    if (!enchantments.isEmpty() && enchantments.size() >= plugin.getMainConfig().MAXIMUM_ENCHANTMENTS) {
+      throw new IllegalArgumentException("You can't have more than " + plugin.getMainConfig().MAXIMUM_ENCHANTMENTS + " enchantments on an item!");
     }
 
     meta.setLore(lore);
@@ -1410,20 +1150,6 @@ public final class Utils {
   }
 
   /**
-   * Checks if an array of strings contains a case-insensitive string.
-   *
-   * @param array the array to check
-   * @param key   the string to check for
-   * @return whether the array contains the string
-   */
-  public static boolean arrayOfStringsContains(final String[] array, final String key) {
-    for (final String s : array) {
-      if (s.equalsIgnoreCase(key)) return true;
-    }
-    return false;
-  }
-
-  /**
    * Checks if an array of strings contains a case-insensitive string even partly.
    *
    * @param array the array to check
@@ -1432,7 +1158,7 @@ public final class Utils {
    */
   public static boolean arrayOfStringsContainsPartly(final String[] array, final String key) {
     for (final String s : array) {
-      if (s.toLowerCase().contains(key)) return true;
+      if (s.toLowerCase().contains(key.toLowerCase())) return true;
     }
     return false;
   }

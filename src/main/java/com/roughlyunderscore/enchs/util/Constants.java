@@ -1,0 +1,302 @@
+package com.roughlyunderscore.enchs.util;
+
+import com.cryptomorin.xseries.XEnchantment;
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XPotion;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.*;
+
+public class Constants {
+  public static final int BSTATS_ID = 12413;
+  public static final int SPIGOT_ID = 97002;
+  public static final Map<Enchantment, String> DEFAULT_ENCH_NAMES = new HashMap<>();
+  public static final List<Enchantment> DEFAULT_WEAPON_ENCHANTMENTS = new ArrayList<>();
+  public static final List<Enchantment> DEFAULT_HELMET_ENCHANTMENTS = new ArrayList<>();
+  public static final List<Enchantment> DEFAULT_CHESTPLATE_ENCHANTMENTS = new ArrayList<>();
+  public static final List<Enchantment> DEFAULT_LEGGINGS_ENCHANTMENTS = new ArrayList<>();
+  public static final List<Enchantment> DEFAULT_BOOTS_ENCHANTMENTS = new ArrayList<>();
+  public static final List<Enchantment> DEFAULT_TOOL_ENCHANTMENTS = new ArrayList<>();
+  public static final List<Enchantment> DEFAULT_BOW_ENCHANTMENTS = new ArrayList<>();
+  public static final List<Material> REPAIRED_BY_PLANKS = new ArrayList<>();
+  public static final List<Material> REPAIRED_BY_IRON = new ArrayList<>();
+  public static final List<Material> REPAIRED_BY_GOLD = new ArrayList<>();
+  public static final List<Material> REPAIRED_BY_DIAMOND = new ArrayList<>();
+  public static final List<Material> REPAIRED_BY_NETHERITE = new ArrayList<>();
+  public static final List<Material> REPAIRED_BY_LEATHER = new ArrayList<>();
+  public static final List<Material> REPAIRED_BY_COBBLE = new ArrayList<>();
+  public static final List<Material> COBBLE = new ArrayList<>();
+  public static final List<Material> WEAPONS = new ArrayList<>();
+  public static final List<Material> TOOLS = new ArrayList<>();
+  public static final List<Material> ARMOR = new ArrayList<>();
+  public static final List<PotionEffectType> BUFFS = new ArrayList<>();
+  public static final List<PotionEffectType> DEBUFFS = new ArrayList<>();
+
+
+  static {
+    DEFAULT_ENCH_NAMES.put(Enchantment.ARROW_DAMAGE, "Power");
+    DEFAULT_ENCH_NAMES.put(Enchantment.ARROW_FIRE, "Flame");
+    DEFAULT_ENCH_NAMES.put(Enchantment.ARROW_INFINITE, "Infinity");
+    DEFAULT_ENCH_NAMES.put(Enchantment.ARROW_KNOCKBACK, "Punch");
+    DEFAULT_ENCH_NAMES.put(Enchantment.DAMAGE_ALL, "Sharpness");
+    DEFAULT_ENCH_NAMES.put(Enchantment.DAMAGE_ARTHROPODS, "Bane of Arthropods");
+    DEFAULT_ENCH_NAMES.put(Enchantment.DAMAGE_UNDEAD, "Smite");
+    DEFAULT_ENCH_NAMES.put(Enchantment.DEPTH_STRIDER, "Depth Strider");
+    DEFAULT_ENCH_NAMES.put(Enchantment.DIG_SPEED, "Efficiency");
+    DEFAULT_ENCH_NAMES.put(Enchantment.DURABILITY, "Unbreaking");
+    DEFAULT_ENCH_NAMES.put(Enchantment.FIRE_ASPECT, "Fire Aspect");
+    DEFAULT_ENCH_NAMES.put(Enchantment.FROST_WALKER, "Frost Walker");
+    DEFAULT_ENCH_NAMES.put(Enchantment.KNOCKBACK, "Knockback");
+    DEFAULT_ENCH_NAMES.put(Enchantment.LOOT_BONUS_BLOCKS, "Fortune");
+    DEFAULT_ENCH_NAMES.put(Enchantment.LOOT_BONUS_MOBS, "Looting");
+    DEFAULT_ENCH_NAMES.put(Enchantment.LUCK, "Luck of the Sea");
+    DEFAULT_ENCH_NAMES.put(Enchantment.LURE, "Lure");
+    DEFAULT_ENCH_NAMES.put(Enchantment.OXYGEN, "Respiration");
+    DEFAULT_ENCH_NAMES.put(Enchantment.PROTECTION_ENVIRONMENTAL, "Protection");
+    DEFAULT_ENCH_NAMES.put(Enchantment.PROTECTION_EXPLOSIONS, "Blast Protection");
+    DEFAULT_ENCH_NAMES.put(Enchantment.PROTECTION_FALL, "Feather Falling");
+    DEFAULT_ENCH_NAMES.put(Enchantment.PROTECTION_FIRE, "Fire Protection");
+    DEFAULT_ENCH_NAMES.put(Enchantment.PROTECTION_PROJECTILE, "Projectile Protection");
+    DEFAULT_ENCH_NAMES.put(Enchantment.SILK_TOUCH, "Silk Touch");
+    DEFAULT_ENCH_NAMES.put(Enchantment.THORNS, "Thorns");
+    DEFAULT_ENCH_NAMES.put(Enchantment.WATER_WORKER, "Aqua Affinity");
+    DEFAULT_ENCH_NAMES.put(Enchantment.MENDING, "Mending");
+    DEFAULT_ENCH_NAMES.put(Enchantment.VANISHING_CURSE, "Curse of Vanishing");
+    DEFAULT_ENCH_NAMES.put(Enchantment.BINDING_CURSE, "Curse of Binding");
+    DEFAULT_ENCH_NAMES.put(Enchantment.SWEEPING_EDGE, "Sweeping Edge");
+    DEFAULT_ENCH_NAMES.put(Enchantment.SWIFT_SNEAK, "Swift Sneak");
+    DEFAULT_ENCH_NAMES.put(Enchantment.RIPTIDE, "Riptide");
+    DEFAULT_ENCH_NAMES.put(Enchantment.CHANNELING, "Channeling");
+    DEFAULT_ENCH_NAMES.put(Enchantment.LOYALTY, "Loyalty");
+    DEFAULT_ENCH_NAMES.put(Enchantment.IMPALING, "Impaling");
+    DEFAULT_ENCH_NAMES.put(Enchantment.MULTISHOT, "Multishot");
+    DEFAULT_ENCH_NAMES.put(Enchantment.QUICK_CHARGE, "Quick Charge");
+    DEFAULT_ENCH_NAMES.put(Enchantment.PIERCING, "Piercing");
+    DEFAULT_ENCH_NAMES.put(Enchantment.SOUL_SPEED, "Soul Speed");
+
+    DEFAULT_WEAPON_ENCHANTMENTS.add(XEnchantment.DAMAGE_ALL.getEnchant());
+    DEFAULT_WEAPON_ENCHANTMENTS.add(XEnchantment.DAMAGE_ARTHROPODS.getEnchant());
+    DEFAULT_WEAPON_ENCHANTMENTS.add(XEnchantment.FIRE_ASPECT.getEnchant());
+    DEFAULT_WEAPON_ENCHANTMENTS.add(XEnchantment.KNOCKBACK.getEnchant());
+    DEFAULT_WEAPON_ENCHANTMENTS.add(XEnchantment.LOOT_BONUS_MOBS.getEnchant());
+    DEFAULT_WEAPON_ENCHANTMENTS.add(XEnchantment.DAMAGE_UNDEAD.getEnchant());
+    DEFAULT_WEAPON_ENCHANTMENTS.add(XEnchantment.DURABILITY.getEnchant());
+    DEFAULT_WEAPON_ENCHANTMENTS.add(XEnchantment.MENDING.getEnchant());
+    DEFAULT_WEAPON_ENCHANTMENTS.add(XEnchantment.SWEEPING_EDGE.getEnchant());
+    DEFAULT_WEAPON_ENCHANTMENTS.add(XEnchantment.VANISHING_CURSE.getEnchant());
+
+    DEFAULT_BOW_ENCHANTMENTS.add(XEnchantment.ARROW_FIRE.getEnchant());
+    DEFAULT_BOW_ENCHANTMENTS.add(XEnchantment.ARROW_DAMAGE.getEnchant());
+    DEFAULT_BOW_ENCHANTMENTS.add(XEnchantment.ARROW_KNOCKBACK.getEnchant());
+    DEFAULT_BOW_ENCHANTMENTS.add(XEnchantment.ARROW_INFINITE.getEnchant());
+    DEFAULT_BOW_ENCHANTMENTS.add(XEnchantment.DURABILITY.getEnchant());
+    DEFAULT_BOW_ENCHANTMENTS.add(XEnchantment.MENDING.getEnchant());
+    DEFAULT_BOW_ENCHANTMENTS.add(XEnchantment.VANISHING_CURSE.getEnchant());
+
+    DEFAULT_TOOL_ENCHANTMENTS.add(XEnchantment.DURABILITY.getEnchant());
+    DEFAULT_TOOL_ENCHANTMENTS.add(XEnchantment.DIG_SPEED.getEnchant());
+    DEFAULT_TOOL_ENCHANTMENTS.add(XEnchantment.LOOT_BONUS_BLOCKS.getEnchant());
+    DEFAULT_TOOL_ENCHANTMENTS.add(XEnchantment.SILK_TOUCH.getEnchant());
+    DEFAULT_TOOL_ENCHANTMENTS.add(XEnchantment.LURE.getEnchant());
+    DEFAULT_TOOL_ENCHANTMENTS.add(XEnchantment.LUCK.getEnchant());
+    DEFAULT_TOOL_ENCHANTMENTS.add(XEnchantment.MENDING.getEnchant());
+    DEFAULT_TOOL_ENCHANTMENTS.add(XEnchantment.VANISHING_CURSE.getEnchant());
+
+    DEFAULT_HELMET_ENCHANTMENTS.add(XEnchantment.WATER_WORKER.getEnchant());
+    DEFAULT_HELMET_ENCHANTMENTS.add(XEnchantment.PROTECTION_EXPLOSIONS.getEnchant());
+    DEFAULT_HELMET_ENCHANTMENTS.add(XEnchantment.PROTECTION_FIRE.getEnchant());
+    DEFAULT_HELMET_ENCHANTMENTS.add(XEnchantment.PROTECTION_PROJECTILE.getEnchant());
+    DEFAULT_HELMET_ENCHANTMENTS.add(XEnchantment.PROTECTION_ENVIRONMENTAL.getEnchant());
+    DEFAULT_HELMET_ENCHANTMENTS.add(XEnchantment.OXYGEN.getEnchant());
+    DEFAULT_HELMET_ENCHANTMENTS.add(XEnchantment.THORNS.getEnchant());
+    DEFAULT_HELMET_ENCHANTMENTS.add(XEnchantment.DURABILITY.getEnchant());
+    DEFAULT_HELMET_ENCHANTMENTS.add(XEnchantment.VANISHING_CURSE.getEnchant());
+    DEFAULT_HELMET_ENCHANTMENTS.add(XEnchantment.BINDING_CURSE.getEnchant());
+    DEFAULT_HELMET_ENCHANTMENTS.add(XEnchantment.MENDING.getEnchant());
+
+    DEFAULT_CHESTPLATE_ENCHANTMENTS.add(XEnchantment.PROTECTION_EXPLOSIONS.getEnchant());
+    DEFAULT_CHESTPLATE_ENCHANTMENTS.add(XEnchantment.PROTECTION_FIRE.getEnchant());
+    DEFAULT_CHESTPLATE_ENCHANTMENTS.add(XEnchantment.PROTECTION_PROJECTILE.getEnchant());
+    DEFAULT_CHESTPLATE_ENCHANTMENTS.add(XEnchantment.PROTECTION_ENVIRONMENTAL.getEnchant());
+    DEFAULT_CHESTPLATE_ENCHANTMENTS.add(XEnchantment.THORNS.getEnchant());
+    DEFAULT_CHESTPLATE_ENCHANTMENTS.add(XEnchantment.DURABILITY.getEnchant());
+    DEFAULT_CHESTPLATE_ENCHANTMENTS.add(XEnchantment.VANISHING_CURSE.getEnchant());
+    DEFAULT_CHESTPLATE_ENCHANTMENTS.add(XEnchantment.BINDING_CURSE.getEnchant());
+    DEFAULT_CHESTPLATE_ENCHANTMENTS.add(XEnchantment.MENDING.getEnchant());
+
+    DEFAULT_LEGGINGS_ENCHANTMENTS.add(XEnchantment.PROTECTION_EXPLOSIONS.getEnchant());
+    DEFAULT_LEGGINGS_ENCHANTMENTS.add(XEnchantment.PROTECTION_FIRE.getEnchant());
+    DEFAULT_LEGGINGS_ENCHANTMENTS.add(XEnchantment.PROTECTION_PROJECTILE.getEnchant());
+    DEFAULT_LEGGINGS_ENCHANTMENTS.add(XEnchantment.PROTECTION_ENVIRONMENTAL.getEnchant());
+    DEFAULT_LEGGINGS_ENCHANTMENTS.add(XEnchantment.THORNS.getEnchant());
+    DEFAULT_LEGGINGS_ENCHANTMENTS.add(XEnchantment.DURABILITY.getEnchant());
+    DEFAULT_LEGGINGS_ENCHANTMENTS.add(XEnchantment.VANISHING_CURSE.getEnchant());
+    DEFAULT_LEGGINGS_ENCHANTMENTS.add(XEnchantment.BINDING_CURSE.getEnchant());
+    DEFAULT_LEGGINGS_ENCHANTMENTS.add(XEnchantment.MENDING.getEnchant());
+
+    DEFAULT_BOOTS_ENCHANTMENTS.add(XEnchantment.DEPTH_STRIDER.getEnchant());
+    DEFAULT_BOOTS_ENCHANTMENTS.add(XEnchantment.PROTECTION_FALL.getEnchant());
+    DEFAULT_BOOTS_ENCHANTMENTS.add(XEnchantment.PROTECTION_FIRE.getEnchant());
+    DEFAULT_BOOTS_ENCHANTMENTS.add(XEnchantment.PROTECTION_PROJECTILE.getEnchant());
+    DEFAULT_BOOTS_ENCHANTMENTS.add(XEnchantment.PROTECTION_ENVIRONMENTAL.getEnchant());
+    DEFAULT_BOOTS_ENCHANTMENTS.add(XEnchantment.THORNS.getEnchant());
+    DEFAULT_BOOTS_ENCHANTMENTS.add(XEnchantment.DURABILITY.getEnchant());
+    DEFAULT_BOOTS_ENCHANTMENTS.add(XEnchantment.PROTECTION_EXPLOSIONS.getEnchant());
+    DEFAULT_BOOTS_ENCHANTMENTS.add(XEnchantment.DEPTH_STRIDER.getEnchant());
+    DEFAULT_BOOTS_ENCHANTMENTS.add(XEnchantment.VANISHING_CURSE.getEnchant());
+    DEFAULT_BOOTS_ENCHANTMENTS.add(XEnchantment.BINDING_CURSE.getEnchant());
+    DEFAULT_BOOTS_ENCHANTMENTS.add(XEnchantment.FROST_WALKER.getEnchant());
+    DEFAULT_BOOTS_ENCHANTMENTS.add(XEnchantment.MENDING.getEnchant());
+    DEFAULT_BOOTS_ENCHANTMENTS.add(XEnchantment.SOUL_SPEED.getEnchant());
+
+    REPAIRED_BY_PLANKS.add(XMaterial.WOODEN_SWORD.parseMaterial());
+    REPAIRED_BY_PLANKS.add(XMaterial.WOODEN_SHOVEL.parseMaterial());
+    REPAIRED_BY_PLANKS.add(XMaterial.WOODEN_PICKAXE.parseMaterial());
+    REPAIRED_BY_PLANKS.add(XMaterial.WOODEN_AXE.parseMaterial());
+    REPAIRED_BY_PLANKS.add(XMaterial.WOODEN_HOE.parseMaterial());
+    REPAIRED_BY_PLANKS.add(XMaterial.SHIELD.parseMaterial());
+      
+    REPAIRED_BY_LEATHER.add(XMaterial.LEATHER_HELMET.parseMaterial());
+    REPAIRED_BY_LEATHER.add(XMaterial.LEATHER_CHESTPLATE.parseMaterial());
+    REPAIRED_BY_LEATHER.add(XMaterial.LEATHER_LEGGINGS.parseMaterial());
+    REPAIRED_BY_LEATHER.add(XMaterial.LEATHER_BOOTS.parseMaterial());
+    
+    REPAIRED_BY_COBBLE.add(XMaterial.STONE_SWORD.parseMaterial());
+    REPAIRED_BY_COBBLE.add(XMaterial.STONE_SHOVEL.parseMaterial());
+    REPAIRED_BY_COBBLE.add(XMaterial.STONE_PICKAXE.parseMaterial());
+    REPAIRED_BY_COBBLE.add(XMaterial.STONE_AXE.parseMaterial());
+    REPAIRED_BY_COBBLE.add(XMaterial.STONE_HOE.parseMaterial());
+    
+    COBBLE.add(XMaterial.COBBLESTONE.parseMaterial());
+    COBBLE.add(XMaterial.COBBLED_DEEPSLATE.parseMaterial());
+    COBBLE.add(XMaterial.BLACKSTONE.parseMaterial());
+    
+    REPAIRED_BY_IRON.add(XMaterial.IRON_SWORD.parseMaterial());
+    REPAIRED_BY_IRON.add(XMaterial.IRON_SHOVEL.parseMaterial());
+    REPAIRED_BY_IRON.add(XMaterial.IRON_PICKAXE.parseMaterial());
+    REPAIRED_BY_IRON.add(XMaterial.IRON_AXE.parseMaterial());
+    REPAIRED_BY_IRON.add(XMaterial.IRON_HOE.parseMaterial());
+    REPAIRED_BY_IRON.add(XMaterial.IRON_HELMET.parseMaterial());
+    REPAIRED_BY_IRON.add(XMaterial.IRON_CHESTPLATE.parseMaterial());
+    REPAIRED_BY_IRON.add(XMaterial.IRON_LEGGINGS.parseMaterial());
+    REPAIRED_BY_IRON.add(XMaterial.IRON_BOOTS.parseMaterial());
+    REPAIRED_BY_IRON.add(XMaterial.CHAINMAIL_HELMET.parseMaterial());
+    REPAIRED_BY_IRON.add(XMaterial.CHAINMAIL_CHESTPLATE.parseMaterial());
+    REPAIRED_BY_IRON.add(XMaterial.CHAINMAIL_LEGGINGS.parseMaterial());
+    REPAIRED_BY_IRON.add(XMaterial.CHAINMAIL_BOOTS.parseMaterial());
+      
+    REPAIRED_BY_GOLD.add(XMaterial.GOLDEN_HELMET.parseMaterial());
+    REPAIRED_BY_GOLD.add(XMaterial.GOLDEN_CHESTPLATE.parseMaterial());
+    REPAIRED_BY_GOLD.add(XMaterial.GOLDEN_LEGGINGS.parseMaterial());
+    REPAIRED_BY_GOLD.add(XMaterial.GOLDEN_BOOTS.parseMaterial());
+    REPAIRED_BY_GOLD.add(XMaterial.GOLDEN_SWORD.parseMaterial());
+    REPAIRED_BY_GOLD.add(XMaterial.GOLDEN_SHOVEL.parseMaterial());
+    REPAIRED_BY_GOLD.add(XMaterial.GOLDEN_PICKAXE.parseMaterial());
+    REPAIRED_BY_GOLD.add(XMaterial.GOLDEN_AXE.parseMaterial());
+    REPAIRED_BY_GOLD.add(XMaterial.GOLDEN_HOE.parseMaterial());
+    
+    REPAIRED_BY_DIAMOND.add(XMaterial.DIAMOND_HELMET.parseMaterial());
+    REPAIRED_BY_DIAMOND.add(XMaterial.DIAMOND_CHESTPLATE.parseMaterial());
+    REPAIRED_BY_DIAMOND.add(XMaterial.DIAMOND_LEGGINGS.parseMaterial());
+    REPAIRED_BY_DIAMOND.add(XMaterial.DIAMOND_BOOTS.parseMaterial());
+    REPAIRED_BY_DIAMOND.add(XMaterial.DIAMOND_SWORD.parseMaterial());
+    REPAIRED_BY_DIAMOND.add(XMaterial.DIAMOND_SHOVEL.parseMaterial());
+    REPAIRED_BY_DIAMOND.add(XMaterial.DIAMOND_PICKAXE.parseMaterial());
+    REPAIRED_BY_DIAMOND.add(XMaterial.DIAMOND_AXE.parseMaterial());
+    REPAIRED_BY_DIAMOND.add(XMaterial.DIAMOND_HOE.parseMaterial());
+    
+    REPAIRED_BY_NETHERITE.add(XMaterial.NETHERITE_HELMET.parseMaterial());
+    REPAIRED_BY_NETHERITE.add(XMaterial.NETHERITE_CHESTPLATE.parseMaterial());
+    REPAIRED_BY_NETHERITE.add(XMaterial.NETHERITE_LEGGINGS.parseMaterial());
+    REPAIRED_BY_NETHERITE.add(XMaterial.NETHERITE_BOOTS.parseMaterial());
+    REPAIRED_BY_NETHERITE.add(XMaterial.NETHERITE_SWORD.parseMaterial());
+    REPAIRED_BY_NETHERITE.add(XMaterial.NETHERITE_SHOVEL.parseMaterial());
+    REPAIRED_BY_NETHERITE.add(XMaterial.NETHERITE_PICKAXE.parseMaterial());
+    REPAIRED_BY_NETHERITE.add(XMaterial.NETHERITE_AXE.parseMaterial());
+    REPAIRED_BY_NETHERITE.add(XMaterial.NETHERITE_HOE.parseMaterial());
+
+    BUFFS.add(XPotion.DAMAGE_RESISTANCE.getPotionEffectType());
+    BUFFS.add(XPotion.FIRE_RESISTANCE.getPotionEffectType());
+    BUFFS.add(XPotion.INCREASE_DAMAGE.getPotionEffectType());
+    BUFFS.add(XPotion.ABSORPTION.getPotionEffectType());
+    BUFFS.add(XPotion.FAST_DIGGING.getPotionEffectType());
+    BUFFS.add(XPotion.HEAL.getPotionEffectType());
+    BUFFS.add(XPotion.HEALTH_BOOST.getPotionEffectType());
+    BUFFS.add(XPotion.INVISIBILITY.getPotionEffectType());
+    BUFFS.add(XPotion.CONDUIT_POWER.getPotionEffectType());
+    BUFFS.add(XPotion.HERO_OF_THE_VILLAGE.getPotionEffectType());
+    BUFFS.add(XPotion.DOLPHINS_GRACE.getPotionEffectType());
+    BUFFS.add(XPotion.GLOWING.getPotionEffectType());
+    BUFFS.add(XPotion.LUCK.getPotionEffectType());
+    BUFFS.add(XPotion.WATER_BREATHING.getPotionEffectType());
+    BUFFS.add(XPotion.SATURATION.getPotionEffectType());
+    BUFFS.add(XPotion.SPEED.getPotionEffectType());
+    BUFFS.add(XPotion.JUMP.getPotionEffectType());
+    BUFFS.add(XPotion.NIGHT_VISION.getPotionEffectType());
+    BUFFS.add(XPotion.REGENERATION.getPotionEffectType());
+
+    XPotion.DEBUFFS.forEach(effect -> DEBUFFS.add(effect.getPotionEffectType()));
+
+    WEAPONS.add(XMaterial.WOODEN_SWORD.parseMaterial());
+    WEAPONS.add(XMaterial.STONE_SWORD.parseMaterial());
+    WEAPONS.add(XMaterial.GOLDEN_SWORD.parseMaterial());
+    WEAPONS.add(XMaterial.IRON_SWORD.parseMaterial());
+    WEAPONS.add(XMaterial.DIAMOND_SWORD.parseMaterial());
+    WEAPONS.add(XMaterial.NETHERITE_SWORD.parseMaterial());
+
+    TOOLS.add(XMaterial.IRON_SHOVEL.parseMaterial());
+    TOOLS.add(XMaterial.IRON_PICKAXE.parseMaterial());
+    TOOLS.add(XMaterial.IRON_AXE.parseMaterial());
+    TOOLS.add(XMaterial.WOODEN_SHOVEL.parseMaterial());
+    TOOLS.add(XMaterial.WOODEN_PICKAXE.parseMaterial());
+    TOOLS.add(XMaterial.WOODEN_AXE.parseMaterial());
+    TOOLS.add(XMaterial.STONE_SHOVEL.parseMaterial());
+    TOOLS.add(XMaterial.STONE_PICKAXE.parseMaterial());
+    TOOLS.add(XMaterial.STONE_AXE.parseMaterial());
+    TOOLS.add(XMaterial.DIAMOND_SHOVEL.parseMaterial());
+    TOOLS.add(XMaterial.DIAMOND_PICKAXE.parseMaterial());
+    TOOLS.add(XMaterial.DIAMOND_AXE.parseMaterial());
+    TOOLS.add(XMaterial.GOLDEN_SHOVEL.parseMaterial());
+    TOOLS.add(XMaterial.GOLDEN_PICKAXE.parseMaterial());
+    TOOLS.add(XMaterial.GOLDEN_AXE.parseMaterial());
+    TOOLS.add(XMaterial.WOODEN_HOE.parseMaterial());
+    TOOLS.add(XMaterial.STONE_HOE.parseMaterial());
+    TOOLS.add(XMaterial.IRON_HOE.parseMaterial());
+    TOOLS.add(XMaterial.DIAMOND_HOE.parseMaterial());
+    TOOLS.add(XMaterial.GOLDEN_HOE.parseMaterial());
+    TOOLS.add(XMaterial.NETHERITE_HOE.parseMaterial());
+    TOOLS.add(XMaterial.NETHERITE_SHOVEL.parseMaterial());
+    TOOLS.add(XMaterial.NETHERITE_AXE.parseMaterial());
+    TOOLS.add(XMaterial.NETHERITE_PICKAXE.parseMaterial());
+    TOOLS.add(XMaterial.FISHING_ROD.parseMaterial());
+    TOOLS.add(XMaterial.FLINT_AND_STEEL.parseMaterial());
+
+    ARMOR.add(XMaterial.DIAMOND_HELMET.parseMaterial());
+    ARMOR.add(XMaterial.DIAMOND_CHESTPLATE.parseMaterial());
+    ARMOR.add(XMaterial.DIAMOND_LEGGINGS.parseMaterial());
+    ARMOR.add(XMaterial.DIAMOND_BOOTS.parseMaterial());
+    ARMOR.add(XMaterial.GOLDEN_HELMET.parseMaterial());
+    ARMOR.add(XMaterial.GOLDEN_CHESTPLATE.parseMaterial());
+    ARMOR.add(XMaterial.GOLDEN_LEGGINGS.parseMaterial());
+    ARMOR.add(XMaterial.GOLDEN_BOOTS.parseMaterial());
+    ARMOR.add(XMaterial.IRON_HELMET.parseMaterial());
+    ARMOR.add(XMaterial.IRON_CHESTPLATE.parseMaterial());
+    ARMOR.add(XMaterial.IRON_LEGGINGS.parseMaterial());
+    ARMOR.add(XMaterial.IRON_BOOTS.parseMaterial());
+    ARMOR.add(XMaterial.CHAINMAIL_HELMET.parseMaterial());
+    ARMOR.add(XMaterial.CHAINMAIL_CHESTPLATE.parseMaterial());
+    ARMOR.add(XMaterial.CHAINMAIL_LEGGINGS.parseMaterial());
+    ARMOR.add(XMaterial.CHAINMAIL_BOOTS.parseMaterial());
+    ARMOR.add(XMaterial.LEATHER_BOOTS.parseMaterial());
+    ARMOR.add(XMaterial.LEATHER_CHESTPLATE.parseMaterial());
+    ARMOR.add(XMaterial.LEATHER_LEGGINGS.parseMaterial());
+    ARMOR.add(XMaterial.LEATHER_BOOTS.parseMaterial());
+    ARMOR.add(XMaterial.NETHERITE_HELMET.parseMaterial());
+    ARMOR.add(XMaterial.NETHERITE_CHESTPLATE.parseMaterial());
+    ARMOR.add(XMaterial.NETHERITE_LEGGINGS.parseMaterial());
+    ARMOR.add(XMaterial.NETHERITE_BOOTS.parseMaterial());
+    ARMOR.add(XMaterial.TURTLE_HELMET.parseMaterial());
+  }
+}

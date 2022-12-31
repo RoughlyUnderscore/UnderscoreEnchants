@@ -3,6 +3,7 @@ package com.roughlyunderscore.enchs.util.general;
 import com.cryptomorin.xseries.XPotion;
 import com.cryptomorin.xseries.particles.XParticle;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
+import com.roughlyunderscore.enchs.util.Constants;
 import lombok.experimental.UtilityClass;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -20,7 +21,7 @@ import java.util.Objects;
 Just a lot of utils that I don't want to explain
  */
 public class EntityUtils {
-  //<editor-fold desc="Location">
+  
   public Location getLocation(Entity entity, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("getLocation was called on entity " + entity.getName() + " and resulted in the following location: " + entity.getLocation());
     return entity.getLocation();
@@ -79,9 +80,9 @@ public class EntityUtils {
   public String getWorldName(Entity entity, UnderscoreEnchants plugin) {
     return getWorld(entity, plugin).getName();
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Health">
+  
   public double getMaximumHealth(Entity entityy, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
       plugin.getDebugger().log("getMaximumHealth was called on entity " + entity.getName() + " and resulted in the following value: " + Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue());
@@ -105,9 +106,9 @@ public class EntityUtils {
   public String getHealthString(Entity entity, UnderscoreEnchants plugin) {
     return String.valueOf(getHealth(entity, plugin));
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Velocity">
+  
   public void produceVelocity(Entity entity, double x, double y, double z, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("produceVelocity was called on entity " + entity.getName() + " with coordinates of " + x + ", " + y + " and " + z + ".");
     produceVelocity(entity, String.valueOf(x), String.valueOf(y), String.valueOf(z));
@@ -120,9 +121,9 @@ public class EntityUtils {
   public void produceVelocity(Entity entity, String[] parameters) {
     produceVelocity(entity, parameters[1], parameters[2], parameters[3]);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Effects & potions">
+  
   public void addPotion(Entity entityy, PotionEffect potion, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
       plugin.getDebugger().log("addPotion was called on entity " + entity.getName() + " with the following potion: " + potion + ".");
@@ -208,19 +209,19 @@ public class EntityUtils {
   public void removeBuffs(Entity entityy, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
       plugin.getDebugger().log("removeBuffs was called on entity " + entity.getName() + ".");
-      plugin.getPositiveEffects().forEach(entity::removePotionEffect);
+      Constants.BUFFS.forEach(entity::removePotionEffect);
     }
   }
 
   public void removeDebuffs(Entity entityy, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
       plugin.getDebugger().log("removeDebuffs was called on entity " + entity.getName() + ".");
-      plugin.getNegativeEffects().forEach(entity::removePotionEffect);
+      Constants.DEBUFFS.forEach(entity::removePotionEffect);
     }
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Location">
+  
   public void setLocation(Entity entity, Location location, UnderscoreEnchants plugin) {
     entity.teleport(location);
     plugin.getDebugger().log("setLocation was called on entity " + entity.getName() + " with location of: " + location);
@@ -327,9 +328,9 @@ public class EntityUtils {
   public void spawnParticleBoots(Entity entity, Location location, String particle0, UnderscoreEnchants plugin) {
     spawnParticleBoots(entity, location, XParticle.getParticle(particle0), plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Health">
+  
   public void setMaximumHealth(Entity entityy, double health, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
       plugin.getDebugger().log("setMaximumHealth was called on entity " + entity.getName() + " with a value of " + health + ".");
@@ -367,9 +368,9 @@ public class EntityUtils {
   public void increaseHealth(Entity entity, String adjustment, UnderscoreEnchants plugin) {
     increaseHealth(entity, Utils.parseD(adjustment), plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Projectiles on entity's behalf">
+  
   public void sendProjectile(Entity entityy, Class<? extends Projectile> clazz, UnderscoreEnchants plugin) {
     if (entityy instanceof ProjectileSource entity) {
       plugin.getDebugger().log("sendProjectile was called for entity " + entityy.getName() + "with the projectile type of " + clazz.getName() + ".");
@@ -384,9 +385,9 @@ public class EntityUtils {
   public void sendFireball(Entity entity, UnderscoreEnchants plugin) {
     sendProjectile(entity, Fireball.class, plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Fire">
+  
   public void setFire(Entity entity, UnderscoreEnchants plugin) {
     setFire(entity, 200, plugin);
   }
@@ -399,9 +400,9 @@ public class EntityUtils {
   public void setFire(Entity entity, String ticks, UnderscoreEnchants plugin) {
     setFire(entity, Utils.parseI(ticks), plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Entity state">
+  
   public boolean swimming(Entity entityy, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
       plugin.getDebugger().log("boolean$swimming was called on entity " + entity.getName() + " and resulted in: " + entity.isSwimming());
@@ -441,5 +442,5 @@ public class EntityUtils {
       return String.valueOf(plugin.getGods().get(player.getUniqueId()));
     else return "0";
   }
-  //</editor-fold>
+  
 }

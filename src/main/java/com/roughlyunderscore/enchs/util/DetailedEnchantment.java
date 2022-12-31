@@ -1,4 +1,4 @@
-package com.roughlyunderscore.enchs.util.data;
+package com.roughlyunderscore.enchs.util;
 
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import lombok.EqualsAndHashCode;

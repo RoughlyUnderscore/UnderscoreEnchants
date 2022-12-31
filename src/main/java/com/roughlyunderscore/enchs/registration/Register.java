@@ -6,7 +6,7 @@ import com.roughlyunderscore.enchs.enchants.EnchantmentLevel;
 import com.roughlyunderscore.enchs.enchants.abstracts.*;
 import com.roughlyunderscore.enchs.events.*;
 import com.roughlyunderscore.enchs.util.cooldownutils.Cooldown;
-import com.roughlyunderscore.enchs.util.data.DetailedEnchantment;
+import com.roughlyunderscore.enchs.util.DetailedEnchantment;
 import com.roughlyunderscore.enchs.util.datastructures.Pair;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -117,11 +117,15 @@ public class Register {
     plugin.debugger.log("Registering enchantment: " + file.getAbsolutePath());
     plugin.debugger.log("Enchantment file name: " + file.getName());
     plugin.debugger.log("Enchantment path: " + file.getPath());
+
     final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
     final Pair<DetailedEnchantment, AbstractEnchantment> enchant = parseEnchantment(configuration, plugin);
     if (enchant == null) return;
+
     final AbstractEnchantment enchantment = enchant.getValue();
     wrapEnchantment(enchantment, enchant.getKey(), plugin);
+
+    plugin.getCachedAutocompleteEnchantments().add(enchant.getKey().getCommandName().toLowerCase().replace(" ", "_"));
     UnderscoreEnchants.staticEnchantmentData.put(enchant.getKey(), enchantment);
   }
 
@@ -137,6 +141,7 @@ public class Register {
     plugin.debugger.log("Attempting to unload an enchantment: " + file.getAbsolutePath());
     plugin.debugger.log("Enchantment file name: " + file.getName());
     plugin.debugger.log("Enchantment path: " + file.getPath());
+
     final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
     // Pair<DetailedEnchantment, AbstractEnchantment> enchant = plugin.parseEnchantment(configuration);
     final DetailedEnchantment enchantment = findEnchantment(file, plugin);
@@ -165,6 +170,7 @@ public class Register {
     HandlerList.unregisterAll(listener);
     UnderscoreEnchants.staticEnchantmentData.remove(enchantment);
 
+    plugin.getCachedAutocompleteEnchantments().remove(name.toLowerCase().replace(" ", "_"));
     plugin.getEnchantmentData().remove(enchantment);
   }
 
@@ -239,24 +245,23 @@ public class Register {
     final int lvl = getEnchantLevel(player, entry, target, forbidOn, plugin);
     if (lvl == 0) return;
 
-    plugin.getUnderscoreLogger().info("Found enchantment: " + name + " with level: " + lvl + "by player: " + player.getName());
+    // plugin.getUnderscoreLogger().info(">" + name + " | Found enchantment: " + name + " with level: " + lvl + "by player: " + player.getName());
 
     if (flag == null) flag = "";
 
-    plugin.getUnderscoreLogger().info("Current flag: " + flag);
+    // plugin.getUnderscoreLogger().info(">" + name + " | Current flag: " + flag);
 
     final EnchantmentLevel level = levels.get(lvl - 1);
 
-    plugin.getUnderscoreLogger().info("Attempting to validate the activation...");
+    // plugin.getUnderscoreLogger().info(">" + name + " | Attempting to validate the activation...");
     // Pass all the checks
     if (!validateActivation(plugin, event, player, level, key, conditions, flag)) return;
 
-    plugin.getUnderscoreLogger().info("Activation validated!");
+    // plugin.getUnderscoreLogger().info(">" + name + " | Activation validated!");
 
     // Parse every action
     for (final String lev : level.getAction()) {
       try {
-        plugin.getUnderscoreLogger().info("Parsing action " + lev);
         parseAction(event, lev, plugin);
       } catch (final Exception e) {
         plugin.debugger.log(Arrays.toString(e.getStackTrace()));
@@ -453,17 +458,18 @@ public class Register {
   }
 
   public /*static*/ Pair<DetailedEnchantment, AbstractEnchantment> parseEnchantment(final YamlConfiguration file, final UnderscoreEnchants instance) {
-
-    //<editor-fold desc="Preparatory">
     final @NonNull String enchantmentName = format(file.getString("name"));
     final @NonNull EnchantmentTarget target = parseTarget(file.getString("applicable"));
     final @NonNull Class<? extends Event> eventString = parseEvent(file.getString("trigger"));
+
     final List<String> conditions = file.getStringList("conditions");
     final List<String> forbidOn = file.getStringList("forbid-on");
     final @NonNull List<EnchantmentLevel> levelsList = getLevelsOf(file.getConfigurationSection("levels"));
+
     final String damagerOrVictim = file.getString("player");
     final @Nullable String conditionFlag = file.getString("condition-flag");
     boolean forDamager = false, forVictim = false, valueEmpty = true;
+
     if (damagerOrVictim != null) {
       valueEmpty = false;
       if (damagerOrVictim.equalsIgnoreCase("damager")) forDamager = true;
@@ -484,10 +490,7 @@ public class Register {
     instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Levels: " + levelsList.toString());
     instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Damager-or-victim-if-present: " + damagerOrVictim);
     instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Condition flag: " + conditionFlag);
-    
-    //</editor-fold>
 
-    //<editor-fold desc="PlayerPVPEvent">
     if (eventString.getName().equals(PlayerPVPEvent.class.getName())) {
       boolean finalForDamager = forDamager, finalForVictim = forVictim, finalValueEmpty = valueEmpty;
       
@@ -519,8 +522,7 @@ public class Register {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
 
     }
-    //</editor-fold>
-    //<editor-fold desc="ArmorEquipEvent">
+
     else if (eventString.getName().equals(ArmorEquipEvent.class.getName())) {
       instance.debugger.log("Registering the event at ArmorEquipEvent");
       ench = new ArmorEquipEnchantment(key, enchantmentName, maximumLevel, target) {
@@ -545,8 +547,7 @@ public class Register {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
 
     }
-    //</editor-fold>
-    //<editor-fold desc="BlockBreakEvent">
+
     else if (eventString.getName().equals(BlockBreakEvent.class.getName())) {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at BlockBreakEvent");
       ench = new BlockBreakEnchantment(key, enchantmentName, maximumLevel, target) {
@@ -570,8 +571,7 @@ public class Register {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
 
     }
-    //</editor-fold>
-    //<editor-fold desc="PlayerItemBreakEvent">
+
     else if (eventString.getName().equals(PlayerItemBreakEvent.class.getName())) {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerItemBreakEvent");
       ench = new ItemBreakEnchantment(key, enchantmentName, maximumLevel, target) {
@@ -596,10 +596,10 @@ public class Register {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
 
     }
-    //</editor-fold>
-    //<editor-fold desc="PlayerItemConsumeEvent">
+
     else if (eventString.getName().equals(PlayerItemConsumeEvent.class.getName())) {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerItemConsumeEvent");
+
       ench = new ItemEatEnchantment(key, enchantmentName, maximumLevel, target) {
         @Override
         public void onConsume(final PlayerItemConsumeEvent event) {
@@ -621,8 +621,7 @@ public class Register {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
 
     }
-    //</editor-fold>
-    //<editor-fold desc="PlayerInteractAtEntityEvent">
+
     else if (eventString.getName().equals(PlayerInteractAtEntityEvent.class.getName())) {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerInteractAtEntityEvent");
       ench = new RMBEntityEnchantment(key, enchantmentName, maximumLevel, target) {
@@ -646,8 +645,7 @@ public class Register {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
 
     }
-    //</editor-fold>
-    //<editor-fold desc="PlayerInteractEvent">
+
     else if (eventString.getName().equals(PlayerInteractEvent.class.getName())) {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerInteractEvent");
       ench = new RMBEnchantment(key, enchantmentName, maximumLevel, target) {
@@ -671,8 +669,7 @@ public class Register {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
 
     }
-    //</editor-fold>
-    //<editor-fold desc="PlayerMoveEvent">
+
     else if (eventString.getName().equals(PlayerMoveEvent.class.getName())) {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerMoveEvent");
       ench = new MoveEnchantment(key, enchantmentName, maximumLevel, target) {
@@ -696,8 +693,7 @@ public class Register {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
 
     }
-    //</editor-fold>
-    //<editor-fold desc="PlayerGotHurtEvent">
+
     else if (eventString.getName().equals(PlayerGotHurtEvent.class.getName())) {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerGotHurtEvent");
       ench = new GotHurtEnchantment(key, enchantmentName, maximumLevel, target) {
@@ -721,8 +717,7 @@ public class Register {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
 
     }
-    //</editor-fold>
-    //<editor-fold desc="PlayerHurtsEntityEvent">
+
     else if (eventString.getName().equals(PlayerHurtsEntityEvent.class.getName())) {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerHurtsEntityEvent");
       ench = new HurtsEntityEnchantment(key, enchantmentName, maximumLevel, target) {
@@ -746,8 +741,7 @@ public class Register {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
 
     }
-    //</editor-fold>
-    //<editor-fold desc="PlayerShootBowEvent">
+
     else if (eventString.getName().equals(PlayerShootBowEvent.class.getName())) {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerShootBowEvent");
       ench = new ShootBowEnchantment(key, enchantmentName, maximumLevel, target) {
@@ -771,8 +765,7 @@ public class Register {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
 
     }
-    //</editor-fold>
-    //<editor-fold desc="PlayerToggleSneakEvent">
+
     else if (eventString.getName().equals(PlayerToggleSneakEvent.class.getName())) {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerToggleSneakEvent");
       ench = new ToggleSneakEnchantment(key, enchantmentName, maximumLevel, target) {
@@ -796,8 +789,7 @@ public class Register {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
 
     }
-    //</editor-fold>
-    //<editor-fold desc="PlayerBowHitEvent">
+
     else if (eventString.getName().equals(PlayerBowHitEvent.class.getName())) {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerBowHitEvent");
       boolean finalForDamager = forDamager, finalForVictim = forVictim, finalValueEmpty = valueEmpty;
@@ -827,14 +819,12 @@ public class Register {
       instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
 
     }
-    //</editor-fold>
-    //<editor-fold desc="Exception case">
+
     else { // Invalid trigger parsing
       instance.getUnderscoreLogger().severe("Enchantment " + enchantmentName + " did not get registered - invalid trigger!");
       instance.getDebugger().log("Enchantment " + enchantmentName + " did not get registered - invalid trigger!");
       return null;
     }
-    //</editor-fold>
 
     return new Pair<>(entry, ench);
   }

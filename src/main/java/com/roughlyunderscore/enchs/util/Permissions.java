@@ -1,4 +1,4 @@
-package com.roughlyunderscore.enchs.util.data;
+package com.roughlyunderscore.enchs.util;
 
 /*
 The list of all the available permissions
