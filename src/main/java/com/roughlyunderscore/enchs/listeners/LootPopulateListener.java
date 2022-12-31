@@ -33,11 +33,11 @@ public class LootPopulateListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = HIGHEST)
   public void onLootPopulate(final LootGenerateEvent ev) {
-    if (!plugin.getConfig().getBoolean("populateLoot")) return;
+    if (!plugin.getMainConfig().POPULATE_CHEST_LOOT) return;
 
     final Entity ent = ev.getEntity();
     final InventoryHolder ih = ev.getInventoryHolder();
-    final int chance = plugin.getConfig().getInt("populateLootChance");
+    final int chance = plugin.getMainConfig().POPULATE_CHEST_LOOT_CHANCE;
 
     if (!(ih instanceof Chest) && !(ent instanceof Minecart)) return;
 
@@ -50,18 +50,18 @@ public class LootPopulateListener implements Listener {
       final Enchantment enchantment = getPossibleEnchantments(loot, getTypicalEnchantments(loot), 1).get(0);
       final int level = ThreadLocalRandom.current().nextInt(enchantment.getStartLevel(), enchantment.getMaxLevel() + 1);
 
-      loot.setItemMeta(enchant(loot, enchantment, level).getKey().getItemMeta());
+      loot.setItemMeta(enchant(loot, enchantment, level, plugin).getKey().getItemMeta());
     });
   }
 
   @EventHandler(ignoreCancelled = true, priority = HIGHEST)
   public void onVillagerAcquireTrades(final VillagerAcquireTradeEvent ev) {
-    if (!plugin.getConfig().getBoolean("populateVillagers")) return;
+    if (!plugin.getMainConfig().POPULATE_VILLAGER_TRADES) return;
 
     final MerchantRecipe recipe0 = ev.getRecipe();
     ItemStack item = recipe0.getResult();
 
-    final int chance = plugin.getConfig().getInt("populateVillagersChance");
+    final int chance = plugin.getMainConfig().POPULATE_VILLAGER_TRADES_CHANCE;
 
     if (new Random().nextInt(chance) + 1 != chance) return;
     if (!isEnchantable(item)) return;
@@ -75,7 +75,7 @@ public class LootPopulateListener implements Listener {
     final Enchantment enchantment = enchantments.isEmpty() ? Enchantment.BINDING_CURSE : enchantments.get(0);
     final int level = ThreadLocalRandom.current().nextInt(enchantment.getStartLevel(), enchantment.getMaxLevel() + 1);
 
-    item = enchant(item, enchantment, level).getKey();
+    item = enchant(item, enchantment, level, plugin).getKey();
 
     final MerchantRecipe recipe = new MerchantRecipe(item, uses, maxUses, reward, exp, coefficient);
     recipe.setIngredients(recipe0.getIngredients());
@@ -84,9 +84,9 @@ public class LootPopulateListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = HIGHEST)
   public void tunaIsLove(final PlayerFishEvent ev) {
-    if (!plugin.getConfig().getBoolean("populateFish")) return;
+    if (!plugin.getMainConfig().POPULATE_FISHING_LOOT) return;
 
-    final int chance = plugin.getConfig().getInt("populateFishChance");
+    final int chance = plugin.getMainConfig().POPULATE_FISHING_LOOT_CHANCE;
     if (new Random().nextInt(chance) + 1 != chance) return;
 
     if (ev.getState() != PlayerFishEvent.State.CAUGHT_FISH) return;
@@ -97,7 +97,7 @@ public class LootPopulateListener implements Listener {
 
     final Enchantment enchantment = getPossibleEnchantments(result, getTypicalEnchantments(result), 1).get(0);
     final int level = ThreadLocalRandom.current().nextInt(enchantment.getStartLevel(), enchantment.getMaxLevel() + 1);
-    result = enchant(result, enchantment, level).getKey();
+    result = enchant(result, enchantment, level, plugin).getKey();
 
     it.setItemStack(result);
   }

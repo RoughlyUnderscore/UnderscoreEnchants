@@ -8,7 +8,7 @@ import com.roughlyunderscore.enchs.enchants.abstracts.AbstractEnchantment;
 import com.roughlyunderscore.enchs.events.PlayerPVPEvent;
 import com.roughlyunderscore.enchs.parsers.condition.ComparativeOperator;
 import com.roughlyunderscore.enchs.util.RomanNumber;
-import com.roughlyunderscore.enchs.util.data.DetailedEnchantment;
+import com.roughlyunderscore.enchs.util.DetailedEnchantment;
 import com.roughlyunderscore.enchs.util.datastructures.Pair;
 import com.roughlyunderscore.enchs.util.datastructures.Triple;
 import com.roughlyunderscore.enchs.util.enums.Type;
@@ -397,7 +397,7 @@ public final class Utils {
    * @param plugin   an {@link UnderscoreEnchants} object, used for configuration access
    */
   public static void activationMessage(final String name, final Player receiver, final UnderscoreEnchants plugin) {
-    if (plugin.getConfig().getBoolean("activated")) {
+    if (plugin.getMainConfig().ACTIVATED_MESSAGE_ENABLED) {
       activationMessage(receiver, name, plugin);
     }
   }
@@ -411,7 +411,7 @@ public final class Utils {
    * @param plugin an {@link UnderscoreEnchants} object, used for configuration access
    */
   public static void activationMessage(final EnchantmentTarget target, final PlayerPVPEvent ev, final String name, final UnderscoreEnchants plugin) {
-    if (plugin.getConfig().getBoolean("activated")) {
+    if (plugin.getMainConfig().ACTIVATED_MESSAGE_ENABLED) {
       switch (target) {
         case BOW, WEAPON, TOOL -> activationMessage(ev.getDamager(), name, plugin);
         default -> activationMessage(ev.getVictim(), name, plugin);
@@ -540,7 +540,7 @@ public final class Utils {
    * @param plugin   an {@link UnderscoreEnchants} object, used for configuration access
    */
   public static void activationMessage(final Player receiver, final String name, final UnderscoreEnchants plugin) {
-    if (plugin.getConfig().getBoolean("activated")) {
+    if (plugin.getMainConfig().ACTIVATED_MESSAGE_ENABLED) {
 
       // build a unique namespace for the bossbar creation
       final String player = ChatColor.stripColor(receiver.getName());
@@ -700,7 +700,7 @@ public final class Utils {
 
     switch (target) {
       case ARMOR -> {
-        for (ItemStack item : armor) {
+        for (final ItemStack item : armor) {
           if (hasEnchantment(item, enchant, forbidden)) {
             level = item.getEnchantments().get(ench.getEnchantment());
             break;
@@ -708,22 +708,22 @@ public final class Utils {
         }
       }
       case ARMOR_HEAD -> {
-        ItemStack piece = player.getInventory().getHelmet();
+        final ItemStack piece = player.getInventory().getHelmet();
         if (hasEnchantment(piece, enchant, forbidden))
           level = piece.getEnchantments().get(ench.getEnchantment());
       }
       case ARMOR_TORSO -> {
-        ItemStack piece = player.getInventory().getChestplate();
+        final ItemStack piece = player.getInventory().getChestplate();
         if (hasEnchantment(piece, enchant, forbidden))
           level = piece.getEnchantments().get(ench.getEnchantment());
       }
       case ARMOR_LEGS -> {
-        ItemStack piece = player.getInventory().getLeggings();
+        final ItemStack piece = player.getInventory().getLeggings();
         if (hasEnchantment(piece, enchant, forbidden))
           level = piece.getEnchantments().get(ench.getEnchantment());
       }
       case ARMOR_FEET -> {
-        ItemStack piece = player.getInventory().getBoots();
+        final ItemStack piece = player.getInventory().getBoots();
         if (hasEnchantment(piece, enchant, forbidden))
           level = piece.getEnchantments().get(ench.getEnchantment());
       }
@@ -775,13 +775,13 @@ public final class Utils {
    * encahnt <br>
    * banana banana banana banana
    */
-  public static Pair<ItemStack, Map<Enchantment, Integer>> enchant(final ItemStack item0, final Enchantment enchantment, final int level) {
+  public static Pair<ItemStack, Map<Enchantment, Integer>> enchant(final ItemStack item0, final Enchantment enchantment, final int level, final UnderscoreEnchants instance) {
     if (item0 == null || item0.getType() == Material.AIR)                                       // Deal will null and AIR
       return Pair.of(null, ImmutableMap.of(enchantment, level));                           // Return a pair of null item and same enchantments
 
     final ItemStack item = item0.clone();                                                       // Clone the itemstack for further work
 
-    if (item.getEnchantments().size() >= UnderscoreEnchants.staticConfig.getInt("enchantmentLimit")) // Can't enchant due to the limit
+    if (item.getEnchantments().size() >= instance.getMainConfig().MAXIMUM_ENCHANTMENTS) // Can't enchant due to the limit
       return Pair.of(item, ImmutableMap.of(enchantment, level));                              // Return a pair of same item and same enchantments
 
 
@@ -814,6 +814,17 @@ public final class Utils {
   }
 
   /**
+   * Replaces PAPI placeholders on any object if it's a player to save some code lines.
+   * @param entity the potential player to use for placeholders
+   * @param string the string to replace
+   * @return the replaced string
+   */
+  public static String replacePAPI(final Object entity, final String string) {
+    if (entity instanceof Player player) return PlaceholderAPI.setPlaceholders(player, string);
+    return string;
+  }
+
+  /**
    * Enchant an {@link ItemStack} with multiple {@link Enchantment}s.
    *
    * @param item         an {@link ItemStack} to enchant
@@ -821,14 +832,14 @@ public final class Utils {
    * @return a {@link Pair} of the (possibly) enchanted {@link ItemStack} and the leftover {@link Enchantment}s along with their levels. If the amount of
    * enchantments does not exceed the limit, the {@link Map} will be empty.
    */
-  public static Pair<ItemStack, Map<Enchantment, Integer>> enchant(ItemStack item, final Map<Enchantment, Integer> enchantments) {
+  public static Pair<ItemStack, Map<Enchantment, Integer>> enchant(ItemStack item, final Map<Enchantment, Integer> enchantments, final UnderscoreEnchants instance) {
     if (item == null || item.getType() == Material.AIR)                                         // Deal will null and AIR
       return Pair.of(null, enchantments);                                                  // Return a pair of null item and same enchantments
 
     final Map<Enchantment, Integer> leftovers = new HashMap<>();                                // Prepare a leftovers storage
 
     for (final Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-      final Pair<ItemStack, Map<Enchantment, Integer>> pair = enchant(item, entry.getKey(), entry.getValue());
+      final Pair<ItemStack, Map<Enchantment, Integer>> pair = enchant(item, entry.getKey(), entry.getValue(), instance);
       if (pair.getValue() != null)
         leftovers.putAll(pair.getValue());                         // An enchantment iteration resulted in non-null (has leftovers);
         // need to put everything in the leftovers storage
@@ -1031,11 +1042,11 @@ public final class Utils {
     } else return new DetailedEnchantment(ench.getKey());
   }
 
-  // two debug methods, used before and maybe will be used later
+  // two debug methods
   private static String tellMeTheStaticEnchantmentData(final UnderscoreEnchants plugin) {
     final StringBuilder builder = new StringBuilder();
     for (final DetailedEnchantment en : plugin.getEnchantmentData().keySet()) {
-      builder.append(en.getName()).append(" / ").append(en.getKey()).append("\n");
+      builder.append(en.getName()).append(" / ").append(en.getKey()).append("  |===|***|===|  ");
     }
     return builder.toString();
   }
@@ -1043,7 +1054,7 @@ public final class Utils {
   private static String tellMeTheDefaultEnchantmentData() {
     final StringBuilder builder = new StringBuilder();
     for (final Enchantment en : Enchantment.values()) {
-      builder.append(en.getName()).append(" / ").append(en.getKey()).append("\n");
+      builder.append(en.getName()).append(" / ").append(en.getKey()).append("  |===|***|===|  ");
     }
     return builder.toString();
   }
@@ -1055,30 +1066,16 @@ public final class Utils {
    * @return the enchantment, or {@code UnderscoreEnchants.STATIC_EMPTY} (identical to EMPTY) if such enchantment doesn't exist
    */
   public static DetailedEnchantment parseEnchantment(final String name, final UnderscoreEnchants plugin) {
-
-    if (plugin.getEnchantmentData().keySet().stream().noneMatch(ench -> ench.getCommandName().equalsIgnoreCase(name))) {
-      if (Arrays.stream(Enchantment.values()).noneMatch(ench -> getName(ench).replace(" ", "_").equalsIgnoreCase(name))) {
-        return WRONG_NAME; // returns the placeholder if there's no enchantment with such name
-      }
+    if (plugin.getEnchantmentData().keySet().stream().noneMatch(ench -> ench.getCommandName().equalsIgnoreCase(name.replace(" ", "_")))) {
+      //if (Arrays.stream(Enchantment.values()).noneMatch(ench -> getName(ench).replace(" ", "_").equalsIgnoreCase(name))) {
+      return WRONG_NAME; // returns the placeholder if there's no enchantment with such name
+      //}
     }
 
-    Enchantment ench;
-
-    final Optional<DetailedEnchantment> optional = plugin.getEnchantmentData().keySet().stream().filter(en -> en.getCommandName().equalsIgnoreCase(name)).findFirst();
-    if (optional.isPresent()) {
-      ench = optional.get().getEnchantment(); // sets the enchantment to the received one (this is a custom enchantment)
-    } else {
-      ench = Arrays
-        .stream(Enchantment.values())
-        .filter(en -> getName(en)
-          .replace(" ", "_")
-          .equalsIgnoreCase(name))
-        .findFirst()
-        .orElse(WRONG_NAME.getEnchantment());
-    }
-
-    return new DetailedEnchantment(ench.getKey()); // returns a DetailedEnchantment object, built from the received enchantment
-
+    return plugin.getEnchantmentData().keySet().stream()
+      .filter(e -> e.getCommandName().equalsIgnoreCase(name.replace(" ", "_")))
+      .findFirst()
+      .orElse(null); // Should never end up here.
   }
 
   /**
@@ -1351,8 +1348,8 @@ public final class Utils {
       }
     }
 
-    if (!enchantments.isEmpty() && enchantments.size() >= plugin.getConfig().getInt("enchantmentLimit")) {
-      throw new IllegalArgumentException("You can't have more than " + plugin.getConfig().getInt("enchantmentLimit") + " enchantments on an item!");
+    if (!enchantments.isEmpty() && enchantments.size() >= plugin.getMainConfig().MAXIMUM_ENCHANTMENTS) {
+      throw new IllegalArgumentException("You can't have more than " + plugin.getMainConfig().MAXIMUM_ENCHANTMENTS + " enchantments on an item!");
     }
 
     meta.setLore(lore);
@@ -1432,7 +1429,7 @@ public final class Utils {
    */
   public static boolean arrayOfStringsContainsPartly(final String[] array, final String key) {
     for (final String s : array) {
-      if (s.toLowerCase().contains(key)) return true;
+      if (s.toLowerCase().contains(key.toLowerCase())) return true;
     }
     return false;
   }

@@ -1,29 +1,29 @@
-require-vault: true # Set to false if you don't any of the economy features (will drop errors if an economy feature is attempted to be accessed)
+misc:
+  require-vault: true # Set to false if you don't any of the economy features (will drop errors if an economy feature is attempted to be accessed)
+  bStats: true # Whether bStats is activated.
+  updater: 24 # Each X hours, an updater checks for updates. Default: 24.
 
-bStats: true # Whether bStats is activated.
-updater: 24 # Each X hours, an updater checks for updates. Default: 24.
+enchantments:
+  activatedMessage: true # Whether a message should be sent upon enchantment activation.
+  limit: 99999 # This is the amount of maximum enchantments per item. Change it to whatever you want.
 
-activated: true # Whether a message should be sent upon enchantment activation.
+populate:
+  villagerTrades: true # Whether to randomly enchant villagers' items.
+  villagerTradesChance: 7 # A denominator to use when populating villagers loot. Imagine it as X in 1/X chance. Should be an integer above 0.
+  chestLoot: true # Whether to randomly populate chest loot.
+  chestLootChance: 7 # A denominator to use when populating chest loot. Imagine it as X in 1/X chance. Should be an integer above 0.
+  fishLoot: true # Whether to randomly populate fish loot.
+  fishLootChance: 4 # A denominator to use when populating fish loot. Imagine it as X in 1/X chance. Should be an integer above 0.
 
-populateVillagers: true # Whether to randomly enchant villagers' items.
-populateVillagersChance: 7 # A denominator to use when populating villagers loot. Imagine it as X in 1/X chance. Should be an integer above 0.
+enchantmentTable:
+  addExtraEnchantment: true # Whether to add an extra enchantment to the item upon enchanting it in the enchantment table. If disabled, the only way to get enchanted items is via commands and loot.
+  extraEnchantmentChance: 3 # A denominator to use when adding extra enchantments. Imagine it as X in 1/X chance. Should be an integer above 0.
 
-populateLoot: true # Whether to randomly populate lootchests.
-populateLootChance: 7 # A denominator to use when populating lootchests. Imagine it as X in 1/X chance. Should be an integer above 0.
+debug:
+  debugMode: false # For advanced users. Takes space on your drive. Ideally you'll only need to enable this if a support member tells you to.
+  suppressGetMainHand: true # For advanced users. Suppresses logging "getMainHand", because it's logged very frequently. Ideally you'll only need to toggle this if a support member tells you to.
 
-populateFish: true # Whether to randomly populate fish loot.
-populateFishChance: 4 # A denominator to use when populating fish loot. Imagine it as X in 1/X chance. Should be an integer above 0.
-
-addExtraEnchantment: true # Whether to add an extra enchantment to the item upon enchanting it in the enchantment table.
-extraEnchantmentChance: 3 # A denominator to use when adding extra enchantments. Imagine it as X in 1/X chance. Should be an integer above 0.
-
-debugMode: false # For advanced users. Takes space on your drive. Ideally you'll only need to enable this if a support member tells you to.
-
-enchantmentLimit: 99999 # This is the amount of maximum enchantments per item. Change it to whatever you want.
-
-prefix: '&c&l[&r&6UnderscoreEnchants&c&l] ' # The prefix to put before each message.
-
-lang: en # Selected from below.
+prefix: '&c&l[&r&6UnderscoreEnchants&c&l]&r ' # The prefix to put before each message.
 
 # This section contains the used UnderscoreEnchants messages.
 # They are translated to the following languages by default, but in case you want to add your own translation,
@@ -32,6 +32,8 @@ lang: en # Selected from below.
 # It helps out other foreign users, and you'll be credited in the update.
 # P.S. The single quotation mark ( ' ) must be written twice (in words like can't, doesn't -> can''t, doesn''t)
 messages:
+  lang: en # Selected from below.
+
   en:
     no-perms: '&cInsufficient permissions!' # Called when a command was executed with a player without proper permissions.
     no-console: '&cYou can''t use this from console!' # Called when a command was executed from console, though wasn't supposed to.
@@ -48,7 +50,7 @@ messages:
     unloaded: '&bEnchantment &e<ench> &bhas been unloaded.' # Called when an enchantment has been unloaded with a command.
     toggled: '&bToggled enchantment &e<ench> &bfor you.' # Called when an enchantment has been toggled with a command.
     over-the-limit: '&cYou can''t have more than <limit> enchantments on an item!' # Called when an item has more enchantments than the limit.
-    reloaded: 'Reloaded the config in <ms> ms.' # Called when the config has been reloaded.
+    reloaded: '&6Reloaded the plugin in <ms> ms.' # Called when the config has been reloaded.
     # Credit to ZBLL (the creator)
 
   ru:
@@ -67,7 +69,7 @@ messages:
     unloaded: '&bЗачарование &e<ench> &bбыло отключено.'
     toggled: '&bЗачарование &e<ench> персонально переключено.'
     over-the-limit: '&cВы не можете иметь больше, чем &e<limit> &cзачарований на предмете!'
-    reloaded: 'Конфиг был перезагружен за <ms> мс.'
+    reloaded: '&6Плагин был перезагружен за <ms> мс.'
     # Credit to ZBLL (the creator)
 
   ro:
@@ -86,7 +88,7 @@ messages:
     unloaded: '&bÎncântarea &e<ench> &ba fost descărcată.' # DeepL
     toggled: '&bVrăjirea &e<ench> &ba fost schimbată pentru tine.' # DeepL
     over-the-limit: '&cNu poți avea mai mult de &e<limit> &cîncântări pe un obiect!' # DeepL
-    reloaded: 'Configul a fost reîncărcat în <ms> ms.' # DeepL
+    reloaded: '&6Plugin a fost reîncărcat în <ms> ms.' # DeepL
     # Credit to Lukedy & DeepL
 
   it:
@@ -105,7 +107,7 @@ messages:
     unloaded: '&bL''incantesimo &e<ench> &bè stato disattivato.' # DeepL
     toggled: '&bHa attivato l''incantesimo &e<ench> &bper te.' # DeepL
     over-the-limit: '&cNon puoi avere più di &e<limit> &cincantesimi su un oggetto!' # DeepL
-    reloaded: 'Il config è stato ricaricato in <ms> ms.' # DeepL
+    reloaded: '&6Il plugin è stato ricaricato in <ms> ms.' # DeepL
     # Credit to Yoshiro/Yoshiro09 & DeepL
 
   es:
@@ -124,7 +126,7 @@ messages:
     unloaded: '&bEl encantamiento &e<ench> &bha sido desactivado.' # DeepL
     toggled: '&bHo cambiato l''incantesimo &e<ench> &bper te.' # DeepL
     over-the-limit: '&c¡No puedes tener más de &e<limit> &cencantamientos en un objeto!' # DeepL
-    reloaded: 'El config ha sido recargado en <ms> ms.' # DeepL
+    reloaded: '&6El plugin ha sido recargado en <ms> ms.' # DeepL
     # Credit to Aliakks (check out his plugins!) & DeepL
 
   de:
@@ -143,7 +145,7 @@ messages:
     unloaded: '&bDie Verzauberung &e<ench> &bwurde unloaded.'
     toggled: '&bIch habe die Verzauberung &e<ench> &bfür Sie umgeschaltet.' # DeepL
     over-the-limit: '&cDu kannst nicht mehr als &e<limit> &cVerzauberungen auf einem Gegenstand haben!' # DeepL
-    reloaded: 'Die Config wurde in <ms> ms neu geladen.' # DeepL
+    reloaded: '&6Die Plugin wurde in <ms> ms neu geladen.' # DeepL
     # Credit to mfnalex & DeepL
 
   fr:
@@ -162,7 +164,7 @@ messages:
     unloaded: '&bEnchantment &e<ench> &ba été déchargé.' # DeepL
     toggled: '&bJ''ai changé l''enchantement &e<ench> &bpour vous.' # DeepL
     over-the-limit: '&cVous ne pouvez pas avoir plus de &e<limit> &cenchantements sur un objet!' # DeepL
-    reloaded: 'La config a été rechargée en <ms> ms.' # DeepL
+    reloaded: '&6La plugin a été rechargée en <ms> ms.' # DeepL
     # Credit to DeepL
 
   tr:
@@ -181,7 +183,7 @@ messages:
     unloaded: '&e<ench> &badlı büyü kaldırıldı.'
     toggled: '&e<ench> &badlı büyünün durumu senin için değiştirildi.'
     over-the-limit: '&cBir eşyada &e<limit> &cadetten fazla büyüye sahip olamazsın!'
-    reloaded: 'Config <ms> ms içinde yeniden yüklendi.'
+    reloaded: '&6Plugin <ms> ms içinde yeniden yüklendi.'
     # Credit to Kigo & Cazcez
 
   ta:
@@ -200,7 +202,7 @@ messages:
     unloaded: '&e<ench> &bமந்திரம் செயலிழக்கப்பட்டது.'
     toggled: '&e<ench> &bமந்திரத்தின் செயல்நிலை மாற்றப்பட்டது.'
     over-the-limit: '&cஒரு பொருளில் &e<limit> &cற்கும் &மேற்பட்ட மந்திரங்கள் இருக்க முடியாது!'
-    reloaded: 'Reloaded the config in <ms> ms.'
+    reloaded: '&6Reloaded the plugin in <ms> ms.'
     # Credit to Ilamparithi (THE MAN)
 
   se:
@@ -219,5 +221,5 @@ messages:
     unloaded: '&bEnchantment &e<ench> &bhar avaktiverats.' # DeepL
     toggled: '&bToggled enchantment &e<ench> &bfor you.'
     over-the-limit: '&cYou can''t have more than <limit> enchantments on an item!'
-    reloaded: 'Reloaded the config in <ms> ms.'
+    reloaded: '&6Reloaded the plugin in <ms> ms.'
     # Credit to Yollan # DeepL

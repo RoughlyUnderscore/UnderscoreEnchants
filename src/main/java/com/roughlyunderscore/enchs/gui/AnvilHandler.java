@@ -27,7 +27,7 @@ public class AnvilHandler implements Listener {
   private final UnderscoreEnchants plugin;
 
   @EventHandler
-  public void onAnvil(PrepareAnvilEvent ev) {
+  public void onAnvil(final PrepareAnvilEvent ev) {
     // <editor-fold desc="Preparations">
     // if (!(ev.getInventory() instanceof AnvilInventory inv)) return;
     final AnvilInventory inv = ev.getInventory();
@@ -49,7 +49,7 @@ public class AnvilHandler implements Listener {
 
     final Material type = item2.getType();
     if (!type.isItem()) return; // ?? I guess I need this but why
-    //</editor-fold>
+    
 
     switch (itemMatchesSecondItem(item1, item2)) {
       case IDENTICAL_ITEMS, BOOK -> {

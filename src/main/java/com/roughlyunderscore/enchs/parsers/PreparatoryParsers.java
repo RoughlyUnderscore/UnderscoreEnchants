@@ -31,7 +31,7 @@ public class PreparatoryParsers {
    * @return the resulting {@link EnchantmentTarget}
    */
   @SuppressWarnings("deprecation")
-  public EnchantmentTarget parseTarget(String parsee) {
+  public EnchantmentTarget parseTarget(final String parsee) {
     if (parsee == null || parsee.isEmpty() || parsee.isBlank()) return EnchantmentTarget.ALL;
 
     return switch (parsee) {
@@ -53,7 +53,7 @@ public class PreparatoryParsers {
    * @param event the string to parse
    * @return the resulting {@link Event} - more precisely, {@link Class} with a wildcard, extending {@link Event}
    */
-  public Class<? extends Event> parseEvent(String event) {
+  public Class<? extends Event> parseEvent(final String event) {
     if (event == null || event.isEmpty() || event.isBlank()) return NeverHappeningEvent.class;
 
     return switch (event.toUpperCase()) {
@@ -88,7 +88,7 @@ public class PreparatoryParsers {
    * @param levels the section to parse
    * @return the resulting {@link List} of {@link EnchantmentLevel}
    */
-  public List<EnchantmentLevel> getLevelsOf(ConfigurationSection levels) {
+  public List<EnchantmentLevel> getLevelsOf(final ConfigurationSection levels) {
     if (levels == null) return Collections.emptyList();
 
     List<EnchantmentLevel> levels0 = new ArrayList<>();
@@ -118,15 +118,9 @@ public class PreparatoryParsers {
    * @param levels the section to parse
    * @return the integer, indicating the maximum level
    */
-  public int getMaxLevelOf(ConfigurationSection levels) {
+  public int getMaxLevelOf(final ConfigurationSection levels) {
     if (levels == null) return -1;
-
-    int level = 0;
-    for (String ignored : levels.getKeys(false)) {
-      level++;
-    }
-
-    return level;
+    return levels.getKeys(false).size();
   }
 
   /**
@@ -144,7 +138,7 @@ public class PreparatoryParsers {
    */
   @SuppressWarnings("BooleanMethodIsAlwaysInverted")
   public boolean validateActivation(
-    UnderscoreEnchants plugin, Event event, Player player, EnchantmentLevel level, NamespacedKey key, List<String> conditions, String flag, String... playerField
+    final UnderscoreEnchants plugin, final Event event, final Player player, final EnchantmentLevel level, final NamespacedKey key, final List<String> conditions, final String flag, final String... playerField
   ) {
     // 0) Checking if the event is cancelled.
     if (event instanceof Cancellable ca && ca.isCancelled()) return false;
@@ -155,10 +149,10 @@ public class PreparatoryParsers {
     // plugin.getUnderscoreLogger().info("VALIDATOR | Player has the enchantment enabled.");
 
     // 2) Checking if the player is subject to cooldown with this enchantment.
-    UUID uuid = player.getUniqueId();
+    final UUID uuid = player.getUniqueId();
     boolean result = true;
     if (!plugin.getCooldowns().isEmpty()) {
-      for (Cooldown cooldown : plugin.getCooldowns()) {
+      for (final Cooldown cooldown : plugin.getCooldowns()) {
         // there's a cooldown with this uuid       this cooldown is with this enchantment
         if (cooldown.getUuid().equals(uuid) && cooldown.getEnchantment().getKey().equals(key)) result = false;
       }
@@ -178,11 +172,11 @@ public class PreparatoryParsers {
   /**
    * @param player Either "victim", "damager" or none!
    */
-  private boolean passConditions(Event event, List<String> conditions, String flag, UnderscoreEnchants plugin, String... player) {
+  private boolean passConditions(final Event event, final List<String> conditions, final String flag, final UnderscoreEnchants plugin, final String... player) {
     boolean passed = true;
     if (conditions != null && !conditions.isEmpty()) {
       // plugin.getUnderscoreLogger().info("> CONDITIONS | Currently parsing " + conditions.size() + " conditions.");
-      for (String condition : conditions) {
+      for (final String condition : conditions) {
         // plugin.getUnderscoreLogger().info(" > CONDITIONS | Parsing condition: " + condition + " with flag: " + flag);
         //! ---------------
         //! Flags

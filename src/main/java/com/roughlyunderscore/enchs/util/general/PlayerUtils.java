@@ -36,8 +36,8 @@ import java.util.*;
 Just a lot of utils that I don't want to explain
  */
 public class PlayerUtils<T, Z> {
-  //<editor-fold desc="Getters">
-  //<editor-fold desc="PDC">
+  
+  
   public PersistentDataContainer getPDC(Player player) {
     return player.getPersistentDataContainer();
   }
@@ -50,8 +50,8 @@ public class PlayerUtils<T, Z> {
     return getPDC(player).get(address, PersistentDataType.STRING);
   }
 
-  //</editor-fold>
-  //<editor-fold desc="Location">
+  
+  
   public Location getLocation(Player player, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("getLocation was called on player " + player.getName() + " and resulted in the following location: " + player.getLocation());
     return player.getLocation();
@@ -110,9 +110,9 @@ public class PlayerUtils<T, Z> {
   public String getWorldName(Player player, UnderscoreEnchants plugin) {
     return getWorld(player, plugin).getName();
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Money">
+  
   public double getMoney(Player player, UnderscoreEnchants plugin) {
     if (UnderscoreEnchants.econ == null) {
       plugin.getDebugger().log("getMoney was called with economy features disabled");
@@ -125,9 +125,9 @@ public class PlayerUtils<T, Z> {
   public String getMoneyString(Player player, UnderscoreEnchants plugin) {
     return String.valueOf(getMoney(player, plugin));
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Experience">
+  
   public int getXp(Player player, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("getXp was called on player " + player.getName() + " and resulted in the following value: " + player.getTotalExperience());
     return player.getTotalExperience();
@@ -145,9 +145,9 @@ public class PlayerUtils<T, Z> {
   public String getLevelString(Player player, UnderscoreEnchants plugin) {
     return String.valueOf(getLevel(player, plugin));
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Health">
+  
   public double getMaximumHealth(Player player, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("getMaximumHealth was called on player " + player.getName() + " and resulted in the following value: " + Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue());
     return Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue();
@@ -165,9 +165,9 @@ public class PlayerUtils<T, Z> {
   public String getHealthString(Player player, UnderscoreEnchants plugin) {
     return String.valueOf(getHealth(player, plugin));
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Food">
+  
   public int getFood(Player player, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("getFood was called on player " + player.getName() + " and resulted in the following value: " + player.getFoodLevel());
     return player.getFoodLevel();
@@ -176,9 +176,9 @@ public class PlayerUtils<T, Z> {
   public String getFoodString(Player player, UnderscoreEnchants plugin) {
     return String.valueOf(getFood(player, plugin));
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Air">
+  
   public int getAir(Player player, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("getAir was called on player " + player.getName() + " and resulted in the following value: " + player.getRemainingAir());
     return player.getRemainingAir();
@@ -196,9 +196,9 @@ public class PlayerUtils<T, Z> {
   public String getMaximumAirString(Player player, UnderscoreEnchants plugin) {
     return String.valueOf(getMaximumAir(player, plugin));
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Effects & potions">
+  
   public boolean hasPotion(Player player, PotionEffectType effect, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("hasPotion was called on player " + player.getName() + " for " + effect.getName() + " and resulted in: " + player.hasPotionEffect(effect));
     return player.hasPotionEffect(effect);
@@ -211,9 +211,9 @@ public class PlayerUtils<T, Z> {
   public boolean hasPotion(Player player, String effect, UnderscoreEnchants plugin) {
     return hasPotion(player, Objects.requireNonNull(XPotion.valueOf(effect)), plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Inventory">
+  
   public ItemStack getMainHand(Player player, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("getMainHand was called on player " + player.getName() + " and resulted in: " + player.getInventory().getItemInMainHand().getType() + " item");
     return player.getInventory().getItemInMainHand();
@@ -238,9 +238,9 @@ public class PlayerUtils<T, Z> {
     plugin.getDebugger().log("getBoots was called on player " + player.getName() + " and resulted in: " + player.getInventory().getBoots());
     return player.getInventory().getBoots();
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Player state">
+  
   public boolean hasPDC(Player player, NamespacedKey address, UnderscoreEnchants plugin) {
     plugin.getDebugger().log(String.format("boolean$hasPDC was called on player %s with address %s and resulted in %b.",
       player.getName(),
@@ -291,9 +291,9 @@ public class PlayerUtils<T, Z> {
     plugin.getDebugger().log("boolean$op was called on player " + player.getName() + " and resulted in: " + player.isOp());
     return player.isOp();
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="World">
+  
   public boolean rains(World world, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("rains was called on world " + world.getName() + " and resulted in: " + (world.getClearWeatherDuration() == 0 || world.hasStorm()));
     return world.hasStorm();
@@ -367,9 +367,9 @@ public class PlayerUtils<T, Z> {
     return end(player.getWorld(), plugin);
   }
 
-  //</editor-fold>
-  //</editor-fold>
-  //<editor-fold desc="Setters & actions">
+  
+  
+  
   public void setPDC(Player player, NamespacedKey address, String value, UnderscoreEnchants plugin) {
     getPDC(player).set(address, PersistentDataType.STRING, value);
     plugin.getDebugger().log(String.format("setPDC was called on player %s with address %s and value %s.",
@@ -382,7 +382,7 @@ public class PlayerUtils<T, Z> {
     getPDC(player).remove(address);
   }
 
-  //<editor-fold desc="Location">
+  
   public void setLocation(Player player, Location location, UnderscoreEnchants plugin) {
     player.teleport(location);
     plugin.getDebugger().log("setLocation was called on player " + player.getName() + " with location of: " + location);
@@ -427,8 +427,8 @@ public class PlayerUtils<T, Z> {
 
   public void sendForward(Player player, double adjustment, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("sendForward was called on player " + player.getName() + " with a value of " + adjustment + ".");
-    Location loc = player.getLocation().clone();
-    Vector dir = loc.getDirection();
+    final Location loc = player.getLocation().clone();
+    final Vector dir = loc.getDirection().setY(0);
     dir.normalize();
     dir.multiply(adjustment);
     loc.add(dir);
@@ -506,9 +506,9 @@ public class PlayerUtils<T, Z> {
   public void spawnParticleBoots(Player player, Location location, String particle0, UnderscoreEnchants plugin) {
     spawnParticleBoots(player, location, XParticle.getParticle(particle0), plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Money">
+  
   public EconomyResponse setMoney(Player player, double money, UnderscoreEnchants plugin) {
     if (UnderscoreEnchants.econ == null) {
       plugin.getDebugger().log("setMoney was called with economy features disabled");
@@ -532,9 +532,9 @@ public class PlayerUtils<T, Z> {
   public EconomyResponse increaseMoney(Player player, String adjustment, UnderscoreEnchants plugin) {
     return increaseMoney(player, Utils.parseD(adjustment), plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Experience">
+  
   public void setXp(Player player, int xp, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("setXp was called on player " + player.getName() + " with a value of " + xp + ".");
     player.setTotalExperience(0);
@@ -571,9 +571,9 @@ public class PlayerUtils<T, Z> {
   public void increaseLevel(Player player, String adjustment, UnderscoreEnchants plugin) {
     increaseLevel(player, Utils.parseI(adjustment), plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Health">
+  
   public void setMaximumHealth(Player player, double health, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("setMaximumHealth was called on player " + player.getName() + " with a value of " + health + ".");
     Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(health);
@@ -608,9 +608,9 @@ public class PlayerUtils<T, Z> {
   public void increaseHealth(Player player, String adjustment, UnderscoreEnchants plugin) {
     increaseHealth(player, Utils.parseD(adjustment), plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Food">
+  
   public void setFood(Player player, int food, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("setFood was called on player " + player.getName() + " with a value of " + food + ".");
     player.setFoodLevel(Math.max(0, Math.min(food, 20))); // needs to be 20 or less
@@ -627,9 +627,9 @@ public class PlayerUtils<T, Z> {
   public void increaseFood(Player player, String adjustment, UnderscoreEnchants plugin) {
     increaseFood(player, Utils.parseI(adjustment), plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Air">
+  
   public void setAir(Player player, int air, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("setAir was called on player " + player.getName() + " with a value of " + air + ".");
     player.setRemainingAir(Math.max(0, Math.min(getMaximumAir(player, plugin), air))); // needs to be under the maximum value but above 0
@@ -663,9 +663,9 @@ public class PlayerUtils<T, Z> {
   public void increaseMaximumAir(Player player, String adjustment, UnderscoreEnchants plugin) {
     increaseMaximumAir(player, Utils.parseI(adjustment), plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Velocity">
+  
   public void produceVelocity(Player player, double x, double y, double z, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("produceVelocity was called on player " + player.getName() + " with coordinates of " + x + ", " + y + " and " + z + ".");
     player.setVelocity(new Vector(x, y, z));
@@ -678,9 +678,9 @@ public class PlayerUtils<T, Z> {
   public void produceVelocity(Player player, String[] parameters, UnderscoreEnchants plugin) {
     produceVelocity(player, parameters[1], parameters[2], parameters[3], plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Sound">
+  
   public void playSound(Player player, Sound sound, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("playSound was called on player " + player.getName() + " with the following sound: " + sound + ".");
     player.playSound(getLocation(player, plugin), sound, SoundCategory.MASTER, 1f, 1f);
@@ -759,9 +759,9 @@ public class PlayerUtils<T, Z> {
       1f
     );
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Effects & potions">
+  
   public void addPotion(Player player, PotionEffect potion, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("addPotion was called on player " + player.getName() + " with the following potion: " + potion + ".");
     player.addPotionEffect(potion);
@@ -841,9 +841,9 @@ public class PlayerUtils<T, Z> {
     plugin.getDebugger().log("removeDebuffs was called on player " + player.getName() + ".");
     plugin.getNegativeEffects().forEach(player::removePotionEffect);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Bossbars">
+  
   public void sendBar(Player player, String text, int ticks, BarStyle style, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("sendBar was called on player " + player.getName() + "with text " + text + ", duration " + ticks + " and style " + style + ".");
     BossBar bar = Bukkit.createBossBar(Utils.format(text), BarColor.RED, style);
@@ -854,9 +854,9 @@ public class PlayerUtils<T, Z> {
   public void sendBar(Player player, String style, String ticks, String text, UnderscoreEnchants plugin) {
     sendBar(player, text, Utils.parseI(ticks), BarStyle.valueOf(style), plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Inventory">
+  
   public void give(Player player, Material material, int amount, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("give was called on player " + player.getName() + " with the following material: " + material + ".");
     player.getInventory().addItem(new ItemStack(material, amount)).forEach((num, it) -> dropItem(player, it, plugin));
@@ -1102,9 +1102,9 @@ public class PlayerUtils<T, Z> {
     plugin.getDebugger().log("damageHand was called for player " + player.getName() + ". There might be a setMainHand log after, belonging here.");
     setMainHand(player, fixItem(getMainHand(player, plugin)), plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Player state">
+  
   public void setFire(Player player, UnderscoreEnchants plugin) {
     setFire(player, 200, plugin);
   }
@@ -1155,9 +1155,9 @@ public class PlayerUtils<T, Z> {
     plugin.getGods().put(player.getUniqueId(), Math.max(0, ticks));
     player.setInvulnerable(true);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Projectiles on player's behalf">
+  
   public void sendProjectile(Player player, Class<? extends Projectile> clazz, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("sendProjectile was called for player " + player.getName() + "with the projectile type of " + clazz.getName() + ".");
     player.launchProjectile(clazz).setShooter(player);
@@ -1170,9 +1170,9 @@ public class PlayerUtils<T, Z> {
   public void sendFireball(Player player, UnderscoreEnchants plugin) {
     sendProjectile(player, Fireball.class, plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Gamemode">
+  
   public void setGamemode(Player player, String gamemode, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("setGamemode was called for player " + player.getName() + "with the gamemode of " + gamemode + ".");
     switch (gamemode.toLowerCase(Locale.ROOT)) {
@@ -1195,9 +1195,9 @@ public class PlayerUtils<T, Z> {
     plugin.getDebugger().log("setGamemode was called for player " + player.getName() + "with the gamemode of " + gamemode.name() + ".");
     player.setGameMode(gamemode);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Text">
+  
   public void say(Player player, String message, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("say was called for player " + player.getName() + "with a message of " + message + ".");
     player.chat(Utils.format(message));
@@ -1230,14 +1230,17 @@ public class PlayerUtils<T, Z> {
     player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.format(message)));
   }
 
+  // This was supposed to be used for an actionbar
+  // that would be sent to the player for a certain duration
+  // but I was too lazy to actually create the action :<
   public void sendActionbar(Player player, String message, int duration, UnderscoreEnchants plugin) {
     plugin.getActionbars().add(ActionbarCooldown.builder().message(Utils.format(message)).seconds(duration).plugin(plugin).uuid(player.getUniqueId()).create());
   }
 
-  //</editor-fold>
-  //</editor-fold>
-  //<editor-fold desc="Miscellaneous (not necessarily players)">
-  //<editor-fold desc="Entity">
+  
+  
+  
+  
   public Entity spawnEntity(Player worldHolder, EntityType type, double x, double y, double z, UnderscoreEnchants plugin) {
     plugin.getDebugger().log(String.format("spawnEntity was called at X:%f, Y:%f, Z:%f in world %s with entity type of %s.", x, y, z, worldHolder.getWorld().getName(), type));
     return worldHolder.getWorld().spawnEntity(new Location(worldHolder.getWorld(), x, y, z), type, true);
@@ -1266,12 +1269,12 @@ public class PlayerUtils<T, Z> {
 
   @SuppressWarnings("all") // ref. above
   public LivingEntity spawnEntity(Player pl, String type, String x, String y, String z, String name, String hp, String pot, String ticks, String amplifier, UnderscoreEnchants plugin) {
-    return spawnEntity(pl, EntityType.valueOf(type), Utils.parseD(x), Utils.parseD(y), Utils.parseD(z), name, Utils.parseD(hp),
+    return spawnEntity(pl, EntityType.valueOf(type), Utils.parseD(x), Utils.parseD(y), Utils.parseD(z), Utils.format(name), Utils.parseD(hp),
       XPotion.valueOf(pot).getPotionEffectType(), Utils.parseI(ticks), Utils.parseI(amplifier), plugin);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="World">
+  
 
 
   public void createWorld(String name, WorldType type, String generator, UnderscoreEnchants plugin) {
@@ -1337,9 +1340,9 @@ public class PlayerUtils<T, Z> {
       world.setThundering(true);
     }
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Location">
+  
   public void dropItem(Player player, ItemStack item, UnderscoreEnchants plugin) {
     dropItem(getLocation(player, plugin), item, plugin);
   }
@@ -1349,16 +1352,16 @@ public class PlayerUtils<T, Z> {
     if (location.getWorld() != null && item != null)
       location.getWorld().dropItemNaturally(location, item);
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Server">
+  
   public void announce(String message, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("announce was called to broadcast the following message: " + message + ".");
     Bukkit.broadcastMessage(Utils.format(message));
   }
-  //</editor-fold>
+  
 
-  //<editor-fold desc="Other">
+  
   public int getPing(Player player, UnderscoreEnchants plugin) {
     plugin.getDebugger().log("getPing was called for a player " + player.getName() + ".");
     return player.getPing();
@@ -1376,6 +1379,6 @@ public class PlayerUtils<T, Z> {
     plugin.getDebugger().log("getGameMode was called for a player " + player.getName() + ".");
     return player.getGameMode();
   }
-  //</editor-fold>
-  //</editor-fold>
+  
+  
 }
