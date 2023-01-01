@@ -35,7 +35,7 @@ public class Messages {
   public Messages(final String string, final UnderscoreEnchants enchants) {
     if (string.equals("Default")) {
       this.enchants = enchants;
-      String prefix = enchants.getMainConfig().PREFIX;
+      final String prefix = enchants.getMainConfig().PREFIX;
 
       NO_PERMS = prefix + getMessage("no-perms");
       NO_CONSOLE = prefix + getMessage("no-console");

@@ -8,6 +8,7 @@ import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import com.roughlyunderscore.enchs.config.MainConfig;
 import com.roughlyunderscore.enchs.config.Messages;
 import com.roughlyunderscore.enchs.easter_eggs.EasterEggs;
+import com.roughlyunderscore.enchs.parsers.PreparatoryParsers;
 import com.roughlyunderscore.enchs.util.DetailedEnchantment;
 import com.roughlyunderscore.enchs.util.Permissions;
 import com.roughlyunderscore.enchs.util.datastructures.Pair;
@@ -40,7 +41,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.roughlyunderscore.enchs.registration.Register.*;
 import static com.roughlyunderscore.enchs.util.general.PlayerUtils.*;
 import static com.roughlyunderscore.enchs.util.general.Utils.*;
 
@@ -192,7 +192,7 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
     player.sendMessage(PlaceholderAPI.setPlaceholders(player, plugin.getMessages().DOWNLOADED.replace("<ench>", enchantment.getName())));
 
     if (load) {
-      loadEnchantment(enchantment, plugin);
+      PreparatoryParsers.loadEnchantment(enchantment, plugin);
       player.sendMessage(PlaceholderAPI.setPlaceholders(player, plugin.getMessages().LOADED.replace("<ench>", enchantment.getName())));
     }
   }
@@ -273,10 +273,10 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
       return;
     }
 
-    if (isEnchantmentLoaded(file, plugin)) {
-      unloadEnchantment(file, plugin);
+    if (PreparatoryParsers.isEnchantmentLoaded(file, plugin)) {
+      PreparatoryParsers.unloadEnchantment(file, plugin);
     }
-    loadEnchantment(file, plugin);
+    PreparatoryParsers.loadEnchantment(file, plugin);
     player.sendMessage(PlaceholderAPI.setPlaceholders(player, plugin.getMessages().LOADED.replace("<ench>", file.getName())));
   }
 
@@ -296,8 +296,8 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
       return;
     }
 
-    if (isEnchantmentLoaded(file, plugin)) {
-      unloadEnchantment(file, plugin);
+    if (PreparatoryParsers.isEnchantmentLoaded(file, plugin)) {
+      PreparatoryParsers.unloadEnchantment(file, plugin);
     }
     player.sendMessage(PlaceholderAPI.setPlaceholders(player, plugin.getMessages().UNLOADED.replace("<ench>", file.getName())));
   }

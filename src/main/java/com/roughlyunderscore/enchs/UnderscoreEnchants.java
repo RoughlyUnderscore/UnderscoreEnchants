@@ -18,7 +18,7 @@ import com.roughlyunderscore.enchs.listeners.InteractListener;
 import com.roughlyunderscore.enchs.listeners.JoinListener;
 import com.roughlyunderscore.enchs.listeners.LeaveListener;
 import com.roughlyunderscore.enchs.listeners.LootPopulateListener;
-import com.roughlyunderscore.enchs.registration.Register;
+import com.roughlyunderscore.enchs.parsers.PreparatoryParsers;
 import com.roughlyunderscore.enchs.util.Constants;
 import com.roughlyunderscore.enchs.util.Debug;
 import com.roughlyunderscore.enchs.util.cooldownutils.ActionbarCooldown;
@@ -60,7 +60,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.roughlyunderscore.enchs.registration.Register.*;
 import static com.roughlyunderscore.enchs.util.general.Utils.*;
 
 public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
@@ -233,7 +232,7 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
 
     final ArrayList<File> files = new ArrayList<>(FileUtils.listFiles(file0, new String[] {"yml", "yaml"}, true));
     for (File file : files)
-      Register.loadEnchantment(file, this);
+      PreparatoryParsers.loadEnchantment(file, this);
 
     
 
@@ -312,7 +311,7 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
     new BukkitRunnable() {
       @Override
       public void run() {
-        for (Map.Entry<UUID, Integer> entry : gods.entrySet()) {
+        for (final Map.Entry<UUID, Integer> entry : gods.entrySet()) {
           if (entry.getValue() == 1) {
             gods.remove(entry.getKey());
             Bukkit.getPlayer(entry.getKey()).setInvulnerable(false);
@@ -394,7 +393,7 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
 
     final ArrayList<File> files = new ArrayList<>(FileUtils.listFiles(file0, new String[] {"yml", "yaml"}, true));
     for (File file : files)
-      Register.loadEnchantment(file, this);
+      PreparatoryParsers.loadEnchantment(file, this);
 
     bowEnchantments.clear();
     toolEnchantments.clear();
@@ -408,7 +407,7 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
 
   // IMPLEMENTATION START
 
-  private ItemStack enchant0(ItemStack it, Enchantment en, int lvl) {
+  private ItemStack enchant0(final ItemStack it, final Enchantment en, final int lvl) {
     return Utils.enchant(it, en, lvl, this).getKey();
   }
 
@@ -616,13 +615,13 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
     );
     if (!file.exists()) return EnchantmentLoadResponse.NOT_FOUND;
 
-    if (isEnchantmentLoaded(file, this)) {
-      Register.unloadEnchantment(file, this);
-      Register.loadEnchantment(file, this);
+    if (PreparatoryParsers.isEnchantmentLoaded(file, this)) {
+      PreparatoryParsers.unloadEnchantment(file, this);
+      PreparatoryParsers.loadEnchantment(file, this);
       return EnchantmentLoadResponse.RELOADED;
     }
 
-    Register.loadEnchantment(file, this);
+    PreparatoryParsers.loadEnchantment(file, this);
     return EnchantmentLoadResponse.LOADED;
   }
 
@@ -633,8 +632,8 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
     );
     if (!file.exists()) return EnchantmentUnloadResponse.NOT_FOUND;
 
-    if (isEnchantmentLoaded(file, this)) {
-      Register.unloadEnchantment(file, this);
+    if (PreparatoryParsers.isEnchantmentLoaded(file, this)) {
+      PreparatoryParsers.unloadEnchantment(file, this);
       return EnchantmentUnloadResponse.UNLOADED;
     }
 

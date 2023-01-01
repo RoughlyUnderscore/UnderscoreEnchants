@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import com.roughlyunderscore.enchs.enchants.abstracts.AbstractEnchantment;
 import com.roughlyunderscore.enchs.events.PlayerPVPEvent;
+import com.roughlyunderscore.enchs.parsers.PreparatoryParsers;
 import com.roughlyunderscore.enchs.parsers.condition.ComparativeOperator;
 import com.roughlyunderscore.enchs.util.Constants;
 import com.roughlyunderscore.enchs.util.RomanNumber;
@@ -49,7 +50,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.roughlyunderscore.enchs.UnderscoreEnchants.WRONG_LEVEL;
 import static com.roughlyunderscore.enchs.UnderscoreEnchants.WRONG_NAME;
-import static com.roughlyunderscore.enchs.registration.Register.*;
 import static com.roughlyunderscore.enchs.util.general.PlayerUtils.*;
 
 @SuppressWarnings({"unused", "deprecation"})
@@ -926,7 +926,7 @@ public final class Utils {
             notifiee.sendMessage(downloaded);
 
             if (load) {
-              loadEnchantment(enchantment, plugin);
+              PreparatoryParsers.loadEnchantment(enchantment, plugin);
 
               String loaded = plugin.getMessages().LOADED.replace("<ench>", enchantment.getName());
               if (notifiee instanceof Player player) loaded = PlaceholderAPI.setPlaceholders(player, loaded);
@@ -950,7 +950,7 @@ public final class Utils {
             notifiee.sendMessage(downloaded);
 
             if (load) {
-              loadEnchantment(enchantment, plugin);
+              PreparatoryParsers.loadEnchantment(enchantment, plugin);
 
               String loaded = plugin.getMessages().NO_PERMS.replace("<ench>", enchantment.getName());
               if (notifiee instanceof Player player) loaded = PlaceholderAPI.setPlaceholders(player, loaded);
