@@ -42,9 +42,9 @@ are **welcome**.
 #### What should every contribution have
 
 1) The added code must be tested in game.
-2) That said, if a new feature can have a unit test, it should have a unit test. This also applies to API implementations.
+2) Having said that, if a new feature can have a unit test, it should have a unit test. This also applies to API implementations.
 3) The code should be as optimized as possible.
-5) If Kotlin can be used, it should be used. While Java code is still welcome, it's frowned upon, for the project is slowly moving to fully Kotlin.
+4) If Kotlin can be used, it should be used. While Java code is still welcome, it's frowned upon, for the project is slowly moving to fully Kotlin.
 
 ### Requirements
 * `Java 19`
@@ -116,7 +116,7 @@ How to suggest a feature
 ===
 Suggesting features is also contribution in a way! That said, there are some guidelines for suggesting features.
 ### Where to suggest features
-You can suggest features in [GitHub Issues](https://github.com/RoughlyUnderscore/UnderscoreEnchantsCode/issues). If you do not feel like it,
+You can suggest features in [GitHub Issues](https://github.com/RoughlyUnderscore/UnderscoreEnchants/issues). If you do not feel like it,
 you are always welcome to write at #suggestions in my [Support Discord server](https://discord.gg/bBge7bj3ra).
 ### A good feature suggestion
 What makes a good feature suggestion is the research behind it.
@@ -127,7 +127,7 @@ can be negated.
 
 How to report a bug
 ===
-If it's a minor bug, report it in [GitHub Issues](https://github.com/RoughlyUnderscore/UnderscoreEnchantsCode/issues). However, if it's a major exploitable
+If it's a minor bug, report it in [GitHub Issues](https://github.com/RoughlyUnderscore/UnderscoreEnchants/issues). However, if it's a major exploitable
 bug or a security exploit, refrain from using issues, and instead open a ticket in my [Support Discord server](https://discord.gg/bBge7bj3ra). Before opening
 an issue, please also make sure that there's no (recent) issue already open on that bug.
 
