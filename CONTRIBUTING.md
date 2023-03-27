@@ -137,24 +137,23 @@ Are you ready to make your first contribution to UnderscoreEnchants? Well then, 
 guidelines.
 
 1) UnderscoreEnchants code is [K&R-styled](https://en.wikipedia.org/wiki/Indentation_style#K&R_style). There are some minor adjustments:
-```java
+```kotlin
 // For short one-line expressions, this is acceptable, but not preferred
 if (1 == 2)
-  return;
+  return
 
 // Instead, this is preferred
-if (1 == 2) return;
+if (1 == 2) return
 
 // However, for long one-line expressions, this is acceptable, but not preferred
-if (1 == 2) bake().cook().doSomethingElse().extraLong().maybe().optional().getOrElse(throw new RuntimeException());
+if (1 == 2) bake().cook().doSomethingElse().extraLong().maybe().optional().veryLongMethod()
 
 // Instead, this is preferred
 if (1 == 2)
-  bake().cook().doSomethingElse().extraLong().maybe().optional().getOrElse(throw new RuntimeException());
+  bake().cook().doSomethingElse().extraLong().maybe().optional().veryLongMethod()
 ```
 
-2) Not every single method should be documented, but if the name isn't clear enough, it should be. Moreover, any method in a utility class (such as Utils, ActionUtils)
-should be documented.
+2) Not every single method should be documented, but if the name isn't clear enough, it should be. Moreover, any method in a utility class (such as Utils, ActionUtils) should be documented.
 3) If a variable can be final, it should be.
 4) If a Lombok annotation can be used, it should be (exceptions: @SneakyThrows, reason - Kotlin doesn't like it).
 5) The code indentation is **2 spaces** for Kotlin/Java and **4 spaces** for XML!
