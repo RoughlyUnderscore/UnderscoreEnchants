@@ -27,7 +27,7 @@ Contributions that...
 * only focus on fixing code style;
 * only optimize something;
 * only add unit tests;
-* add/remove easter eggs
+* only add/remove easter eggs
 are **not welcome**.<br>
 In addition, contributions that largely refactor a big part of the code just for the sake of structuring are **frowned upon, but not forbidden**. However, care to document the new code structure in the commit message for it to have a chance to be accepted.
 
