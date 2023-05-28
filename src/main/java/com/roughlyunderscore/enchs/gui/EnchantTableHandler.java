@@ -70,14 +70,12 @@ public class EnchantTableHandler implements Listener {
   public void onEnchant(final EnchantItemEvent ev) {
     final Player enchanter = ev.getEnchanter();
 
-    if (!plugin.getMainConfig().ADD_ENCHANTMENTS_TO_ENCHANTMENT_TABLE) return;
-    final int chance = plugin.getMainConfig().ENCHANTMENT_TABLE_CHANCE;
-
-    if (new Random().nextInt(chance) + 1 != chance) return;
+    if (!plugin.getConfigValues().ADD_ENCHANTMENTS_TO_ENCHANTMENT_TABLE) return;
+    final int chance = plugin.getConfigValues().ENCHANTMENT_TABLE_CHANCE;
 
     final ItemStack item = ev.getItem();
 
-    if (item.getEnchantments().size() == plugin.getMainConfig().MAXIMUM_ENCHANTMENTS) { // This will probably never happen, because the enchantment table only allows unenchanted items
+    if (item.getEnchantments().size() == plugin.getConfigValues().MAXIMUM_ENCHANTMENTS) { // This will probably never happen, because the enchantment table only allows unenchanted items
       enchanter.sendMessage(PlaceholderAPI.setPlaceholders(enchanter, plugin.getMessages().OVER_THE_LIMIT));
       ev.setCancelled(true);                                                            // but perhaps someone will use a 0 limit.
       return;
@@ -93,7 +91,10 @@ public class EnchantTableHandler implements Listener {
       newEnchants = ev.getEnchantsToAdd();
 
     try {
-      final ItemStack resultItem = Utils.generateEnchantedItemWithMergedEnchantments(item, Utils.mergeEnchantments(currentEnchants, newEnchants), Map.of(enchantment, level), plugin);
+      ItemStack resultItem = item.clone();
+      if (new Random().nextInt(chance) + 1 == chance)
+        resultItem = Utils.generateEnchantedItemWithMergedEnchantments(item, Utils.mergeEnchantments(currentEnchants, newEnchants), Map.of(enchantment, level), plugin);
+
       final PreEnchantEvent pee = new PreEnchantEvent(ev.getEnchanter(), enchantment, level, resultItem); // haha pee
       Bukkit.getPluginManager().callEvent(pee);
 

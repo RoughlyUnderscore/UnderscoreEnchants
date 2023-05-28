@@ -36,6 +36,7 @@ public class PlayerConditionParser extends AbstractConditionParser<Player> {
       case SNEAKING -> sneaking(player, plugin);
       case SPRINTING -> sprinting(player, plugin);
       case SWIMMING -> swimming(player, plugin);
+      case IN_WATER -> inWater(player, plugin);
       case FLYING -> flying(player, plugin);
       case ON_FIRE -> onFire(player, plugin);
       case ON_HIGHEST_BLOCK -> onTop(player, plugin);

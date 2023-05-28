@@ -5,8 +5,8 @@ import co.aikar.commands.annotation.*;
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
-import com.roughlyunderscore.enchs.config.MainConfig;
-import com.roughlyunderscore.enchs.config.Messages;
+import com.roughlyunderscore.enchs.config.main.MainConfigValues;
+import com.roughlyunderscore.enchs.config.messages.Messages;
 import com.roughlyunderscore.enchs.easter_eggs.EasterEggs;
 import com.roughlyunderscore.enchs.parsers.PreparatoryParsers;
 import com.roughlyunderscore.enchs.util.DetailedEnchantment;
@@ -61,7 +61,7 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
       return;
     }
 
-    sender.sendMessage(format(plugin.getMainConfig().PREFIX + "&r" + plugin.getDescription().getVersion()));
+    sender.sendMessage(format(plugin.getConfigValues().PREFIX + "&r" + plugin.getDescription().getVersion()));
     sender.sendMessage(format("&b&n&m----------------------------------"));
     sender.sendMessage(" ");
     sender.sendMessage(format("&9/ue log - &bCreates a plugin log for the support team to review"));
@@ -207,10 +207,10 @@ public class UnderscoreEnchantsCommand extends BaseCommand {
     }
 
     try {
-      final MainConfig newConfig = new MainConfig(plugin);
+      final MainConfigValues newConfig = new MainConfigValues(plugin);
       final Messages newMessages = new Messages(plugin);
 
-      plugin.setMainConfig(newConfig);
+      plugin.setConfigValues(newConfig);
       plugin.setMessages(newMessages);
 
       plugin.reloadEnchantments();

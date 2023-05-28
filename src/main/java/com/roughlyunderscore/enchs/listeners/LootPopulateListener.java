@@ -33,11 +33,11 @@ public class LootPopulateListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = HIGHEST)
   public void onLootPopulate(final LootGenerateEvent ev) {
-    if (!plugin.getMainConfig().POPULATE_CHEST_LOOT) return;
+    if (!plugin.getConfigValues().POPULATE_CHEST_LOOT) return;
 
     final Entity ent = ev.getEntity();
     final InventoryHolder ih = ev.getInventoryHolder();
-    final int chance = plugin.getMainConfig().POPULATE_CHEST_LOOT_CHANCE;
+    final int chance = plugin.getConfigValues().POPULATE_CHEST_LOOT_CHANCE;
 
     if (!(ih instanceof Chest) && !(ent instanceof Minecart)) return;
 
@@ -56,12 +56,12 @@ public class LootPopulateListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = HIGHEST)
   public void onVillagerAcquireTrades(final VillagerAcquireTradeEvent ev) {
-    if (!plugin.getMainConfig().POPULATE_VILLAGER_TRADES) return;
+    if (!plugin.getConfigValues().POPULATE_VILLAGER_TRADES) return;
 
     final MerchantRecipe recipe0 = ev.getRecipe();
     ItemStack item = recipe0.getResult();
 
-    final int chance = plugin.getMainConfig().POPULATE_VILLAGER_TRADES_CHANCE;
+    final int chance = plugin.getConfigValues().POPULATE_VILLAGER_TRADES_CHANCE;
 
     if (new Random().nextInt(chance) + 1 != chance) return;
     if (!isEnchantable(item)) return;
@@ -84,9 +84,9 @@ public class LootPopulateListener implements Listener {
 
   @EventHandler(ignoreCancelled = true, priority = HIGHEST)
   public void tunaIsLove(final PlayerFishEvent ev) {
-    if (!plugin.getMainConfig().POPULATE_FISHING_LOOT) return;
+    if (!plugin.getConfigValues().POPULATE_FISHING_LOOT) return;
 
-    final int chance = plugin.getMainConfig().POPULATE_FISHING_LOOT_CHANCE;
+    final int chance = plugin.getConfigValues().POPULATE_FISHING_LOOT_CHANCE;
     if (new Random().nextInt(chance) + 1 != chance) return;
 
     if (ev.getState() != PlayerFishEvent.State.CAUGHT_FISH) return;

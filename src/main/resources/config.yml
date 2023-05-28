@@ -1,5 +1,5 @@
 misc:
-  require-vault: true # Set to false if you don't any of the economy features (will drop errors if an economy feature is attempted to be accessed)
+  requireVault: true # Set to false if you don't any of the economy features (will drop errors if an economy feature is attempted to be accessed)
   bStats: true # Whether bStats is activated.
   updater: 24 # Each X hours, an updater checks for updates. Default: 24.
 
@@ -123,10 +123,10 @@ messages:
     wrong-parameter: '&cParámetro inválido (<param>)!'
     downloaded: '&bEl encantamiento &e<ench> &bha sido descargado correctamente.'
     loaded: '&bEl encantamiento &e<ench> &bha sido cargado.'
-    unloaded: '&bEl encantamiento &e<ench> &bha sido desactivado.' # DeepL
-    toggled: '&bHo cambiato l''incantesimo &e<ench> &bper te.' # DeepL
-    over-the-limit: '&c¡No puedes tener más de &e<limit> &cencantamientos en un objeto!' # DeepL
-    reloaded: '&6El plugin ha sido recargado en <ms> ms.' # DeepL
+    unloaded: '&bEl encantamiento &e<ench> &bha sido desactivado.'
+    toggled: '&bHo cambiato l''incantesimo &e<ench> &bper te.'
+    over-the-limit: '&c¡No puedes tener más de &e<limit> &cencantamientos en un objeto!'
+    reloaded: '&6El plugin ha sido recargado en <ms> ms.'
     # Credit to Aliakks (check out his plugins!) & DeepL
 
   de:
@@ -143,9 +143,9 @@ messages:
     downloaded: '&bDie Verzauberung &e<ench> &bwurde erfolgreich heruntergeladen.'
     loaded: '&bDie Verzauberung &e<ench> &bwurde geladen.'
     unloaded: '&bDie Verzauberung &e<ench> &bwurde unloaded.'
-    toggled: '&bIch habe die Verzauberung &e<ench> &bfür Sie umgeschaltet.' # DeepL
-    over-the-limit: '&cDu kannst nicht mehr als &e<limit> &cVerzauberungen auf einem Gegenstand haben!' # DeepL
-    reloaded: '&6Die Plugin wurde in <ms> ms neu geladen.' # DeepL
+    toggled: '&bIch habe die Verzauberung &e<ench> &bfür Sie umgeschaltet.'
+    over-the-limit: '&cDu kannst nicht mehr als &e<limit> &cVerzauberungen auf einem Gegenstand haben!'
+    reloaded: '&6Die Plugin wurde in <ms> ms neu geladen.'
     # Credit to mfnalex & DeepL
 
   fr:
@@ -161,10 +161,10 @@ messages:
     wrong-parameter: '&cParamètre non valide (<param>)!'
     downloaded: '&bEnchantment &e<ench> &ba été téléchargé avec succès.'
     loaded: '&bEnchantment &e<ench> &ba été chargé.'
-    unloaded: '&bEnchantment &e<ench> &ba été déchargé.' # DeepL
-    toggled: '&bJ''ai changé l''enchantement &e<ench> &bpour vous.' # DeepL
-    over-the-limit: '&cVous ne pouvez pas avoir plus de &e<limit> &cenchantements sur un objet!' # DeepL
-    reloaded: '&6La plugin a été rechargée en <ms> ms.' # DeepL
+    unloaded: '&bEnchantment &e<ench> &ba été déchargé.'
+    toggled: '&bJ''ai changé l''enchantement &e<ench> &bpour vous.'
+    over-the-limit: '&cVous ne pouvez pas avoir plus de &e<limit> &cenchantements sur un objet!'
+    reloaded: '&6La plugin a été rechargée en <ms> ms.'
     # Credit to DeepL
 
   tr:
@@ -216,9 +216,9 @@ messages:
     enchanted: '&6Enchantade ditt föremål med &b<name> <level>.'
     activated: '&6Du har aktivetat &l&b<name> enchanten.'
     wrong-parameter: '&cFel parameter (<param>)!'
-    downloaded: '&bEnchantment &e<ench> &bhas laddats ner framgångsrikt.' # DeepL
-    loaded: '&bEnchantment &e<ench> &bhar laddats.' # DeepL
-    unloaded: '&bEnchantment &e<ench> &bhar avaktiverats.' # DeepL
+    downloaded: '&bEnchantment &e<ench> &bhas laddats ner framgångsrikt.'
+    loaded: '&bEnchantment &e<ench> &bhar laddats.'
+    unloaded: '&bEnchantment &e<ench> &bhar avaktiverats.'
     toggled: '&bToggled enchantment &e<ench> &bfor you.'
     over-the-limit: '&cYou can''t have more than <limit> enchantments on an item!'
     reloaded: '&6Reloaded the plugin in <ms> ms.'

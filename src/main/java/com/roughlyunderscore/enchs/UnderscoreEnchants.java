@@ -9,8 +9,10 @@ import com.roughlyunderscore.enchantsapi.EnchantmentLoadResponse;
 import com.roughlyunderscore.enchantsapi.EnchantmentUnloadResponse;
 import com.roughlyunderscore.enchantsapi.UEnchantsAPI;
 import com.roughlyunderscore.enchs.commands.UnderscoreEnchantsCommand;
-import com.roughlyunderscore.enchs.config.MainConfig;
-import com.roughlyunderscore.enchs.enchants.abstracts.AbstractEnchantment;
+import com.roughlyunderscore.enchs.config.main.MainConfigValues;
+import com.roughlyunderscore.enchs.config.main.MainConfiguration;
+import com.roughlyunderscore.enchs.config.messages.lang.*;
+import com.roughlyunderscore.enchs.enchants.UEnchant;
 import com.roughlyunderscore.enchs.events.GeneralListener;
 import com.roughlyunderscore.enchs.gui.AnvilHandler;
 import com.roughlyunderscore.enchs.gui.EnchantTableHandler;
@@ -24,8 +26,11 @@ import com.roughlyunderscore.enchs.util.Debug;
 import com.roughlyunderscore.enchs.util.cooldownutils.ActionbarCooldown;
 import com.roughlyunderscore.enchs.util.cooldownutils.Cooldown;
 import com.roughlyunderscore.enchs.util.DetailedEnchantment;
-import com.roughlyunderscore.enchs.config.Messages;
+import com.roughlyunderscore.enchs.config.messages.Messages;
 import com.roughlyunderscore.enchs.util.general.Utils;
+import de.exlll.configlib.NameFormatters;
+import de.exlll.configlib.YamlConfigurationProperties;
+import de.exlll.configlib.YamlConfigurations;
 import de.jeff_media.updatechecker.UpdateChecker;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +41,6 @@ import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -55,6 +59,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -67,10 +72,6 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
 
   // The main class.
   // A lot of stuff in a confined place, don't trip over something!
-
-
-  @Getter @Setter
-  public Messages messages;
 
   public static DetailedEnchantment WRONG_LEVEL, WRONG_NAME;
 
@@ -87,8 +88,12 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
   @Getter
   public List<Enchantment> allEnchs = new ArrayList<>();
   @Getter
-  public Map<DetailedEnchantment, AbstractEnchantment> enchantmentData = new HashMap<>();
-  public static final Map<DetailedEnchantment, AbstractEnchantment> staticEnchantmentData = new HashMap<>();
+  public Map<DetailedEnchantment, UEnchant> enchantmentData = new HashMap<>();
+
+  public static final Map<DetailedEnchantment, UEnchant> staticEnchantmentData = new HashMap<>();
+  public static final List<Enchantment> uniqueEnchantments = new ArrayList<>();
+  public static final Map<Enchantment, List<String>> conflicts = new HashMap<>();
+
 
   @Getter
   private final Map<UUID, Integer> gods = new HashMap<>();
@@ -104,20 +109,6 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
   public static List<Enchantment> leggingsEnchantments = new ArrayList<>();
   public static List<Enchantment> bootsEnchantments = new ArrayList<>();
   public static List<Enchantment> tridentEnchantments = new ArrayList<>();
-
-  private final String serverVersion = Bukkit.getBukkitVersion();
-
-  private void regTest() {
-    if (!serverVersion.contains("1.13") &&
-      !serverVersion.contains("1.14") &&
-      !serverVersion.contains("1.15") &&
-      !serverVersion.contains("1.16") &&
-      !serverVersion.contains("1.17") &&
-      !serverVersion.contains("1.18") &&
-      !serverVersion.contains("1.19")) {
-      throw new IllegalStateException("Couldn't start the plugin. Is your server running on <1.13? The plugin works on 1.13+ and functions properly on 1.17+.");
-    }
-  }
   @Getter
   @Setter
   UpdateChecker checker;
@@ -128,8 +119,20 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
   @Setter
   Metrics metrics;
 
-  @Getter @Setter
-  MainConfig mainConfig;
+  // CONFIG START
+  @Getter @Setter public Messages messages;
+  @Getter @Setter MainConfigValues configValues;
+  @Getter EnglishMsgConfig englishMsgConfig;
+  @Getter SpanishMsgConfig spanishMsgConfig;
+  @Getter GermanMsgConfig germanMsgConfig;
+  @Getter FrenchMsgConfig frenchMsgConfig;
+  @Getter ItalianMsgConfig italianMsgConfig;
+  @Getter RussianMsgConfig russianMsgConfig;
+  @Getter RomanianMsgConfig romanianMsgConfig;
+  @Getter TurkishMsgConfig turkishMsgConfig;
+  @Getter TamilMsgConfig tamilMsgConfig;
+  @Getter SwedishMsgConfig swedishMsgConfig;
+  // CONFIG END
 
   @Override
   public void onEnable() {
@@ -139,16 +142,12 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
     final List<Enchantment> vanillaEnchants = Arrays.stream(Enchantment.values()).toList();
     vanillaEnchants.forEach(enchantment -> {
       DetailedEnchantment ench = new DetailedEnchantment(enchantment.getKey());
-      enchantmentData.put(ench, new AbstractEnchantment(enchantment));
+      enchantmentData.put(ench, new UEnchant(enchantment));
     });
 
     staticEnchantmentData.putAll(enchantmentData);
 
-    saveDefaultConfig();
-    final FileConfiguration config = this.getConfig();
-    config.options().copyDefaults(true);
-    saveDefaultConfig();
-    reloadConfig();
+
 
     weaponEnchantments.addAll(Constants.DEFAULT_WEAPON_ENCHANTMENTS);
     toolEnchantments.addAll(Constants.DEFAULT_TOOL_ENCHANTMENTS);
@@ -157,16 +156,6 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
     chestplateEnchantments.addAll(Constants.DEFAULT_CHESTPLATE_ENCHANTMENTS);
     leggingsEnchantments.addAll(Constants.DEFAULT_LEGGINGS_ENCHANTMENTS);
     bootsEnchantments.addAll(Constants.DEFAULT_BOOTS_ENCHANTMENTS);
-
-    mainConfig = new MainConfig(this);
-    messages = new Messages(this);
-
-    try {
-      regTest();
-    } catch (final IllegalStateException why_do_you_run_a_plugin_that_says_1_17_on_its_page_on_a_server_that_is_under_1_13) {
-      onDisable();
-      return;
-    }
 
     final String directPath = this.getDataFolder().getPath() + File.separator + "debug";
     final String debugFile = System.currentTimeMillis() + ".debug";
@@ -192,36 +181,7 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
       return;
     }
     writer = new BufferedWriter(fileW);
-    debugger = new Debug(mainConfig.DEBUG, writer, this);
-
-    checker = UpdateChecker.init(this, Constants.SPIGOT_ID)
-      .setDownloadLink(Constants.SPIGOT_ID)
-      .setDonationLink("https://donationalerts.com/r/zbll")
-      .onFail((senders, ex) -> {
-        this.getUnderscoreLogger().severe("Could not check for updates, make sure your connection is stable!");
-        this.getUnderscoreLogger().severe(ex.getMessage());
-      })
-      .onSuccess((senders, ex) -> {
-        this.getUnderscoreLogger().finest("Thanks for using UnderscoreEnchants!");
-        this.getUnderscoreLogger().finest("Successfully checked for updates.");
-      })
-      .checkEveryXHours(mainConfig.UPDATER_INTERVAL)
-      .setNotifyOpsOnJoin(true)
-      .checkNow();
-
-    if (mainConfig.BSTATS_ENABLED) {
-      metrics = new Metrics(this, Constants.BSTATS_ID);
-
-      metrics.addCustomChart(new SimplePie(
-        "language",
-        () -> mainConfig.LANGUAGE
-      ));
-
-      metrics.addCustomChart(new SimplePie(
-        "enchantments_count",
-        () -> String.valueOf(allEnchs.size())
-      ));
-    }
+    debugger = new Debug(configValues.DEBUG, writer, this);
 
     for (final String name : Arrays.stream(Enchantment.values()).map(Enchantment::getName).toList()) {
       cachedAutocompleteEnchantments.add(name.toLowerCase().replace(" ", "_"));
@@ -333,7 +293,7 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
 
   
   private boolean setupEconomy() {
-    if (!mainConfig.REQUIRE_VAULT) return true;
+    if (!configValues.REQUIRE_VAULT) return true;
     if (getServer().getPluginManager().getPlugin("Vault") == null) {
       return false;
     }
@@ -383,7 +343,7 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
     final List<Enchantment> vanillaEnchants = Arrays.stream(Enchantment.values()).toList();
     vanillaEnchants.forEach(enchantment -> {
       DetailedEnchantment ench = new DetailedEnchantment(enchantment.getKey());
-      enchantmentData.put(ench, new AbstractEnchantment(enchantment));
+      enchantmentData.put(ench, new UEnchant(enchantment));
     });
 
     staticEnchantmentData.putAll(enchantmentData);
@@ -672,7 +632,7 @@ public class UnderscoreEnchants extends JavaPlugin implements UEnchantsAPI {
       ", serverVersion='" + serverVersion + '\'' +
       ", checker=" + checker +
       ", metrics=" + metrics +
-      ", mainConfig=" + mainConfig +
+      ", mainConfig=" + configValues +
       ", cachedAutocompleteEnchantments=" + cachedAutocompleteEnchantments +
       '}';
   }

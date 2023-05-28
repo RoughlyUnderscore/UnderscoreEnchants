@@ -44,42 +44,32 @@ public class PlayerUtils<T, Z> {
   }
 
   public Object getPDCValue(Player player, NamespacedKey address, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log(String.format("getPDCValue was called on player %s with address %s and yielded %s.",
-      player.getName(),
-      address.toString(),
-      getPDC(player).get(address, PersistentDataType.STRING)));
     return getPDC(player).get(address, PersistentDataType.STRING);
   }
 
   
   
   public Location getLocation(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getLocation was called on player " + player.getName() + " and resulted in the following location: " + player.getLocation());
     return player.getLocation();
   }
 
   public double getX(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getX was called on player " + player.getName() + " and resulted in the following coordinate: " + getLocation(player, plugin).getX());
     return getLocation(player, plugin).getX();
   }
 
   public double getY(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getY was called on player " + player.getName() + " and resulted in the following coordinate: " + getLocation(player, plugin).getY());
     return getLocation(player, plugin).getY();
   }
 
   public double getZ(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getZ was called on player " + player.getName() + " and resulted in the following coordinate: " + getLocation(player, plugin).getZ());
     return getLocation(player, plugin).getZ();
   }
 
   public float getYaw(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getYaw was called on player " + player.getName() + " and resulted in the following angle: " + getLocation(player, plugin).getYaw());
     return getLocation(player, plugin).getYaw();
   }
 
   public float getPitch(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getPitch was called on player " + player.getName() + " and resulted in the following angle: " + getLocation(player, plugin).getPitch());
     return getLocation(player, plugin).getPitch();
   }
 
@@ -104,7 +94,6 @@ public class PlayerUtils<T, Z> {
   }
 
   public World getWorld(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getWorld was called on player " + player.getName() + " and resulted in the following world: " + getLocation(player, plugin).getWorld());
     return getLocation(player, plugin).getWorld();
   }
 
@@ -116,10 +105,8 @@ public class PlayerUtils<T, Z> {
   
   public double getMoney(Player player, UnderscoreEnchants plugin) {
     if (UnderscoreEnchants.econ == null) {
-      plugin.getDebugger().log("getMoney was called with economy features disabled");
       return 0;
     }
-    plugin.getDebugger().log("getMoney was called on player " + player.getName() + " and resulted in the following balance: " + UnderscoreEnchants.econ.getBalance(player));
     return UnderscoreEnchants.econ.getBalance(player);
   }
 
@@ -130,7 +117,6 @@ public class PlayerUtils<T, Z> {
 
   
   public int getXp(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getXp was called on player " + player.getName() + " and resulted in the following value: " + player.getTotalExperience());
     return player.getTotalExperience();
   }
 
@@ -139,7 +125,6 @@ public class PlayerUtils<T, Z> {
   }
 
   public int getLevel(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getLevel was called on player " + player.getName() + " and resulted in the following value: " + player.getLevel());
     return player.getLevel();
   }
 
@@ -150,7 +135,6 @@ public class PlayerUtils<T, Z> {
 
   
   public double getMaximumHealth(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getMaximumHealth was called on player " + player.getName() + " and resulted in the following value: " + Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue());
     return Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue();
   }
 
@@ -159,7 +143,6 @@ public class PlayerUtils<T, Z> {
   }
 
   public double getHealth(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getHealth was called on player " + player.getName() + " and resulted in the following value: " + player.getHealth());
     return player.getHealth();
   }
 
@@ -170,7 +153,6 @@ public class PlayerUtils<T, Z> {
 
   
   public int getFood(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getFood was called on player " + player.getName() + " and resulted in the following value: " + player.getFoodLevel());
     return player.getFoodLevel();
   }
 
@@ -181,7 +163,6 @@ public class PlayerUtils<T, Z> {
 
   
   public int getAir(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getAir was called on player " + player.getName() + " and resulted in the following value: " + player.getRemainingAir());
     return player.getRemainingAir();
   }
 
@@ -190,7 +171,6 @@ public class PlayerUtils<T, Z> {
   }
 
   public int getMaximumAir(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getMaximumAir was called on player " + player.getName() + " and resulted in the following value: " + player.getMaximumAir());
     return player.getMaximumAir();
   }
 
@@ -201,7 +181,6 @@ public class PlayerUtils<T, Z> {
 
   
   public boolean hasPotion(Player player, PotionEffectType effect, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("hasPotion was called on player " + player.getName() + " for " + effect.getName() + " and resulted in: " + player.hasPotionEffect(effect));
     return player.hasPotionEffect(effect);
   }
 
@@ -216,53 +195,49 @@ public class PlayerUtils<T, Z> {
 
   
   public ItemStack getMainHand(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getMainHand was called on player " + player.getName() + " and resulted in: " + player.getInventory().getItemInMainHand().getType() + " item");
     return player.getInventory().getItemInMainHand();
   }
 
   public ItemStack getHelmet(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getHelmet was called on player " + player.getName() + " and resulted in: " + player.getInventory().getHelmet());
     return player.getInventory().getHelmet();
   }
 
   public ItemStack getChestplate(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getChestplate was called on player " + player.getName() + " and resulted in: " + player.getInventory().getChestplate());
     return player.getInventory().getChestplate();
   }
 
   public ItemStack getLeggings(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getLeggings was called on player " + player.getName() + " and resulted in: " + player.getInventory().getLeggings());
     return player.getInventory().getLeggings();
   }
 
   public ItemStack getBoots(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getBoots was called on player " + player.getName() + " and resulted in: " + player.getInventory().getBoots());
     return player.getInventory().getBoots();
   }
   
 
   
   public boolean hasPDC(Player player, NamespacedKey address, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log(String.format("boolean$hasPDC was called on player %s with address %s and resulted in %b.",
-      player.getName(),
-      address.toString(),
-      getPDC(player).has(address, PersistentDataType.STRING)));
     return getPDC(player).has(address, PersistentDataType.STRING);
   }
 
   public boolean sprinting(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("boolean$sprinting was called on player " + player.getName() + " and resulted in: " + player.isSprinting());
     return player.isSprinting();
   }
 
   public boolean sneaking(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("boolean$sneaking was called on player " + player.getName() + " and resulted in: " + player.isSneaking());
     return player.isSneaking();
   }
 
   public boolean swimming(Player player, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("boolean$swimming was called on player " + player.getName() + " and resulted in: " + player.isSwimming());
     return player.isSwimming();
+  }
+
+  /**
+   * @since 2.2
+   */
+  public boolean inWater(Player player, UnderscoreEnchants plugin) {
+    plugin.getDebugger().log("boolean$inWater was called on player " + player.getName() + " and resulted in: " + player.getLocation().getBlock().isLiquid());
+    return player.getLocation().getBlock().getType() == Material.WATER;
   }
 
   public boolean blocking(Player player, UnderscoreEnchants plugin) {

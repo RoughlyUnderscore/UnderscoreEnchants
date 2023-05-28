@@ -1,4 +1,4 @@
-package com.roughlyunderscore.enchs.config;
+package com.roughlyunderscore.enchs.config.main;
 
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import lombok.ToString;
@@ -7,7 +7,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import static com.roughlyunderscore.enchs.util.general.Utils.*;
 
 @ToString
-public final class MainConfig {
+public final class MainConfigValues {
   // misc.*, enchantments.*
   public final boolean REQUIRE_VAULT;
   public final boolean BSTATS_ENABLED;
@@ -37,9 +37,9 @@ public final class MainConfig {
   public final String PREFIX;
   public final String LANGUAGE;
   
-  public MainConfig(final UnderscoreEnchants plugin) {
+  public MainConfigValues(final UnderscoreEnchants plugin) {
     final FileConfiguration config = plugin.getConfig();
-    REQUIRE_VAULT = config.getBoolean("misc.require-vault", true);
+    REQUIRE_VAULT = config.getBoolean("misc.require-vault", config.getBoolean("misc.requireVault", true)); // backwards compatibility
     BSTATS_ENABLED = config.getBoolean("misc.bStats", true);
     ACTIVATED_MESSAGE_ENABLED = config.getBoolean("misc.activatedMessageEnabled", true);
     

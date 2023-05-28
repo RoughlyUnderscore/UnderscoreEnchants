@@ -1,23 +1,23 @@
-package com.roughlyunderscore.enchs.enchants.new_sys;
+package com.roughlyunderscore.enchs.enchants;
 
-import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-@ToString @EqualsAndHashCode(callSuper = false)
+@ToString
+@EqualsAndHashCode(callSuper = false)
+/*
+A class that extends Enchantment for my own convenience.
+ */
 public class UEnchant extends Enchantment implements Listener {
+
   private final NamespacedKey key;
   private final String name;
   private final int maxLevel;
@@ -27,11 +27,8 @@ public class UEnchant extends Enchantment implements Listener {
   private final boolean isTreasure;
   private final List<Enchantment> conflicts;
   private final List<ItemStack> canEnchant;
-  private final Event event;
-  private final BukkitRunnable action;
-  private final UnderscoreEnchants plugin;
 
-  public UEnchant(final Enchantment enchantment, final Event event, final BukkitRunnable action, final UnderscoreEnchants plugin) {
+  public UEnchant(Enchantment enchantment) {
     this(
       enchantment.getKey(),
       enchantment.getName(),
@@ -41,26 +38,11 @@ public class UEnchant extends Enchantment implements Listener {
       enchantment.isCursed(),
       enchantment.isTreasure(),
       null,
-      null,
-      event,
-      action,
-      plugin
+      null
     );
   }
 
-  public UEnchant(final NamespacedKey key,
-                  final String name,
-                  final int maxLevel,
-                  final int startLevel,
-                  final EnchantmentTarget target,
-                  final boolean isCursed,
-                  final boolean isTreasure,
-                  final List<Enchantment> conflicts,
-                  final List<ItemStack> canEnchant,
-                  final Event event,
-                  final BukkitRunnable action,
-                  final UnderscoreEnchants plugin
-  ) {
+  public UEnchant(NamespacedKey key, String name, int maxLevel, int startLevel, EnchantmentTarget target, boolean isCursed, boolean isTreasure, List<Enchantment> conflicts, List<ItemStack> canEnchant) {
     super(key);
     this.key = key;
     this.name = name;
@@ -71,20 +53,14 @@ public class UEnchant extends Enchantment implements Listener {
     this.isTreasure = isTreasure;
     this.conflicts = conflicts;
     this.canEnchant = canEnchant;
-    this.event = event;
-    this.action = action;
-    this.plugin = plugin;
   }
 
-  @NonNull
-  @Override
-  public NamespacedKey getKey() {
+  public @NonNull NamespacedKey getKey() {
     return key;
   }
 
-  @NotNull
   @Override
-  public String getName() {
+  public @NonNull String getName() {
     return name;
   }
 
@@ -98,9 +74,8 @@ public class UEnchant extends Enchantment implements Listener {
     return startLevel;
   }
 
-  @NotNull
   @Override
-  public EnchantmentTarget getItemTarget() {
+  public @NonNull EnchantmentTarget getItemTarget() {
     return target;
   }
 
@@ -115,17 +90,12 @@ public class UEnchant extends Enchantment implements Listener {
   }
 
   @Override
-  public boolean conflictsWith(@NotNull final Enchantment other) {
+  public boolean conflictsWith(@NonNull Enchantment other) {
     return conflicts != null && conflicts.contains(other);
   }
 
   @Override
-  public boolean canEnchantItem(@NotNull final ItemStack item) {
+  public boolean canEnchantItem(@NonNull ItemStack item) {
     return canEnchant == null || canEnchant.contains(item);
-  }
-
-  @EventHandler
-  public void call(final Event event) {
-    if (event.getEventName().equals(this.event.getEventName())) action.runTask(plugin);
   }
 }

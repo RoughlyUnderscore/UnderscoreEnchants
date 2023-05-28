@@ -46,6 +46,7 @@ public class DoublePlayerConditionParser extends AbstractConditionParser<Player>
       case PLAYER_ONE_SNEAKING -> sneaking(first, plugin);
       case PLAYER_ONE_SPRINTING -> sprinting(first, plugin);
       case PLAYER_ONE_SWIMMING -> swimming(first, plugin);
+      case PLAYER_ONE_IN_WATER -> inWater(first, plugin);
       case PLAYER_ONE_FLYING -> flying(first, plugin);
       case PLAYER_ONE_ON_FIRE -> onFire(first, plugin);
       case PLAYER_ONE_ON_HIGHEST_BLOCK -> onTop(first, plugin);
@@ -122,6 +123,7 @@ public class DoublePlayerConditionParser extends AbstractConditionParser<Player>
       case PLAYER_TWO_SNEAKING -> sneaking(second, plugin);
       case PLAYER_TWO_SPRINTING -> sprinting(second, plugin);
       case PLAYER_TWO_SWIMMING -> swimming(second, plugin);
+      case PLAYER_TWO_IN_WATER -> inWater(second, plugin);
       case PLAYER_TWO_FLYING -> flying(second, plugin);
       case PLAYER_TWO_ON_FIRE -> onFire(second, plugin);
       case PLAYER_TWO_ON_HIGHEST_BLOCK -> onTop(second, plugin);

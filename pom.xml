@@ -197,12 +197,11 @@
             <version>1.19.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <!--<dependency>
-            <groupId>io.papermc.paper</groupId>
-            <artifactId>paper-api</artifactId>
-            <version>1.19.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>-->
+        <dependency>
+            <groupId>com.github.Exlll.ConfigLib</groupId>
+            <artifactId>configlib-yaml</artifactId>
+            <version>v4.2.0</version>
+        </dependency>
         <dependency>
             <groupId>com.github.seeseemelk</groupId>
             <artifactId>MockBukkit-v1.19</artifactId>

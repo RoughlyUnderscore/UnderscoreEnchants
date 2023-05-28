@@ -18,6 +18,7 @@ import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.roughlyunderscore.enchs.util.general.PlayerUtils.*;
@@ -50,11 +51,15 @@ public class AnvilHandler implements Listener {
 
     final Material type = item2.getType();
     if (!type.isItem()) return; // ?? I guess I need this but why
-    
+
+    if (containsConflicts(item1, item2)) {
+      ev.setResult(null);
+      return;
+    }
 
     switch (itemMatchesSecondItem(item1, item2)) {
       case IDENTICAL_ITEMS, BOOK -> {
-        if (item1.getType() == XMaterial.BOOK.parseMaterial()) item1.setType(XMaterial.ENCHANTED_BOOK.parseMaterial());
+        if (item1.getType() == XMaterial.BOOK.parseMaterial()) item1.setType(Objects.requireNonNull(XMaterial.ENCHANTED_BOOK.parseMaterial())); // "iT cAn Be NuLl"
 
         ItemStack newItem = new ItemStack(item1.getType()); // The first item is always the result item (example: in repairs the second item isn't the same)
         // final ItemMeta newMeta = Bukkit.getItemFactory().getItemMeta(newItem.getType());
@@ -82,31 +87,26 @@ public class AnvilHandler implements Listener {
           // TODO degrade anvil: 12% chance
           // maybe degrading the anvil is not necessary? it should be accounted for with vanilla...
 
-          // We don't need to set the other items to null, because the player might just think again.
+          // no need to set the other items to null
           // inv.setItem(0, null);
           // inv.setItem(1, null);
         }
       }
       case REPAIR -> {
-        ItemStack newItem = Utils.repair(item1, 0.2 * item2.getAmount());
+        final ItemStack newItem = Utils.repair(item1, 0.2 * item2.getAmount());
         plugin.getServer().getScheduler().runTask(plugin, () -> inv.setRepairCost(1));
 
         final EnchantmentsCombineEvent ece = new EnchantmentsCombineEvent(player, newItem);
         Bukkit.getPluginManager().callEvent(ece);
         if (!ece.isCancelled()) {
-          final ItemStack finalNewItem = newItem; // lambdas :rolled_eyes:
-          plugin.getServer().getScheduler().runTaskLater(plugin, () -> inv.setItem(2, finalNewItem), 1);
-
+          plugin.getServer().getScheduler().runTaskLater(plugin, () -> inv.setItem(2, newItem), 1);
         }
-        // TODO test REPAIR and BOOKS
-      }
-      default -> {
       }
     }
 
   }
 
-  AnvilPlacementType itemMatchesSecondItem(ItemStack first, ItemStack second) {
+  AnvilPlacementType itemMatchesSecondItem(final ItemStack first, final ItemStack second) {
     Material item = first.getType(), ingot = second.getType();
 
     if (
@@ -131,6 +131,21 @@ public class AnvilHandler implements Listener {
       return AnvilPlacementType.BOOK; // it can't be book + book, because that's handled in the first if statement
 
     return AnvilPlacementType.INVALID;
+  }
+
+  /**
+   * @since 2.2
+   */
+  boolean containsConflicts(final ItemStack item1, final ItemStack item2) {
+    final Map<Enchantment, Integer> item1Enchants = new ConcurrentHashMap<>(item1.getEnchantments());
+    final Map<Enchantment, Integer> item2Enchants = new ConcurrentHashMap<>(item2.getEnchantments());
+
+    for (final Enchantment ench1 : item1Enchants.keySet()) {
+      for (final Enchantment ench2 : item2Enchants.keySet()) {
+        if (conflictsWith(ench1, ench2)) return true;
+      }
+    }
+    return false;
   }
 
   // For internal purposes

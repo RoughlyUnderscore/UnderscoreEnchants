@@ -64,6 +64,10 @@ public enum DoublePlayerActions {
   PLAYER_ONE_SUBTITLE("player-one-subtitle", "player-one-subtitle-send", "player-one-send-subtitle"),
   PLAYER_ONE_SEND_MESSAGE("player-one-send-message", "player-one-message-send", "player-one-message-send", "player-one-send-message", "player-one-produce-message", "player-one-message"),
   PLAYER_ONE_SEND_ACTIONBAR("player-one-send-actionbar", "player-one-actionbar-send", "player-one-actionbar-send", "player-one-send-actionbar", "player-one-produce-actionbar", "player-one-actionbar"),
+  /**
+   * @since 2.2
+   */
+  PLAYER_ONE_SEND_TIMED_ACTIONBAR("player-one-send-timed-actionbar", "player-one-timed-actionbar-send", "player-one-timed-actionbar-send", "player-one-send-timed-actionbar", "player-one-produce-timed-actionbar", "player-one-timed-actionbar"),
   PLAYER_ONE_SEND_CHAT("player-one-send-chat", "player-one-chat-send", "player-one-chat-send", "player-one-send-chat", "player-one-produce-chat", "player-one-chat"),
 
   PLAYER_TWO_PDC_SET("player-two-pdc-set", "player-two-set-pdc", "player-two-set-pdc-value", "player-two-pdc-value-set", "player-two-set-pdc-value", "player-two-pdc-value-set", "player-two-set-pdc", "player-two-pdc-set"),
@@ -114,6 +118,10 @@ public enum DoublePlayerActions {
   PLAYER_TWO_SUBTITLE("player-two-subtitle", "player-two-subtitle-send", "player-two-send-subtitle"),
   PLAYER_TWO_SEND_MESSAGE("player-two-send-message", "player-two-message-send", "player-two-message-send", "player-two-send-message", "player-two-produce-message", "player-two-message"),
   PLAYER_TWO_SEND_ACTIONBAR("player-two-send-actionbar", "player-two-actionbar-send", "player-two-actionbar-send", "player-two-send-actionbar", "player-two-produce-actionbar", "player-two-actionbar"),
+  /**
+   * @since 2.2
+   */
+  PLAYER_TWO_SEND_TIMED_ACTIONBAR("player-two-send-timed-actionbar", "player-two-timed-actionbar-send", "player-two-timed-actionbar-send", "player-two-send-timed-actionbar", "player-two-produce-timed-actionbar", "player-two-timed-actionbar"),
   PLAYER_TWO_SEND_CHAT("player-two-send-chat", "player-two-chat-send", "player-two-chat-send", "player-two-send-chat", "player-two-produce-chat", "player-two-chat");
   
 

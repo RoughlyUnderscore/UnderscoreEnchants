@@ -3,7 +3,7 @@ package com.roughlyunderscore.enchs.util.general;
 import com.cryptomorin.xseries.XMaterial;
 import com.google.common.collect.ImmutableMap;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
-import com.roughlyunderscore.enchs.enchants.abstracts.AbstractEnchantment;
+import com.roughlyunderscore.enchs.enchants.UEnchant;
 import com.roughlyunderscore.enchs.events.PlayerPVPEvent;
 import com.roughlyunderscore.enchs.parsers.PreparatoryParsers;
 import com.roughlyunderscore.enchs.parsers.condition.ComparativeOperator;
@@ -11,6 +11,7 @@ import com.roughlyunderscore.enchs.util.Constants;
 import com.roughlyunderscore.enchs.util.RomanNumber;
 import com.roughlyunderscore.enchs.util.DetailedEnchantment;
 import com.roughlyunderscore.enchs.util.datastructures.Pair;
+import com.roughlyunderscore.enchs.util.enums.ActivationIndicator;
 import com.roughlyunderscore.enchs.util.enums.Type;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.apache.commons.collections4.ListUtils;
@@ -87,7 +88,7 @@ public final class Utils {
    * @return the name in a form of {@link String}
    */
   public static String getName(final Enchantment ench) {
-    final @Nullable String name = Constants.DEFAULT_ENCH_NAMES.get(ench);
+    final @Nullable String name = Constants.FRIENDLY_ENCHANT_NAMES.get(ench);
     if (name == null) return ench.getName();
     return name;
   }
@@ -201,9 +202,9 @@ public final class Utils {
    * @param receiver the message receiver in a form of {@link Player}
    * @param plugin   an {@link UnderscoreEnchants} object, used for configuration access
    */
-  public static void activationMessage(final String name, final Player receiver, final UnderscoreEnchants plugin) {
-    if (plugin.getMainConfig().ACTIVATED_MESSAGE_ENABLED) {
-      activationMessage(receiver, name, plugin);
+  public static void activationMessage(final String name, final Player receiver, final UnderscoreEnchants plugin, final ActivationIndicator indicator) {
+    if (plugin.getConfigValues().ACTIVATED_MESSAGE_ENABLED) {
+      activationMessage(receiver, name, plugin, indicator);
     }
   }
 
@@ -215,11 +216,11 @@ public final class Utils {
    * @param name   the {@link String} object, representing the name of the {@link Enchantment}
    * @param plugin an {@link UnderscoreEnchants} object, used for configuration access
    */
-  public static void activationMessage(final EnchantmentTarget target, final PlayerPVPEvent ev, final String name, final UnderscoreEnchants plugin) {
-    if (plugin.getMainConfig().ACTIVATED_MESSAGE_ENABLED) {
+  public static void activationMessage(final EnchantmentTarget target, final PlayerPVPEvent ev, final String name, final UnderscoreEnchants plugin, final ActivationIndicator indicator) {
+    if (plugin.getConfigValues().ACTIVATED_MESSAGE_ENABLED) {
       switch (target) {
-        case BOW, WEAPON, TOOL -> activationMessage(ev.getDamager(), name, plugin);
-        default -> activationMessage(ev.getVictim(), name, plugin);
+        case BOW, WEAPON, TOOL -> activationMessage(ev.getDamager(), name, plugin, indicator);
+        default -> activationMessage(ev.getVictim(), name, plugin, indicator);
       }
     }
   }
@@ -255,6 +256,7 @@ public final class Utils {
     if (item.getType().equals(Material.AIR) || item.getItemMeta() == null) return nonConflictingEnchants;
     final ItemMeta meta = item.getItemMeta();
     // Add all possible enchants to our list
+    // Sort out conflicts with vanilla enchants
     possibleEnchantments
       .stream()
       .filter(candidate -> !meta.hasConflictingEnchant(candidate) && !meta.hasEnchant(candidate))
@@ -268,9 +270,40 @@ public final class Utils {
       if (result.size() >= maxAmount) {
         break;
       }
-      result.add(enchantment);
+
+      // Sort out conflicts with our own enchants
+      if (!conflictsWith(enchantment, item)) result.add(enchantment);
     }
     return result;
+  }
+
+  /**
+   * UnderscoreEnchants has its own conflict system. This method properly checks for conflicts between 2 {@link Enchantment}s.
+   * @param first the first {@link Enchantment} to check
+   * @param second the second {@link Enchantment} to check
+   * @return {@code true} if the {@link Enchantment}s conflict, {@code false} otherwise
+   * @since 2.2
+   */
+  public static boolean conflictsWith(final Enchantment first, final Enchantment second) {
+    return first.conflictsWith(second) ||
+      second.conflictsWith(first) ||
+      UnderscoreEnchants.conflicts.get(first).contains(second.getName()) ||
+      UnderscoreEnchants.conflicts.get(second).contains(first.getName());
+  }
+
+  /**
+   * Checks if the {@link Enchantment} conflicts with the {@link ItemStack}.
+   * @param first the {@link Enchantment} to check
+   * @param item the {@link ItemStack} to check
+   * @return {@code true} if the {@link Enchantment} conflicts with the {@link ItemStack}, {@code false} otherwise
+   */
+  public static boolean conflictsWith(final Enchantment first, final ItemStack item) {
+    for (final Enchantment enchantment : item.getEnchantments().keySet()) {
+      if (conflictsWith(first, enchantment)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -344,49 +377,92 @@ public final class Utils {
    * @param receiver the message receiver in a form of {@link Player}
    * @param plugin   an {@link UnderscoreEnchants} object, used for configuration access
    */
-  public static void activationMessage(final Player receiver, final String name, final UnderscoreEnchants plugin) {
-    if (plugin.getMainConfig().ACTIVATED_MESSAGE_ENABLED) {
+  public static void activationMessage(final Player receiver, final String name, final UnderscoreEnchants plugin, final ActivationIndicator indicator) {
+    if (indicator == ActivationIndicator.NONE) return;
 
-      // build a unique namespace for the bossbar creation
-      final String player = ChatColor.stripColor(receiver.getName());
+    if (plugin.getConfigValues().ACTIVATED_MESSAGE_ENABLED) {
 
-      final String builder = "underscore_enchants_" + name +
-        "_" +
-        player +
-        ThreadLocalRandom.current().nextLong(Long.MIN_VALUE, Long.MAX_VALUE)
-        + System.currentTimeMillis();
-      final String namespace = builder.replace("-", "_");
+      switch (indicator) {
+        case BOSSBAR -> activationBossbar(receiver, name, plugin);
+        case PARTICLES -> activationParticles(receiver, name, plugin);
+        case BOTH -> {
+          activationBossbar(receiver, name, plugin);
+          activationParticles(receiver, name, plugin);
+        }
+      }
 
-      // build a key
-      final NamespacedKey key = new NamespacedKey(plugin, namespace.replace(" ", "_"));
 
-      // create & send the bossbar
-      final BossBar bar = Bukkit.createBossBar(
-        key,
-        PlaceholderAPI.setPlaceholders(receiver, format(plugin.getMessages().ACTIVATED.replace("<name>", name))),
-        BarColor.PURPLE,
-        BarStyle.SEGMENTED_20,
-        BarFlag.DARKEN_SKY
-      );
-      bar.setProgress(1);
-      bar.addPlayer(receiver);
+    }
+  }
 
-      Bukkit.getScheduler().runTaskLater(plugin, () -> {
-        bar.removeAll();
-        Bukkit.removeBossBar(key);
-      }, 60);
+  private static void activationBossbar(final Player receiver, final String name, final UnderscoreEnchants plugin) {
+    // build a unique namespace for the bossbar creation
+    final String player = ChatColor.stripColor(receiver.getName());
+
+    final String builder = "underscore_enchants_" + name +
+      "_" +
+      player +
+      ThreadLocalRandom.current().nextLong(Long.MIN_VALUE, Long.MAX_VALUE)
+      + System.currentTimeMillis();
+    final String namespace = builder.replace("-", "_");
+
+    // build a key
+    final NamespacedKey key = new NamespacedKey(plugin, namespace.replace(" ", "_"));
+
+    // create & send the bossbar
+    final BossBar bar = Bukkit.createBossBar(
+      key,
+      PlaceholderAPI.setPlaceholders(receiver, format(plugin.getMessages().ACTIVATED.replace("<name>", name))),
+      BarColor.PURPLE,
+      BarStyle.SEGMENTED_20,
+      BarFlag.DARKEN_SKY
+    );
+    bar.setProgress(1);
+    bar.addPlayer(receiver);
+
+    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+      bar.removeAll();
+      Bukkit.removeBossBar(key);
+    }, 60);
+  }
+
+  // i don't know what pattern this is because it was generated by copilot but i trust it
+  private static void activationParticles(final Player receiver, final String name, final UnderscoreEnchants plugin) {
+    final Location location = receiver.getLocation();
+    final World world = location.getWorld();
+    if (world == null) return;
+
+    final double x = location.getX();
+    final double y = location.getY();
+    final double z = location.getZ();
+
+    final double radius = 1.5;
+    final double increment = 0.1;
+
+    for (double theta = 0; theta < 2 * Math.PI; theta += increment) {
+      final double x1 = radius * Math.cos(theta);
+      final double z1 = radius * Math.sin(theta);
+
+      final double x2 = radius * Math.cos(theta + increment);
+      final double z2 = radius * Math.sin(theta + increment);
+
+      final Location loc1 = new Location(world, x + x1, y, z + z1);
+      final Location loc2 = new Location(world, x + x2, y, z + z2);
+
+      world.spawnParticle(Particle.VILLAGER_HAPPY, loc1, 1, 0, 0, 0, 0);
+      world.spawnParticle(Particle.VILLAGER_HAPPY, loc2, 1, 0, 0, 0, 0);
     }
   }
 
   /**
    * Sends an activation message to the {@link Player} if the message is enabled.
    *
-   * @param ench     the {@link AbstractEnchantment} to send the activation message of
+   * @param ench     the {@link UEnchant} to send the activation message of
    * @param receiver the message receiver in a form of {@link Player}
    * @param plugin   an {@link UnderscoreEnchants} object, used for configuration access
    */
-  public static void activationMessage(final Player receiver, final AbstractEnchantment ench, final UnderscoreEnchants plugin) {
-    activationMessage(receiver, ench.getName(), plugin);
+  public static void activationMessage(final Player receiver, final UEnchant ench, final UnderscoreEnchants plugin, final ActivationIndicator indicator) {
+    activationMessage(receiver, ench.getName(), plugin, indicator);
   }
 
   /**
@@ -555,7 +631,7 @@ public final class Utils {
 
     final ItemStack item = item0.clone();                                                       // Clone the itemstack for further work
 
-    if (item.getEnchantments().size() >= instance.getMainConfig().MAXIMUM_ENCHANTMENTS) // Can't enchant due to the limit
+    if (item.getEnchantments().size() >= instance.getConfigValues().MAXIMUM_ENCHANTMENTS) // Can't enchant due to the limit
       return Pair.of(item, ImmutableMap.of(enchantment, level));                              // Return a pair of same item and same enchantments
 
 
@@ -935,7 +1011,6 @@ public final class Utils {
           } catch (MalformedURLException e) {
             e.printStackTrace();
             plugin.getUnderscoreLogger().info("Something went wrong while downloading a file!");
-            plugin.getDebugger().log("Something went wrong while downloading a file!");
           }
         }, wait);
       } else {
@@ -959,7 +1034,6 @@ public final class Utils {
           } catch (final MalformedURLException e) {
             e.printStackTrace();
             plugin.getUnderscoreLogger().info("Something went wrong while downloading a file!");
-            plugin.getDebugger().log("Something went wrong while downloading a file!");
           }
         });
       }
@@ -1094,8 +1168,8 @@ public final class Utils {
       }
     }
 
-    if (!enchantments.isEmpty() && enchantments.size() >= plugin.getMainConfig().MAXIMUM_ENCHANTMENTS) {
-      throw new IllegalArgumentException("You can't have more than " + plugin.getMainConfig().MAXIMUM_ENCHANTMENTS + " enchantments on an item!");
+    if (!enchantments.isEmpty() && enchantments.size() >= plugin.getConfigValues().MAXIMUM_ENCHANTMENTS) {
+      throw new IllegalArgumentException("You can't have more than " + plugin.getConfigValues().MAXIMUM_ENCHANTMENTS + " enchantments on an item!");
     }
 
     meta.setLore(lore);

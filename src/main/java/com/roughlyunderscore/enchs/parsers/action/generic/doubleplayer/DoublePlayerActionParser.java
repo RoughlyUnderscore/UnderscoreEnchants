@@ -273,6 +273,9 @@ public class DoublePlayerActionParser extends AbstractActionParser<Player> {
         // Assumption: [0]PLAYER-ONE-SEND-ACTIONBAR [1]ACTIONBAR
         case PLAYER_ONE_SEND_ACTIONBAR -> sendActionbar(first, collectTail(args, 1, " ", (String[]) arrayOf("delay:", "chance:")), plugin);
 
+        // Assumption: [0]PLAYER-ONE-SEND-TIMED-ACTIONBAR [1]DURATION [2]ACTIONBAR
+        case PLAYER_ONE_SEND_TIMED_ACTIONBAR -> sendActionbar(first, collectTail(args, 2, " ", (String[]) arrayOf("delay:", "chance:")), parseI(args[1]), plugin);
+
         // Assumption: [0]PLAYER-ONE-SEND-CHAT [1]CHAT
         case PLAYER_ONE_SEND_CHAT -> say(first, collectTail(args, 1, " ", (String[]) arrayOf("delay:", "chance:")), plugin);
 
@@ -435,6 +438,9 @@ public class DoublePlayerActionParser extends AbstractActionParser<Player> {
 
         // Assumption: [0]PLAYER-TWO-SEND-ACTIONBAR [1]ACTIONBAR
         case PLAYER_TWO_SEND_ACTIONBAR -> sendActionbar(second, collectTail(args, 1, " ", (String[]) arrayOf("delay:", "chance:")), plugin);
+
+        // Assumption: [0]PLAYER-TWO-SEND-TIMED-ACTIONBAR [1]DURATION [2]ACTIONBAR
+        case PLAYER_TWO_SEND_TIMED_ACTIONBAR -> sendActionbar(second, collectTail(args, 2, " ", (String[]) arrayOf("delay:", "chance:")), parseI(args[1]), plugin);
 
         // Assumption: [0]PLAYER-TWO-SEND-CHAT [1]CHAT
         case PLAYER_TWO_SEND_CHAT -> say(second, collectTail(args, 1, " ", (String[]) arrayOf("delay:", "chance:")), plugin);

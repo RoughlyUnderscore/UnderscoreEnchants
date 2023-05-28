@@ -60,6 +60,10 @@ public enum PlayerActions {
   PLAYER_SUBTITLE("player-subtitle", "player-subtitle-send", "player-send-subtitle"),
   PLAYER_SEND_MESSAGE("player-send-message", "player-message-send", "player-message-send", "player-send-message", "player-produce-message", "player-message"),
   PLAYER_SEND_ACTIONBAR("player-send-actionbar", "player-actionbar-send", "player-actionbar-send", "player-send-actionbar", "player-produce-actionbar", "player-actionbar"),
+  /**
+   * @since 2.2
+   */
+  PLAYER_SEND_TIMED_ACTIONBAR("player-send-timed-actionbar", "player-timed-actionbar-send", "player-timed-actionbar-send", "player-send-timed-actionbar", "player-produce-timed-actionbar", "player-timed-actionbar"),
   PLAYER_SEND_CHAT("player-send-chat", "player-chat-send", "player-chat-send", "player-send-chat", "player-produce-chat", "player-chat"),
   BROADCAST_MESSAGE("broadcast-message", "message-broadcast", "produce-message", "broadcast"),
   LOG_MESSAGE("log-message", "message-log", "log"),

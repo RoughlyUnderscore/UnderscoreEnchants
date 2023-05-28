@@ -23,32 +23,26 @@ Just a lot of utils that I don't want to explain
 public class EntityUtils {
   
   public Location getLocation(Entity entity, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getLocation was called on entity " + entity.getName() + " and resulted in the following location: " + entity.getLocation());
     return entity.getLocation();
   }
 
   public double getX(Entity entity, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getX was called on entity " + entity.getName() + " and resulted in the following coordinate: " + getLocation(entity, plugin).getX());
     return getLocation(entity, plugin).getX();
   }
 
   public double getY(Entity entity, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getY was called on entity " + entity.getName() + " and resulted in the following coordinate: " + getLocation(entity, plugin).getY());
     return getLocation(entity, plugin).getY();
   }
 
   public double getZ(Entity entity, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getZ was called on entity " + entity.getName() + " and resulted in the following coordinate: " + getLocation(entity, plugin).getZ());
     return getLocation(entity, plugin).getZ();
   }
 
   public float getYaw(Entity entity, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getYaw was called on entity " + entity.getName() + " and resulted in the following angle: " + getLocation(entity, plugin).getYaw());
     return getLocation(entity, plugin).getYaw();
   }
 
   public float getPitch(Entity entity, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getPitch was called on entity " + entity.getName() + " and resulted in the following angle: " + getLocation(entity, plugin).getPitch());
     return getLocation(entity, plugin).getPitch();
   }
 
@@ -73,7 +67,6 @@ public class EntityUtils {
   }
 
   public World getWorld(Entity entity, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("getWorld was called on entity " + entity.getName() + " and resulted in the following world: " + getLocation(entity, plugin).getWorld());
     return getLocation(entity, plugin).getWorld();
   }
 
@@ -85,7 +78,6 @@ public class EntityUtils {
   
   public double getMaximumHealth(Entity entityy, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
-      plugin.getDebugger().log("getMaximumHealth was called on entity " + entity.getName() + " and resulted in the following value: " + Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue());
       return Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue();
     }
     return -1;
@@ -97,7 +89,6 @@ public class EntityUtils {
 
   public double getHealth(Entity entityy, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
-      plugin.getDebugger().log("getHealth was called on entity " + entity.getName() + " and resulted in the following value: " + entity.getHealth());
       return entity.getHealth();
     }
     return 0;
@@ -110,7 +101,6 @@ public class EntityUtils {
 
   
   public void produceVelocity(Entity entity, double x, double y, double z, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("produceVelocity was called on entity " + entity.getName() + " with coordinates of " + x + ", " + y + " and " + z + ".");
     produceVelocity(entity, String.valueOf(x), String.valueOf(y), String.valueOf(z));
   }
 
@@ -126,14 +116,12 @@ public class EntityUtils {
   
   public void addPotion(Entity entityy, PotionEffect potion, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
-      plugin.getDebugger().log("addPotion was called on entity " + entity.getName() + " with the following potion: " + potion + ".");
       entity.addPotionEffect(potion);
     }
   }
 
   public void addPermanentPotion(Entity entityy, PotionEffectType effect, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
-      plugin.getDebugger().log("addPermanentPotion was called on entity " + entity.getName() + " with the following potion effect: " + effect + ".");
       entity.addPotionEffect(new PotionEffect(effect, 999999, 0));
     }
   }
@@ -148,7 +136,6 @@ public class EntityUtils {
 
   public void addPermanentPotion(Entity entityy, PotionEffectType effect, int amplifier, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
-      plugin.getDebugger().log("addPermanentPotion was called on entity " + entity.getName() + " with effect " + effect + "and amplifier " + amplifier + ".");
       entity.addPotionEffect(new PotionEffect(effect, 999999, amplifier));
     }
   }
@@ -163,7 +150,6 @@ public class EntityUtils {
 
   public void addPotion(Entity entityy, PotionEffectType effect, int ticks, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
-      plugin.getDebugger().log("addPermanentPotion was called on entity " + entity.getName() + " with effect " + effect + "and duration " + ticks + ".");
       entity.addPotionEffect(new PotionEffect(effect, ticks, 0));
     }
   }
@@ -178,7 +164,6 @@ public class EntityUtils {
 
   public void addPotion(Entity entityy, PotionEffectType effect, int ticks, int amplifier, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
-      plugin.getDebugger().log("addPermanentPotion was called on entity " + entity.getName() + " with effect " + effect + ", duration " + ticks + "and amplifier " + amplifier + ".");
       entity.addPotionEffect(new PotionEffect(effect, ticks, amplifier));
     }
   }
@@ -193,7 +178,6 @@ public class EntityUtils {
 
   public void removePotion(Entity entityy, PotionEffectType effect, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
-      plugin.getDebugger().log("removePotion was called on entity " + entity.getName() + " with the following potion effect: " + effect + ".");
       entity.removePotionEffect(effect);
     }
   }
@@ -208,14 +192,12 @@ public class EntityUtils {
 
   public void removeBuffs(Entity entityy, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
-      plugin.getDebugger().log("removeBuffs was called on entity " + entity.getName() + ".");
       Constants.BUFFS.forEach(entity::removePotionEffect);
     }
   }
 
   public void removeDebuffs(Entity entityy, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
-      plugin.getDebugger().log("removeDebuffs was called on entity " + entity.getName() + ".");
       Constants.DEBUFFS.forEach(entity::removePotionEffect);
     }
   }
@@ -224,7 +206,6 @@ public class EntityUtils {
   
   public void setLocation(Entity entity, Location location, UnderscoreEnchants plugin) {
     entity.teleport(location);
-    plugin.getDebugger().log("setLocation was called on entity " + entity.getName() + " with location of: " + location);
   }
 
   public void setLocation(Entity entity, double x, double y, double z, UnderscoreEnchants plugin) {
@@ -260,7 +241,6 @@ public class EntityUtils {
   }
 
   public void sendForward(Entity entity, double adjustment, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("sendForward was called on entity " + entity.getName() + " with a value of " + adjustment + ".");
     Location loc = entity.getLocation().clone();
     Vector dir = loc.getDirection();
     dir.normalize();
@@ -300,7 +280,6 @@ public class EntityUtils {
   }
 
   public void setWorld(Entity entity, World world, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("sendForward was called on entity " + entity.getName() + " with a world of " + world + ".");
     entity.teleport(world.getSpawnLocation());
   }
 
@@ -310,7 +289,6 @@ public class EntityUtils {
   }
 
   public void spawnParticle(Entity entity, Location location, Particle particle, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("spawnParticle was called on location " + location + ", entity " + entity.getName() + " and particle " + particle.name());
     Location locatio = location.clone();
     locatio.setY(locatio.getY() + 1);
     Objects.requireNonNull(location.getWorld()).spawnParticle(particle, locatio, 1);
@@ -321,7 +299,6 @@ public class EntityUtils {
   }
 
   public void spawnParticleBoots(Entity entity, Location location, Particle particle, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("spawnParticleBoots was called on location " + location + ", entity " + entity.getName() + " and particle " + particle.name());
     Objects.requireNonNull(location.getWorld()).spawnParticle(particle, location, 1);
   }
 
@@ -333,7 +310,6 @@ public class EntityUtils {
   
   public void setMaximumHealth(Entity entityy, double health, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
-      plugin.getDebugger().log("setMaximumHealth was called on entity " + entity.getName() + " with a value of " + health + ".");
       Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(health);
     }
   }
@@ -352,7 +328,6 @@ public class EntityUtils {
 
   public void setHealth(Entity entityy, double health, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
-      plugin.getDebugger().log("setHealth was called on entity " + entity.getName() + " with a value of " + health + ".");
       entity.setHealth(Math.max(0, Math.min(getMaximumHealth(entity, plugin), health))); // needs to be under the maximum value but above 0
     }
   }
@@ -373,7 +348,6 @@ public class EntityUtils {
   
   public void sendProjectile(Entity entityy, Class<? extends Projectile> clazz, UnderscoreEnchants plugin) {
     if (entityy instanceof ProjectileSource entity) {
-      plugin.getDebugger().log("sendProjectile was called for entity " + entityy.getName() + "with the projectile type of " + clazz.getName() + ".");
       entity.launchProjectile(clazz).setShooter(entity);
     }
   }
@@ -393,7 +367,6 @@ public class EntityUtils {
   }
 
   public void setFire(Entity entity, int ticks, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("setFire was called for entity " + entity.getName() + "for " + ticks + "ticks.");
     entity.setFireTicks(ticks);
   }
 
@@ -405,33 +378,26 @@ public class EntityUtils {
   
   public boolean swimming(Entity entityy, UnderscoreEnchants plugin) {
     if (entityy instanceof LivingEntity entity) {
-      plugin.getDebugger().log("boolean$swimming was called on entity " + entity.getName() + " and resulted in: " + entity.isSwimming());
       return entity.isSwimming();
     }
     return false;
   }
 
   public boolean onFire(Entity entity, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("onFire was called on entity " + entity.getName() + " and resulted in: " + (entity.getFireTicks() > 0));
     return entity.getFireTicks() > 0;
   }
 
   public boolean onTop(Entity entity, UnderscoreEnchants plugin) {
     // The Y of the entity (floored, e.g. 56.14 -> 56) must be equal or above the top block in the same location.
-    boolean onTop = (int) Math.floor(getY(entity, plugin)) >= (int) Math.floor(getWorld(entity, plugin).getHighestBlockYAt(getLocation(entity, plugin)));
-
-    plugin.getDebugger().log("onTop was called on entity " + entity.getName() + " and resulted in: " + onTop);
-    return onTop;
+    return (int) Math.floor(getY(entity, plugin)) >= (int) Math.floor(getWorld(entity, plugin).getHighestBlockYAt(getLocation(entity, plugin)));
   }
 
   public boolean op(Entity entity, UnderscoreEnchants plugin) {
-    plugin.getDebugger().log("boolean$op was called on entity " + entity.getName() + " and resulted in: " + entity.isOp());
     return entity.isOp();
   }
 
   public int invisibleFor(Player player, UnderscoreEnchants plugin) {
     int time = plugin.getGods().get(player.getUniqueId());
-    plugin.getDebugger().log(String.format("invisibleFor was called for player %s and returned %d.", player.getName(), time));
     if (plugin.getGods().get(player.getUniqueId()) != null) return time;
     else return 0;
 

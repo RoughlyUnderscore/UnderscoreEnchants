@@ -3,12 +3,14 @@ package com.roughlyunderscore.enchs.parsers;
 import com.codingforcookies.armorequip.ArmorEquipEvent;
 import com.roughlyunderscore.enchs.UnderscoreEnchants;
 import com.roughlyunderscore.enchs.enchants.EnchantmentLevel;
+import com.roughlyunderscore.enchs.enchants.UEnchant;
 import com.roughlyunderscore.enchs.enchants.abstracts.*;
 import com.roughlyunderscore.enchs.events.*;
 import com.roughlyunderscore.enchs.parsers.condition.generic.GeneralConditionParser;
 import com.roughlyunderscore.enchs.util.DetailedEnchantment;
 import com.roughlyunderscore.enchs.util.cooldownutils.Cooldown;
 import com.roughlyunderscore.enchs.util.datastructures.Pair;
+import com.roughlyunderscore.enchs.util.enums.ActivationIndicator;
 import com.roughlyunderscore.enchs.util.general.Utils;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -220,7 +222,7 @@ public class PreparatoryParsers {
    * @param plugin UnderscoreEnchants
    */
   @SuppressWarnings("deprecation")
-  public /*static*/ void listEnchantment(final Enchantment ench, final UnderscoreEnchants plugin) {
+  public void listEnchantment(final Enchantment ench, final UnderscoreEnchants plugin) {
     switch (ench.getItemTarget()) {
       case BOW, CROSSBOW -> UnderscoreEnchants.bowEnchantments.add(ench);
       case TOOL, FISHING_ROD -> UnderscoreEnchants.toolEnchantments.add(ench);
@@ -247,7 +249,6 @@ public class PreparatoryParsers {
       }
       default -> {
         plugin.getUnderscoreLogger().severe(format("&cEnchantment " + ench.getName() + " could not process the enchantment target."));
-        plugin.debugger.log("&cEnchantment " + ench.getName() + " could not process the enchantment target.");
       }
     }
   }
@@ -259,11 +260,10 @@ public class PreparatoryParsers {
    * @param keyHolder a DetailedEnchantment object for that very enchantment
    * @param plugin    UnderscoreEnchants
    */
-  public /*static*/ void wrapEnchantment(final Enchantment ench, final DetailedEnchantment keyHolder, final UnderscoreEnchants plugin) {
+  public void wrapEnchantment(final Enchantment ench, final DetailedEnchantment keyHolder, final UnderscoreEnchants plugin) {
 
     if (!(ench instanceof Listener l)) return;
     Bukkit.getServer().getPluginManager().registerEvents(l, plugin);
-    plugin.debugger.log("");
 
     try {
       final Field field = Enchantment.class.getDeclaredField("acceptingNew");
@@ -272,7 +272,6 @@ public class PreparatoryParsers {
       Enchantment.registerEnchantment(ench);
     } catch (final IllegalAccessException | NoSuchFieldException e) {
       plugin.getUnderscoreLogger().severe("Enchantment " + keyHolder.getName() + " didn't get registered. Restart the server; if the problem won't be fixed, report it to the support Discord.");
-      plugin.debugger.log("Enchantment " + keyHolder.getName() + " didn't get registered. Restart the server; if the problem won't be fixed, report it to the support Discord.");
       e.printStackTrace();
       return;
     }
@@ -280,7 +279,7 @@ public class PreparatoryParsers {
     listEnchantment(keyHolder.getEnchantment(), plugin);
 
     plugin.getAllEnchs().add(keyHolder.getEnchantment());
-    plugin.enchantmentData.put(keyHolder, new AbstractEnchantment(ench));
+    plugin.enchantmentData.put(keyHolder, new UEnchant(ench));
   }
 
   /**
@@ -289,36 +288,21 @@ public class PreparatoryParsers {
    * @param file   the file to load
    * @param plugin UnderscoreEnchants
    */
-  // @SneakyThrows
-  public /*static*/ void loadEnchantment(final File file, final UnderscoreEnchants plugin) {
-    plugin.debugger.log("Registering enchantment: " + file.getAbsolutePath());
-    plugin.debugger.log("Enchantment file name: " + file.getName());
-    plugin.debugger.log("Enchantment path: " + file.getPath());
-
+  public void loadEnchantment(final File file, final UnderscoreEnchants plugin) {
     final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-    final Pair<DetailedEnchantment, AbstractEnchantment> enchant = parseEnchantment(configuration, plugin);
+    final Pair<DetailedEnchantment, UEnchant> enchant = parseEnchantment(configuration, plugin);
     if (enchant == null) return;
 
-    final AbstractEnchantment enchantment = enchant.getValue();
+    final UEnchant enchantment = enchant.getValue();
     wrapEnchantment(enchantment, enchant.getKey(), plugin);
 
     plugin.getCachedAutocompleteEnchantments().add(enchant.getKey().getCommandName().toLowerCase().replace(" ", "_"));
     UnderscoreEnchants.staticEnchantmentData.put(enchant.getKey(), enchantment);
   }
 
-  /**
-   * Unloads an enchantment from a file.
-   *
-   * @param file   the file to load
-   * @param plugin UnderscoreEnchants
-   */
-  /* @SneakyThrows */
-  @SuppressWarnings({"unchecked", "unused"})
-  public /*static*/ void unloadEnchantment(final File file, final UnderscoreEnchants plugin) {
-    plugin.debugger.log("Attempting to unload an enchantment: " + file.getAbsolutePath());
-    plugin.debugger.log("Enchantment file name: " + file.getName());
-    plugin.debugger.log("Enchantment path: " + file.getPath());
 
+  @SuppressWarnings({"unchecked", "unused"})
+  public void unloadEnchantment(final File file, final UnderscoreEnchants plugin) {
     final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
     // Pair<DetailedEnchantment, AbstractEnchantment> enchant = plugin.parseEnchantment(configuration);
     final DetailedEnchantment enchantment = findEnchantment(file, plugin);
@@ -339,7 +323,6 @@ public class PreparatoryParsers {
       byName.remove(name);
     } catch (final NoSuchFieldException | IllegalAccessException e) {
       plugin.getUnderscoreLogger().severe("Enchantment " + name + " didn't get unregistered. Restart the server; if the problem won't be fixed, report it to the support Discord.");
-      plugin.debugger.log("Enchantment " + name + " didn't get unregistered. Restart the server; if the problem won't be fixed, report it to the support Discord.");
       e.printStackTrace();
     }
 
@@ -357,7 +340,7 @@ public class PreparatoryParsers {
    * @param file   the file to look at
    * @param plugin UnderscoreEnchants
    */
-  public /*static*/ DetailedEnchantment findEnchantment(final File file, final UnderscoreEnchants plugin) {
+  public DetailedEnchantment findEnchantment(final File file, final UnderscoreEnchants plugin) {
     // Load file as a yamlconfiguration
     final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
     // Get the enchantment name
@@ -374,7 +357,7 @@ public class PreparatoryParsers {
    * @param file   the enchantment to check
    * @param plugin UnderscoreEnchants
    */
-  public /*static*/ boolean isEnchantmentLoaded(final File file, final UnderscoreEnchants plugin) {
+  public boolean isEnchantmentLoaded(final File file, final UnderscoreEnchants plugin) {
     return isEnchantmentLoaded(findEnchantment(file, plugin), plugin);
   }
 
@@ -384,28 +367,412 @@ public class PreparatoryParsers {
    * @param enchantment the enchantment to check
    * @param plugin      UnderscoreEnchants
    */
-  public /*static*/ boolean isEnchantmentLoaded(final DetailedEnchantment enchantment, final UnderscoreEnchants plugin) {
+  public boolean isEnchantmentLoaded(final DetailedEnchantment enchantment, final UnderscoreEnchants plugin) {
     return plugin.getEnchantmentData().containsKey(enchantment);
   }
 
   /**
+   * This is the root of UnderscoreEnchants parsers.<br>
+   * The enchantment parsing starts here, where the YAML file is broken down into individual fields and each field is accounted for.
+   * Alongside creating a UEnchant, it also creates a DetailedEnchantment, which might be unnecessary and requires investigation.<br><br>
+   *
+   * Not only does this method parse the enchantment and return the parsing results, but it also adds it to a list of unique/conflictable enchantments
+   * if needed. The rest of the parsing is done with #wrapEnchantment(UEnchant, DetailedEnchantment, UnderscoreEnchants).
+   * @param file
+   * @param instance
+   * @return
+   */
+  public Pair<DetailedEnchantment, UEnchant> parseEnchantment(final YamlConfiguration file, final UnderscoreEnchants instance) {
+    final String damagerOrVictim = file.getString("player");
+
+    final List<String> conditions = file.getStringList("conditions");
+    final @Nullable String conditionFlag = file.getString("condition-flag");
+
+    final List<String> forbidOn = file.getStringList("forbid-on");
+
+    final @NonNull List<EnchantmentLevel> levelsList = getLevelsOf(file.getConfigurationSection("levels"));
+
+    // Since 2.2
+    final ActivationIndicator activationIndicator = ActivationIndicator.valueOf(file.getString("activation-indicator", "bossbar").toUpperCase());
+    final boolean unique = file.getBoolean("unique", false);
+    @SuppressWarnings("unchecked") final List<String> conflicts = (List<String>) (file.getList("conflicts-with", Collections.EMPTY_LIST));
+
+    boolean forDamager = false, forVictim = false, valueEmpty = true;
+
+    if (damagerOrVictim != null) {
+      valueEmpty = false;
+      if (damagerOrVictim.equalsIgnoreCase("damager")) forDamager = true;
+      else if (damagerOrVictim.equalsIgnoreCase("victim")) forVictim = true;
+    }
+
+    final int maximumLevel = getMaxLevelOf(file.getConfigurationSection("levels"));
+    final int cooldownApplied = file.getInt("cooldown");
+
+    final NamespacedKey key = new NamespacedKey(instance, "underscore_enchants_" + enchantmentName.replace(" ", "__"));
+    final DetailedEnchantment entry = new DetailedEnchantment(key.getKey(), instance);
+    UEnchant ench;
+
+    if (eventClass.getName().equals(PlayerPVPEvent.class.getName())) {
+      boolean finalForDamager = forDamager, finalForVictim = forVictim, finalValueEmpty = valueEmpty;
+
+      ench = new PVPEnchantment(key, enchantmentName, maximumLevel, target) {
+        @Override
+        public void onPVP(final PlayerPVPEvent event) {
+          twoPlayerDamageAction(event,
+            event.getDamager(),
+            event.getVictim(),
+            entry,
+            target,
+            forbidOn,
+            levelsList,
+            key,
+            conditions,
+            conditionFlag,
+            finalValueEmpty,
+            finalForDamager,
+            finalForVictim,
+            enchantmentName,
+            cooldownApplied,
+            activationIndicator,
+            instance
+          );
+        }
+      };
+
+
+    }
+
+    else if (eventClass.getName().equals(ArmorEquipEvent.class.getName())) {
+      ench = new ArmorEquipEnchantment(key, enchantmentName, maximumLevel, target) {
+        @Override
+        public void onEquip(final ArmorEquipEvent event) {
+          extraItemAction(event,
+            event.getPlayer(),
+            entry,
+            event.getNewArmorPiece(),
+            target,
+            forbidOn,
+            levelsList,
+            key,
+            conditions,
+            conditionFlag,
+            enchantmentName,
+            cooldownApplied,
+            activationIndicator,
+            instance
+          );
+        }
+      };
+
+
+    }
+
+    else if (eventClass.getName().equals(BlockBreakEvent.class.getName())) {
+      ench = new BlockBreakEnchantment(key, enchantmentName, maximumLevel, target) {
+        @Override
+        public void onBreak(final BlockBreakEvent event) {
+          commonAction(event,
+            event.getPlayer(),
+            entry,
+            target,
+            forbidOn,
+            levelsList,
+            key,
+            conditions,
+            conditionFlag,
+            enchantmentName,
+            cooldownApplied,
+            activationIndicator,
+            instance
+          );
+        }
+      };
+
+
+    }
+
+    else if (eventClass.getName().equals(PlayerItemBreakEvent.class.getName())) {
+      ench = new ItemBreakEnchantment(key, enchantmentName, maximumLevel, target) {
+        @Override
+        public void onBreak(final PlayerItemBreakEvent event) {
+          // Create the EnchantmentLevel
+          commonAction(event,
+            event.getPlayer(),
+            entry,
+            target,
+            forbidOn,
+            levelsList,
+            key,
+            conditions,
+            conditionFlag,
+            enchantmentName,
+            cooldownApplied,
+            activationIndicator,
+            instance
+          );
+        }
+      };
+
+
+    }
+
+    else if (eventClass.getName().equals(PlayerItemConsumeEvent.class.getName())) {
+
+      ench = new ItemEatEnchantment(key, enchantmentName, maximumLevel, target) {
+        @Override
+        public void onConsume(final PlayerItemConsumeEvent event) {
+          commonAction(event,
+            event.getPlayer(),
+            entry,
+            target,
+            forbidOn,
+            levelsList,
+            key,
+            conditions,
+            conditionFlag,
+            enchantmentName,
+            cooldownApplied,
+            activationIndicator,
+            instance
+          );
+        }
+      };
+
+
+    }
+
+    else if (eventClass.getName().equals(PlayerInteractAtEntityEvent.class.getName())) {
+      ench = new RMBEntityEnchantment(key, enchantmentName, maximumLevel, target) {
+        @Override
+        public void onRMB(final PlayerInteractAtEntityEvent event) {
+          commonAction(event,
+            event.getPlayer(),
+            entry,
+            target,
+            forbidOn,
+            levelsList,
+            key,
+            conditions,
+            conditionFlag,
+            enchantmentName,
+            cooldownApplied,
+            activationIndicator,
+            instance
+          );
+        }
+      };
+
+    }
+
+    else if (eventClass.getName().equals(PlayerInteractEvent.class.getName())) {
+      ench = new RMBEnchantment(key, enchantmentName, maximumLevel, target) {
+        @Override
+        public void onRMB(final PlayerInteractEvent event) {
+          commonAction(event,
+            event.getPlayer(),
+            entry,
+            target,
+            forbidOn,
+            levelsList,
+            key,
+            conditions,
+            conditionFlag,
+            enchantmentName,
+            cooldownApplied,
+            activationIndicator,
+            instance
+          );
+        }
+      };
+
+
+    }
+
+    else if (eventClass.getName().equals(PlayerMoveEvent.class.getName())) {
+      ench = new MoveEnchantment(key, enchantmentName, maximumLevel, target) {
+        @Override
+        public void onMove(final PlayerMoveEvent event) {
+          commonAction(event,
+            event.getPlayer(),
+            entry,
+            target,
+            forbidOn,
+            levelsList,
+            key,
+            conditions,
+            conditionFlag,
+            enchantmentName,
+            cooldownApplied,
+            activationIndicator,
+            instance
+          );
+        }
+      };
+
+
+    }
+
+    else if (eventClass.getName().equals(PlayerGotHurtEvent.class.getName())) {
+      ench = new GotHurtEnchantment(key, enchantmentName, maximumLevel, target) {
+        @Override
+        public void onHurt(final PlayerGotHurtEvent event) {
+          commonAction(event,
+            event.getVictim(),
+            entry,
+            target,
+            forbidOn,
+            levelsList,
+            key,
+            conditions,
+            conditionFlag,
+            enchantmentName,
+            cooldownApplied,
+            activationIndicator,
+            instance
+          );
+        }
+      };
+
+
+    }
+
+    else if (eventClass.getName().equals(PlayerHurtsEntityEvent.class.getName())) {
+      ench = new HurtsEntityEnchantment(key, enchantmentName, maximumLevel, target) {
+        @Override
+        public void onAttack(final PlayerHurtsEntityEvent event) {
+          commonAction(event,
+            event.getDamager(),
+            entry,
+            target,
+            forbidOn,
+            levelsList,
+            key,
+            conditions,
+            conditionFlag,
+            enchantmentName,
+            cooldownApplied,
+            activationIndicator,
+            instance
+          );
+        }
+      };
+
+
+    }
+
+    else if (eventClass.getName().equals(PlayerShootBowEvent.class.getName())) {
+      ench = new ShootBowEnchantment(key, enchantmentName, maximumLevel, target) {
+        @Override
+        public void onShoot(final PlayerShootBowEvent event) {
+          commonAction(event,
+            event.getShooter(),
+            entry,
+            target,
+            forbidOn,
+            levelsList,
+            key,
+            conditions,
+            conditionFlag,
+            enchantmentName,
+            cooldownApplied,
+            activationIndicator,
+            instance
+          );
+        }
+      };
+
+
+    }
+
+    else if (eventClass.getName().equals(PlayerToggleSneakEvent.class.getName())) {
+      ench = new ToggleSneakEnchantment(key, enchantmentName, maximumLevel, target) {
+        @Override
+        public void onToggle(final PlayerToggleSneakEvent event) {
+          commonAction(event,
+            event.getPlayer(),
+            entry,
+            target,
+            forbidOn,
+            levelsList,
+            key,
+            conditions,
+            conditionFlag,
+            enchantmentName,
+            cooldownApplied,
+            activationIndicator,
+            instance
+          );
+        }
+      };
+
+    }
+
+    else if (eventClass.getName().equals(PlayerBowHitEvent.class.getName())) {
+      boolean finalForDamager = forDamager, finalForVictim = forVictim, finalValueEmpty = valueEmpty;
+      ench = new BowHitEnchantment(key, enchantmentName, maximumLevel, target) {
+        @Override
+        public void onHit(final PlayerBowHitEvent event) {
+          twoPlayerDamageAction(event,
+            event.getDamager(),
+            event.getVictim(),
+            entry,
+            target,
+            forbidOn,
+            levelsList,
+            key,
+            conditions,
+            conditionFlag,
+            finalValueEmpty,
+            finalForDamager,
+            finalForVictim,
+            enchantmentName,
+            cooldownApplied,
+            activationIndicator,
+            instance
+          );
+        }
+      };
+
+    }
+
+    else { // Invalid trigger parsing
+      instance.getUnderscoreLogger().severe("Enchantment " + enchantmentName + " did not get registered - invalid trigger!");
+      return null;
+    }
+
+    if (unique) UnderscoreEnchants.uniqueEnchantments.add(ench);
+    if (!conflicts.isEmpty()) UnderscoreEnchants.conflicts.put(ench, conflicts);
+
+    return new Pair<>(entry, ench);
+  }
+
+
+
+
+
+
+
+
+
+  /**
    * Works in parseEnchantment and is placed here for making the code more readable
    *
-   * @param event      The event itself, used here to check if is cancelled
-   * @param player     The event's player, used for various checks
-   * @param entry      The DetailedEnchantment entry, used to check for the item enchantment status
-   * @param target     The EnchantmentTarget, used to select the item (ref. above)
-   * @param forbidOn   A list of Materials that are forbidden to have this enchantment
-   * @param levels     A list of all EnchantmentLevels accessible for this enchantment
-   * @param key        The NamespacedKey of this enchantment, used for checking the toggle status
-   * @param conditions A list of conditions that must be met before activating the enchantments
-   * @param flag       A potential condition flag that changes the condition parse
-   * @param name       The enchantment name
-   * @param cooldown   An overall enchantment cooldown
-   * @param plugin     UnderscoreEnchants
+   * @param event               The event itself, used here to check if is cancelled
+   * @param player              The event's player, used for various checks
+   * @param entry               The DetailedEnchantment entry, used to check for the item enchantment status
+   * @param target              The EnchantmentTarget, used to select the item (ref. above)
+   * @param forbidOn            A list of Materials that are forbidden to have this enchantment
+   * @param levels              A list of all EnchantmentLevels accessible for this enchantment
+   * @param key                 The NamespacedKey of this enchantment, used for checking the toggle status
+   * @param conditions          A list of conditions that must be met before activating the enchantments
+   * @param flag                A potential condition flag that changes the condition parse
+   * @param name                The enchantment name
+   * @param cooldown            An overall enchantment cooldown
+   * @param activationIndicator The activation indicator placement
+   * @param plugin              UnderscoreEnchants
    *                   <br>Also see {@link #parseEnchantment(YamlConfiguration, UnderscoreEnchants)}
    */
-  public /*static*/ void commonAction(
+  public void commonAction(
     final Event event,
     final Player player,
     final DetailedEnchantment entry,
@@ -417,6 +784,7 @@ public class PreparatoryParsers {
     String flag,
     final String name,
     final int cooldown,
+    final ActivationIndicator activationIndicator,
     final UnderscoreEnchants plugin
   ) {
     final int lvl = getEnchantLevel(player, entry, target, forbidOn, plugin);
@@ -441,14 +809,13 @@ public class PreparatoryParsers {
       try {
         parseAction(event, lev, plugin);
       } catch (final Exception e) {
-        plugin.debugger.log(Arrays.toString(e.getStackTrace()));
         plugin.getUnderscoreLogger().info("Please check your actions in " + name + "! They are wrongly configured.");
         return;
       }
     }
 
     // Send the activation message
-    activationMessage(name, player, plugin);
+    activationMessage(name, player, plugin, activationIndicator);
 
     // If the cooldown provided by the configuration is not 0, create that cooldown
     if (cooldown != 0) plugin.getCooldowns().add(new Cooldown(cooldown, entry.getEnchantment(), player.getUniqueId()));
@@ -460,22 +827,23 @@ public class PreparatoryParsers {
   /**
    * Works in parseEnchantment and is placed here for making the code more readable
    *
-   * @param event      The event itself, used here to check if is cancelled
-   * @param player     The event's player,used for various checks
-   * @param entry      The DetailedEnchantment entry, used to check for the item enchantment status
-   * @param extra      An extra item to check for the enchantment status
-   * @param target     The EnchantmentTarget, used to select the item (ref. above)
-   * @param forbidOn   A list of Materials that are forbidden to have this enchantment
-   * @param levels     A list of all EnchantmentLevels accessible for this enchantment
-   * @param key        The NamespacedKey of this enchantment, used for checking the toggle status
-   * @param conditions A list of conditions that must be met before activating the enchantments
-   * @param flag       A potential condition flag that changes the condition parse
-   * @param name       The enchantment name
-   * @param cooldown   An overall enchantment cooldown
-   * @param plugin     UnderscoreEnchants
+   * @param event               The event itself, used here to check if is cancelled
+   * @param player              The event's player,used for various checks
+   * @param entry               The DetailedEnchantment entry, used to check for the item enchantment status
+   * @param extra               An extra item to check for the enchantment status
+   * @param target              The EnchantmentTarget, used to select the item (ref. above)
+   * @param forbidOn            A list of Materials that are forbidden to have this enchantment
+   * @param levels              A list of all EnchantmentLevels accessible for this enchantment
+   * @param key                 The NamespacedKey of this enchantment, used for checking the toggle status
+   * @param conditions          A list of conditions that must be met before activating the enchantments
+   * @param flag                A potential condition flag that changes the condition parse
+   * @param name                The enchantment name
+   * @param cooldown            An overall enchantment cooldown
+   * @param activationIndicator The activation indicator placement
+   * @param plugin              UnderscoreEnchants
    *                   <br>Also see {@link #parseEnchantment(YamlConfiguration, UnderscoreEnchants)}
    */
-  public /*static*/ void extraItemAction(
+  public void extraItemAction(
     final Event event,
     final Player player,
     final DetailedEnchantment entry,
@@ -488,6 +856,7 @@ public class PreparatoryParsers {
     String flag,
     final String name,
     final int cooldown,
+    final ActivationIndicator activationIndicator,
     final UnderscoreEnchants plugin
   ) {
     int lvl = getEnchantLevel(player, entry, extra, target, forbidOn, plugin);
@@ -505,14 +874,13 @@ public class PreparatoryParsers {
       try {
         parseAction(event, lev, plugin);
       } catch (final Exception e) {
-        plugin.debugger.log(Arrays.toString(e.getStackTrace()));
         plugin.getUnderscoreLogger().info("Please check your actions in " + name + "! They are wrongly configured.");
         return;
       }
     }
 
     // Send the activation message
-    activationMessage(name, player, plugin);
+    activationMessage(name, player, plugin, activationIndicator);
 
     // If the cooldown provided by the configuration is not 0, create that cooldown
     if (cooldown != 0) plugin.getCooldowns().add(new Cooldown(cooldown, entry.getEnchantment(), player.getUniqueId()));
@@ -524,25 +892,26 @@ public class PreparatoryParsers {
   /**
    * Works in parseEnchantment and is placed here for making the code more readable
    *
-   * @param event        The event itself, used here to check if is cancelled
-   * @param damager      The event's damager, used for various checks
-   * @param victim       The event's victim, used for various checks
-   * @param entry        The DetailedEnchantment entry, used to check for the item enchantment status
-   * @param target       The EnchantmentTarget, used to select the item (ref. above)
-   * @param forbidOn     A list of Materials that are forbidden to have this enchantment
-   * @param levels       A list of all EnchantmentLevels accessible for this enchantment
-   * @param key          The NamespacedKey of this enchantment, used for checking the toggle status
-   * @param conditions   A list of conditions that must be met before activating the enchantments
-   * @param flag         A potential condition flag that changes the condition parse
-   * @param isEmpty      A boolean, indicating if the "player" value exists in the configuration header
-   * @param isForDamager A boolean, indicating if the "player" value is equal to DAMAGER
-   * @param isForVictim  A boolean, indicating if the "player" value is equal to VICTIM
-   * @param name         The enchantment name
-   * @param cooldown     An overall enchantment cooldown
-   * @param plugin       UnderscoreEnchants
+   * @param event                 The event itself, used here to check if is cancelled
+   * @param damager               The event's damager, used for various checks
+   * @param victim                The event's victim, used for various checks
+   * @param entry                 The DetailedEnchantment entry, used to check for the item enchantment status
+   * @param target                The EnchantmentTarget, used to select the item (ref. above)
+   * @param forbidOn              A list of Materials that are forbidden to have this enchantment
+   * @param levels                A list of all EnchantmentLevels accessible for this enchantment
+   * @param key                   The NamespacedKey of this enchantment, used for checking the toggle status
+   * @param conditions            A list of conditions that must be met before activating the enchantments
+   * @param flag                  A potential condition flag that changes the condition parse
+   * @param isEmpty               A boolean, indicating if the "player" value exists in the configuration header
+   * @param isForDamager          A boolean, indicating if the "player" value is equal to DAMAGER
+   * @param isForVictim           A boolean, indicating if the "player" value is equal to VICTIM
+   * @param name                  The enchantment name
+   * @param cooldown              An overall enchantment cooldown
+   * @param activationIndicator   The activation indicator placement
+   * @param plugin                UnderscoreEnchants
    *                     <br>Also see {@link #parseEnchantment(YamlConfiguration, UnderscoreEnchants)}
    */
-  public /*static*/ void twoPlayerDamageAction(
+  public void twoPlayerDamageAction(
     final Event event,
     final Player damager,
     final Player victim,
@@ -558,6 +927,7 @@ public class PreparatoryParsers {
     final boolean isForVictim,
     final String name,
     final int cooldown,
+    final ActivationIndicator activationIndicator,
     final UnderscoreEnchants plugin
   ) {
     // Create the EnchantmentLevel
@@ -593,14 +963,13 @@ public class PreparatoryParsers {
         try {
           parseAction(event, lev, plugin);
         } catch (final Exception e) {
-          plugin.debugger.log(Arrays.toString(e.getStackTrace()));
           plugin.getUnderscoreLogger().info("Please check your actions in " + name + "! They are wrongly configured.");
           return;
         }
       }
 
       // Send the activation message
-      activationMessage(name, damager, plugin);
+      activationMessage(name, damager, plugin, activationIndicator);
 
       // If the cooldown provided by the configuration is not 0, create that cooldown
       if (cooldown != 0)
@@ -616,14 +985,13 @@ public class PreparatoryParsers {
         try {
           parseAction(event, lev, plugin);
         } catch (final Exception e) {
-          plugin.debugger.log(Arrays.toString(e.getStackTrace()));
           plugin.getUnderscoreLogger().info("Please check your actions in " + name + "! They are wrongly configured.");
           return;
         }
       }
 
       // Send the activation message
-      activationMessage(name, victim, plugin);
+      activationMessage(name, victim, plugin, activationIndicator);
 
       // If the cooldown provided by the configuration is not 0, create that cooldown
       if (cooldown != 0)
@@ -632,377 +1000,5 @@ public class PreparatoryParsers {
       if (victimEnchLevel.getCooldown() != 0)
         plugin.getCooldowns().add(new Cooldown(victimEnchLevel.getCooldown(), entry.getEnchantment(), victim.getUniqueId()));
     }
-  }
-
-  public /*static*/ Pair<DetailedEnchantment, AbstractEnchantment> parseEnchantment(final YamlConfiguration file, final UnderscoreEnchants instance) {
-    final @NonNull String enchantmentName = format(file.getString("name"));
-    final @NonNull EnchantmentTarget target = parseTarget(file.getString("applicable"));
-    final @NonNull Class<? extends Event> eventString = parseEvent(file.getString("trigger"));
-
-    final List<String> conditions = file.getStringList("conditions");
-    final List<String> forbidOn = file.getStringList("forbid-on");
-    final @NonNull List<EnchantmentLevel> levelsList = getLevelsOf(file.getConfigurationSection("levels"));
-
-    final String damagerOrVictim = file.getString("player");
-    final @Nullable String conditionFlag = file.getString("condition-flag");
-    boolean forDamager = false, forVictim = false, valueEmpty = true;
-
-    if (damagerOrVictim != null) {
-      valueEmpty = false;
-      if (damagerOrVictim.equalsIgnoreCase("damager")) forDamager = true;
-      else if (damagerOrVictim.equalsIgnoreCase("victim")) forVictim = true;
-    }
-
-    final int maximumLevel = getMaxLevelOf(file.getConfigurationSection("levels"));
-    final int cooldownApplied = file.getInt("cooldown");
-
-    final NamespacedKey key = new NamespacedKey(instance, "underscore_enchants_" + enchantmentName.replace(" ", "__"));
-    final DetailedEnchantment entry = new DetailedEnchantment(key.getKey(), instance);
-    AbstractEnchantment ench;
-
-    instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Target: " + target.toString());
-    instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Trigger: " + eventString.getName());
-    instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Conditions: " + conditions);
-    instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Forbidden on: " + forbidOn);
-    instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Levels: " + levelsList.toString());
-    instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Damager-or-victim-if-present: " + damagerOrVictim);
-    instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Condition flag: " + conditionFlag);
-
-    if (eventString.getName().equals(PlayerPVPEvent.class.getName())) {
-      boolean finalForDamager = forDamager, finalForVictim = forVictim, finalValueEmpty = valueEmpty;
-
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerPVPEvent");
-
-      ench = new PVPEnchantment(key, enchantmentName, maximumLevel, target) {
-        @Override
-        public void onPVP(final PlayerPVPEvent event) {
-          twoPlayerDamageAction(event,
-            event.getDamager(),
-            event.getVictim(),
-            entry,
-            target,
-            forbidOn,
-            levelsList,
-            key,
-            conditions,
-            conditionFlag,
-            finalValueEmpty,
-            finalForDamager,
-            finalForVictim,
-            enchantmentName,
-            cooldownApplied,
-            instance
-          );
-        }
-      };
-
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
-
-    }
-
-    else if (eventString.getName().equals(ArmorEquipEvent.class.getName())) {
-      instance.debugger.log("Registering the event at ArmorEquipEvent");
-      ench = new ArmorEquipEnchantment(key, enchantmentName, maximumLevel, target) {
-        @Override
-        public void onEquip(final ArmorEquipEvent event) {
-          extraItemAction(event,
-            event.getPlayer(),
-            entry,
-            event.getNewArmorPiece(),
-            target,
-            forbidOn,
-            levelsList,
-            key,
-            conditions,
-            conditionFlag,
-            enchantmentName,
-            cooldownApplied,
-            instance);
-        }
-      };
-
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
-
-    }
-
-    else if (eventString.getName().equals(BlockBreakEvent.class.getName())) {
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at BlockBreakEvent");
-      ench = new BlockBreakEnchantment(key, enchantmentName, maximumLevel, target) {
-        @Override
-        public void onBreak(final BlockBreakEvent event) {
-          commonAction(event,
-            event.getPlayer(),
-            entry,
-            target,
-            forbidOn,
-            levelsList,
-            key,
-            conditions,
-            conditionFlag,
-            enchantmentName,
-            cooldownApplied,
-            instance);
-        }
-      };
-
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
-
-    }
-
-    else if (eventString.getName().equals(PlayerItemBreakEvent.class.getName())) {
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerItemBreakEvent");
-      ench = new ItemBreakEnchantment(key, enchantmentName, maximumLevel, target) {
-        @Override
-        public void onBreak(final PlayerItemBreakEvent event) {
-          // Create the EnchantmentLevel
-          commonAction(event,
-            event.getPlayer(),
-            entry,
-            target,
-            forbidOn,
-            levelsList,
-            key,
-            conditions,
-            conditionFlag,
-            enchantmentName,
-            cooldownApplied,
-            instance);
-        }
-      };
-
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
-
-    }
-
-    else if (eventString.getName().equals(PlayerItemConsumeEvent.class.getName())) {
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerItemConsumeEvent");
-
-      ench = new ItemEatEnchantment(key, enchantmentName, maximumLevel, target) {
-        @Override
-        public void onConsume(final PlayerItemConsumeEvent event) {
-          commonAction(event,
-            event.getPlayer(),
-            entry,
-            target,
-            forbidOn,
-            levelsList,
-            key,
-            conditions,
-            conditionFlag,
-            enchantmentName,
-            cooldownApplied,
-            instance);
-        }
-      };
-
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
-
-    }
-
-    else if (eventString.getName().equals(PlayerInteractAtEntityEvent.class.getName())) {
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerInteractAtEntityEvent");
-      ench = new RMBEntityEnchantment(key, enchantmentName, maximumLevel, target) {
-        @Override
-        public void onRMB(final PlayerInteractAtEntityEvent event) {
-          commonAction(event,
-            event.getPlayer(),
-            entry,
-            target,
-            forbidOn,
-            levelsList,
-            key,
-            conditions,
-            conditionFlag,
-            enchantmentName,
-            cooldownApplied,
-            instance);
-        }
-      };
-
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
-
-    }
-
-    else if (eventString.getName().equals(PlayerInteractEvent.class.getName())) {
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerInteractEvent");
-      ench = new RMBEnchantment(key, enchantmentName, maximumLevel, target) {
-        @Override
-        public void onRMB(final PlayerInteractEvent event) {
-          commonAction(event,
-            event.getPlayer(),
-            entry,
-            target,
-            forbidOn,
-            levelsList,
-            key,
-            conditions,
-            conditionFlag,
-            enchantmentName,
-            cooldownApplied,
-            instance);
-        }
-      };
-
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
-
-    }
-
-    else if (eventString.getName().equals(PlayerMoveEvent.class.getName())) {
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerMoveEvent");
-      ench = new MoveEnchantment(key, enchantmentName, maximumLevel, target) {
-        @Override
-        public void onMove(final PlayerMoveEvent event) {
-          commonAction(event,
-            event.getPlayer(),
-            entry,
-            target,
-            forbidOn,
-            levelsList,
-            key,
-            conditions,
-            conditionFlag,
-            enchantmentName,
-            cooldownApplied,
-            instance);
-        }
-      };
-
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
-
-    }
-
-    else if (eventString.getName().equals(PlayerGotHurtEvent.class.getName())) {
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerGotHurtEvent");
-      ench = new GotHurtEnchantment(key, enchantmentName, maximumLevel, target) {
-        @Override
-        public void onHurt(final PlayerGotHurtEvent event) {
-          commonAction(event,
-            event.getVictim(),
-            entry,
-            target,
-            forbidOn,
-            levelsList,
-            key,
-            conditions,
-            conditionFlag,
-            enchantmentName,
-            cooldownApplied,
-            instance);
-        }
-      };
-
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
-
-    }
-
-    else if (eventString.getName().equals(PlayerHurtsEntityEvent.class.getName())) {
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerHurtsEntityEvent");
-      ench = new HurtsEntityEnchantment(key, enchantmentName, maximumLevel, target) {
-        @Override
-        public void onAttack(final PlayerHurtsEntityEvent event) {
-          commonAction(event,
-            event.getDamager(),
-            entry,
-            target,
-            forbidOn,
-            levelsList,
-            key,
-            conditions,
-            conditionFlag,
-            enchantmentName,
-            cooldownApplied,
-            instance);
-        }
-      };
-
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
-
-    }
-
-    else if (eventString.getName().equals(PlayerShootBowEvent.class.getName())) {
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerShootBowEvent");
-      ench = new ShootBowEnchantment(key, enchantmentName, maximumLevel, target) {
-        @Override
-        public void onShoot(final PlayerShootBowEvent event) {
-          commonAction(event,
-            event.getShooter(),
-            entry,
-            target,
-            forbidOn,
-            levelsList,
-            key,
-            conditions,
-            conditionFlag,
-            enchantmentName,
-            cooldownApplied,
-            instance);
-        }
-      };
-
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
-
-    }
-
-    else if (eventString.getName().equals(PlayerToggleSneakEvent.class.getName())) {
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerToggleSneakEvent");
-      ench = new ToggleSneakEnchantment(key, enchantmentName, maximumLevel, target) {
-        @Override
-        public void onToggle(final PlayerToggleSneakEvent event) {
-          commonAction(event,
-            event.getPlayer(),
-            entry,
-            target,
-            forbidOn,
-            levelsList,
-            key,
-            conditions,
-            conditionFlag,
-            enchantmentName,
-            cooldownApplied,
-            instance);
-        }
-      };
-
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
-
-    }
-
-    else if (eventString.getName().equals(PlayerBowHitEvent.class.getName())) {
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "Registering the event at PlayerBowHitEvent");
-      boolean finalForDamager = forDamager, finalForVictim = forVictim, finalValueEmpty = valueEmpty;
-      ench = new BowHitEnchantment(key, enchantmentName, maximumLevel, target) {
-        @Override
-        public void onHit(final PlayerBowHitEvent event) {
-          twoPlayerDamageAction(event,
-            event.getDamager(),
-            event.getVictim(),
-            entry,
-            target,
-            forbidOn,
-            levelsList,
-            key,
-            conditions,
-            conditionFlag,
-            finalValueEmpty,
-            finalForDamager,
-            finalForVictim,
-            enchantmentName,
-            cooldownApplied,
-            instance
-          );
-        }
-      };
-
-      instance.debugger.log(enchantmentName.toUpperCase() + "> " + "If no errors have been thrown, this enchantment has registered its events correctly.");
-
-    }
-
-    else { // Invalid trigger parsing
-      instance.getUnderscoreLogger().severe("Enchantment " + enchantmentName + " did not get registered - invalid trigger!");
-      instance.getDebugger().log("Enchantment " + enchantmentName + " did not get registered - invalid trigger!");
-      return null;
-    }
-
-    return new Pair<>(entry, ench);
   }
 }
