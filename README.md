@@ -1,6 +1,6 @@
 # UnderscoreEnchants
-[![wakatime](https://wakatime.com/badge/user/19138aa2-1487-421c-9561-14ecdff554f8/project/dfe481f2-7aa9-4c4f-9841-86facc281ba3.svg)](https://wakatime.com/badge/user/19138aa2-1487-421c-9561-14ecdff554f8/project/dfe481f2-7aa9-4c4f-9841-86facc281ba3)<br>
-This repository is the head repository of UnderscoreEnchants.
+This repository is the head repository of UnderscoreEnchants, a plugin for creating your own custom enchantments for free. The plugin can be found [here](https://www.spigotmc.org/resources/97002/).<br>
+As per July 30th, 2023, the plugin is undergoing a complete rewrite due to the current plugin being subject to a lot of hydra code. The rewrite is being done in Kotlin, and will be released as version 2.2. There are no estimates for when the plugin will receive the update because I have increasingly less time to work on it, but in my free time I consistently work on it.
 
 # Default enchantment list
 
