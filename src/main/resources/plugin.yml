@@ -1,0 +1,94 @@
+api-version: 1.20
+name: UnderscoreEnchants
+version: 2.2
+main: com.roughlyunderscore.ue.UnderscoreEnchantsPlugin
+authors: [ Roughly_ ]
+description: A premium class plugin that makes working with enchantments a breeze!
+load: STARTUP
+softdepend: [ Vault, Treasury ]
+depend: [ PlaceholderAPI ]
+
+libraries:
+  - commons-io:commons-io:2.16.1
+  - org.apache.commons:commons-collections4:4.5.0-M1
+  - org.mariuszgromada.math:MathParser.org-mXparser:6.0.0
+  - com.mysql:mysql-connector-j:8.4.0
+  - org.mongodb:mongodb-driver-sync:5.1.0
+  - com.github.cryptomorin:XSeries:11.0.0
+  - org.apache.commons:commons-compress:1.26.2
+  - com.zaxxer:HikariCP:5.1.0
+
+permissions:
+  uench.debug: { default: op, description: Allows you to use /ue debug and its subcommands. }
+
+  uench.enchant: { default: op, description: Allows you to use /ue enchant on yourself. }
+  uench.enchant.other: { default: op, description: Allows you to use /ue enchant on other players. }
+  uench.enchant.*:
+    default: op
+    description: Allows you to use all the Underscore Enchants enchantment commands.
+    children: { uench.enchant: true, uench.enchant.other: true }
+
+  uench.toggle: { default: op, description: Allows you to use /ue toggle on yourself. }
+  uench.toggle.other: { default: op, description: Allows you to use /ue toggle on other players. }
+  uench.toggle.*:
+    default: op
+    description: Allows you to use all the Underscore Enchants toggle commands.
+    children: { uench.toggle: true, uench.toggle.other: true }
+
+  uench.download.enchantment: { default: op, description: Allows you to use /ue download enchantment. }
+  uench.download.pack: { default: op, description: Allows you to use /ue download pack. }
+  uench.download.locale: { default: op, description: Allows you to use /ue download locale. }
+  uench.download.*:
+    default: op
+    description: Allows you to use all the Underscore Enchants download commands.
+    children: { uench.download.enchantment: true, uench.download.pack: true, uench.download.locale: true }
+
+  uench.help: { default: op, description: Allows you to use /ue help and its subcommands. }
+
+  uench.load.enchantment: { default: op, description: Allows you to use /ue load enchantment. }
+  uench.load.pack: { default: op, description: Allows you to use /ue load pack. }
+  uench.load.locale: { default: op, description: Allows you to use /ue load locale. }
+  uench.load.*:
+    default: op
+    description: Allows you to use all the Underscore Enchants load commands.
+    children: { uench.load.enchantment: true, uench.load.pack: true, uench.load.locale: true }
+
+  uench.unload.enchantment: { default: op, description: Allows you to use /ue unload enchantment. }
+  uench.unload.pack: { default: op, description: Allows you to use /ue unload pack. }
+  uench.unload.locale: { default: op, description: Allows you to use /ue unload locale. }
+  uench.unload.*:
+    default: op
+    description: Allows you to use all the Underscore Enchants unload commands.
+    children: { uench.unload.enchantment: true, uench.unload.pack: true, uench.unload.locale: true }
+
+  uench.locale: { default: op, description: Allows you to use /ue locale on yourself. }
+  uench.locale.other: { default: op, description: Allows you to use /ue locale on other players. }
+  uench.locale.*:
+    default: op
+    description: Allows you to use all the Underscore Enchants localization commands.
+    children: { uench.locale: true, uench.locale.other: true }
+
+  uench.reload: { default: op, description: Allows you to use /ue reload. }
+
+  uench.browse.packs: { default: op, description: Allows you to use /ue browse packs. }
+  uench.browse.enchants: { default: op, description: Allows you to use /ue browse enchants. }
+  uench.browse.locales: { default: op, description: Allows you to use /ue browse locales. }
+  uench.browse.*:
+    default: op
+    description: Allows you to use all the Underscore Enchants browse commands.
+    children: { uench.browse.packs: true, uench.browse.enchants: true, uench.browse.locales: true }
+
+  uench.*:
+    default: op
+    description: Allows you to use all the Underscore Enchants commands.
+    children:
+      uench.debug: true
+      uench.enchant.*: true
+      uench.toggle.*: true
+      uench.download.*: true
+      uench.help: true
+      uench.load.*: true
+      uench.unload.*: true
+      uench.reload: true
+      uench.locale.*: true
+      uench.browse.*: true

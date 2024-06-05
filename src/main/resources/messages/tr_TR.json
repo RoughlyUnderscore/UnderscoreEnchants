@@ -1,0 +1,494 @@
+{
+  "identifier": "tr_TR",
+  "messages": {
+    "tokens": {
+      "yes": "yes",
+      "no": "no"
+    },
+
+    "start-messages": {
+      "word-tokens": {
+        "started": "Started <action>.",
+        "finished": "Finished <action>. Took <ms>ms."
+      },
+
+      "process": {
+        "populating-registry": "populating the registry",
+        "initializing-connection": "initializing the connection data",
+        "initializing-data": "initializing the data storage",
+        "preparing-metrics": "preparing the bStats metrics",
+        "checking-updates": "setting up the update checker",
+        "creating-tasks": "creating the tasks",
+        "registering-listeners": "registering the listeners",
+        "initializing-commands": "initializing the commands",
+        "initializing-economy": "initializing the economy handler",
+        "registering-enchantments": "registering the enchantments",
+        "adding-readme": "adding README if necessary",
+        "implementing-api": "implementing the API",
+        "starting-retrofit": "starting Retrofit for networking"
+      },
+
+      "started": {
+        "initialized": "<plugin> was successfully initialized in <ms>ms.",
+        "report-bugs-here": "Please report any bugs here: https://discord.gg/bBge7bj3ra",
+        "review-request": "An honest review will go a long way: <link>",
+        "thanks-for-using-ue": "Thanks for using UnderscoreEnchants!"
+      }
+    },
+
+    "start-errors": {
+      "invalid-connection": "&cVeri tabanına bağlanılamadı. Lütfen bilgilerini kontrol edip, sunucunuzu yeniden başlatın ve tekrar deneyin."
+    },
+
+    "insufficiency": {
+      "no-permissions": "&cBu eylemi gerçekleştirmek için gerek yetkiye sahip değilsin.",
+      "not-for-console": "&cBu komut konsol için mevcut değil."
+    },
+
+    "ui": {
+      "ui-next": "&eNext",
+      "ui-previous": "&ePrevious",
+      "ui-back": "&eBack",
+      "ui-close": "&cClose",
+
+      "browsing": {
+        "ui-browsing-sort-by-downloads": "Sort by downloads",
+        "ui-browsing-sort-by-name": "Sort by name",
+        "ui-browsing-sort-by-author": "Sort by author",
+        "ui-browsing-sort-by-amount": "Sort by amount",
+        "ui-browsing-downloaded": "&eDownloaded: &b<amount> times",
+        "ui-browsing-click-to-toggle": "&eClick to toggle"
+      },
+
+      "state": {
+        "ui-state-on": "&a&lON",
+        "ui-state-off": "&c&lOFF"
+      },
+
+      "ui-browsing-click": "&a&lClick to download",
+      "ui-browsing-shift-click": "&a&lShift + Click to download & load",
+      "ui-browsing-right-click": "&a&lRMB to preview",
+      "ui-browsing-download": "&a&lClick to download",
+      "ui-browsing-load": "&a&lClick to download & load",
+
+      "pack-browsing": {
+        "ui-pack-browsing-title": "&r&f&6&lENCHANTMENT PACKS",
+        "ui-pack-browsing-pack-author": "&ePack author: &b<author>",
+        "ui-pack-browsing-pack-amount": "&eEnchantments: &b<amount>",
+        "ui-pack-browsing-pack-website": "&eWebsite: &b<website>",
+        "ui-pack-browsing-has-conflicts-first-line": "&r&cSome enchantments on your server match the names of some",
+        "ui-pack-browsing-has-conflicts-second-line": "&r&cenchantments in this pack. This may cause conflicts.",
+        "ui-pack-browsing-show-downloaded": "&eShow downloaded packs: <state>",
+
+        "preview": {
+          "ui-pack-browsing-pack-description": "&eDescription",
+          "ui-pack-browsing-pack-whitelists-first-line": "&eThis pack contains blacklisted/whitelisted worlds.",
+          "ui-pack-browsing-pack-whitelists-second-line": "&eYou may need to reconfigure the pack later.",
+          "ui-pack-browsing-pack-enchantments": "&eEnchantments",
+          "ui-pack-browsing-pack-truncated": "&7...and &6<amount> &7more enchantments."
+        }
+      },
+
+      "enchantment-browsing": {
+        "ui-enchantment-browsing-title": "&r&f&b&lENCHANTMENTS",
+        "ui-enchantment-browsing-enchantment-author": "&eEnchantment author: &b<author>",
+        "ui-enchantment-browsing-show-downloaded": "&eShow downloaded enchantments: <state>",
+
+        "preview": {
+          "ui-enchantment-browsing-description": "&eDescription",
+          "ui-enchantment-browsing-chance": "&eActivation chance: &b<chance>",
+          "ui-enchantment-browsing-trigger": "&eTrigger: &b<trigger>",
+          "ui-enchantment-browsing-conflicts": "&eConflicts with: <conflicts>",
+          "ui-enchantment-browsing-cooldown": "&eCooldown: &b<cooldown>",
+          "ui-enchantment-browsing-forbidden": "&eForbidden materials: <forbidden>",
+          "ui-enchantment-browsing-unique": "&eIs unique: &b<unique>",
+          "ui-enchantment-browsing-seekers": "&eSeekers: <seekers>",
+          "ui-enchantment-browsing-required": "&eRequired enchantments: <required>",
+
+          "preview-word-tokens": {
+            "ui-enchantment-preview-seconds": "sec",
+            "ui-enchantment-preview-minutes": "min",
+            "ui-enchantment-preview-hours": "hrs",
+            "ui-enchantment-preview-day": "day"
+          },
+
+          "required-plugins": {
+            "ui-enchantment-browsing-required-plugins": "&eRequired plugins",
+            "ui-enchantment-browsing-required-plugin": "&7- &b<plugin>: <installed>",
+            "ui-enchantment-browsing-required-plugin-installed": "&aInstalled",
+            "ui-enchantment-browsing-required-plugin-not-installed": "&cNot installed",
+            "ui-enchantment-browsing-required-plugin-click": "&eClick to download",
+            "ui-enchantment-browsing-required-plugin-disclaimer-first-line": "&7UnderscoreEnchants will not download the plugin for you. You must do it manually.",
+            "ui-enchantment-browsing-required-plugin-disclaimer-second-line": "&7UnderscoreEnchants is not responsible for any damage caused by third-party plugins.",
+            "ui-enchantment-required-plugin-chat-syntax": "&e<plugin> &f- &6&l<link>"
+          }
+        }
+      },
+
+      "locale-browsing": {
+        "ui-locale-browsing-title": "&r&f&b&lLOCALES",
+        "ui-locale-browsing-show-downloaded": "&eShow downloaded locales: <state>"
+      }
+    },
+
+    "log": {
+      "creating-log": "&6Kayıt günlüğü dosyası oluşturuluyor...",
+      "log-created": "&b<location> &akonumunda bir kayıt dosyası başarıyla oluşturuldu.",
+      "log-not-created": "&cKayıt günlüğü oluşturulamadı. Detaylar için konsolu kontrol ediniz.",
+
+      "word-tokens": {
+        "log-token-authors": "Authors",
+        "log-token-created": "Log creation date",
+        "log-token-worlds": "Worlds information",
+
+        "world-word-tokens": {
+          "log-token-world-name": "Name",
+          "log-token-world-uuid": "UUID",
+          "log-token-world-env": "Environment",
+          "log-token-world-seed": "Seed",
+          "log-token-world-difficulty": "Difficulty",
+          "log-token-world-spawn": "Spawn location",
+          "log-token-world-time": "Time",
+          "log-token-world-rain": "Is raining",
+          "log-token-world-thunder": "Is thundering",
+          "log-token-world-spawn-limit": "spawn limit"
+        },
+
+        "log-token-registry": "Registry information",
+
+        "registry-word-tokens": {
+          "log-token-registry-action-singular": "Action",
+          "log-token-registry-action-plural": "Actions",
+          "log-token-registry-applicable-singular": "Applicable",
+          "log-token-registry-applicable-plural": "Applicables",
+          "log-token-registry-condition-singular": "Condition",
+          "log-token-registry-condition-plural": "Conditions",
+          "log-token-registry-indicator-singular": "Indicator",
+          "log-token-registry-indicator-plural": "Indicators",
+          "log-token-registry-placeholder-singular": "Placeholder",
+          "log-token-registry-placeholder-plural": "Placeholders",
+          "log-token-registry-seeker-singular": "Seeker",
+          "log-token-registry-seeker-plural": "Seekers",
+          "log-token-registry-trigger-singular": "Trigger",
+          "log-token-registry-trigger-plural": "Triggers",
+          "log-token-registry-loaded": "loaded",
+          "log-token-registry-provider": "Provider"
+        },
+
+        "log-token-enchantments": "Enchantments information",
+        "log-token-enchantments-loaded": "Enchantments loaded"
+      }
+    },
+
+    "invalid-state": {
+      "invalid-enchantment-name": "&b<enchantment> &cisimli büyü mevcut bir büyü değil.",
+      "invalid-enchantment-level": "&b<level> &csayılı büyü seviyesi mevcut bir büyü seviyesi değil.",
+      "invalid-parameter": "&cParametre &b<parameter> &cgeçerli değil.",
+      "invalid-url": "&b<url> &cURL hatalı ya da geçerli bir büyü (ya da büyü paketi) içermiyor. Başka bir indirme adresi deneyin.",
+      "enchantment-level-out-of-bounds": "&b<level> &csayısı büyü seviyesi sınırının dışında. Mininum seviye &b<min> &cve maksiumum seviye &b<max>&c.",
+      "over-the-limit": "&cBir eşyada &b<limit> &cadetten fazla büyüye sahip olamazsın.",
+      "enchantment-conflicts": "&cThis enchantment conflicts with some of the enchantments on the requested item.",
+      "enchantment-unique": "&cThis enchantment is unique and cannot be applied to an item that contains other enchantments.",
+      "has-unique-enchantment": "&cThis item has a unique enchantment and cannot receive any more enchantments.",
+      "bad-update": "&cGüncellemeler kontrol edilemiyor. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.",
+      "player-not-found": "&cThe player &b<player> &cwas not found.",
+      "already-registered": "&6<new> &cis already registered as &6<old> &cby &6<plugin>."
+    },
+
+    "activated": {
+      "default-activation-indicator": "&b<enchantment> &aadlı büyü aktifleştirildi."
+    },
+
+    "downloaded": {
+      "downloaded-enchantment": "&aThe enchantment &b<enchantment> &ahas been downloaded.",
+      "downloaded-pack": "&aThe enchantment pack &b<pack> &ahas been downloaded.",
+      "downloaded-locale": "&aThe locale &b<locale> &ahas been downloaded.",
+      "failed-to-download-enchantment": "&cCould not download enchantment &b<enchantment>&c.",
+      "failed-to-download-pack": "&cCould not download pack &b<pack>&c.",
+      "failed-to-download-locale": "&cCould not download locale &b<locale>&c."
+    },
+
+    "loaded": {
+      "loaded-enchantment": "&aThe enchantment &b<enchantment> &ahas been loaded.",
+      "loaded-pack": "&aThe enchantment pack &b<pack> &awith &b<amount> &aenchantments has been loaded.",
+      "loaded-locale": "&aThe locale &b<locale> &ahas been loaded.",
+      "failed-to-load-enchantment": "&cCould not load enchantment &b<enchantment>&c.",
+      "failed-to-load-pack": "&cCould not load pack &b<pack>&c.",
+      "failed-to-load-locale": "&cCould not load locale &b<locale>&c."
+    },
+
+    "unloaded": {
+      "unloaded-enchantment": "&aThe enchantment &b<enchantment> &ahas been unloaded.",
+      "unloaded-pack": "&aThe enchantment pack &b<pack> &ahas been unloaded.",
+      "unloaded-locale": "&aThe locale &b<locale> &ahas been unloaded."
+    },
+
+    "toggled": {
+      "toggled-enchantment": "&a&b<enchantment> &aadlı büyünün durumu değiştirildi (&b<state>&a).",
+      "toggled-enchantment-other": "&aYou have toggled the enchantment &b<enchantment> &afor player &b<player> &a(&b<state>&a).",
+      "toggled-enchantment-externally": "&aThe enchantment &b<enchantment> &ahas been toggled (&b<state>&a) for you via external means.",
+      "state-on": "&aaçık",
+      "state-off": "&akapalı",
+      "cant-toggle-vanilla": "&cYou cannot toggle vanilla enchantments."
+    },
+
+    "locale": {
+      "changed-locale": "&aYou've set your language to &bTurkish &a(&6tr_TR&a).",
+      "changed-locale-externally": "&aYour language has been set to &bTurkish &a(&6tr_TR&a) via external means.",
+      "changed-locale-other": "&aYou've changed the locale of player &6<player> to &bTurkish &a(&6tr_TR&a).",
+      "cant-change-locale": "&cThe per-player locale function is disabled in this plugin. Contact the server administration if you think this is a mistake.",
+      "no-such-locale": "&cCould not find locale &6<locale>&c."
+    },
+
+    "data": {
+      "loading": "&eYour data is being loaded. Please wait for a bit.",
+      "loaded": "&aYour data has been loaded successfully. Enjoy your stay."
+    },
+
+    "command": {
+      "reloaded": "&aEklenti &6<ms>&amilisaniyede yeniden yüklendi.",
+
+      "enchant": {
+        "error": {
+          "command-enchant-no-enchantment-name": "&cYou must provide an enchantment name.",
+          "command-enchant-no-enchantment-level": "&cYou must provide an enchantment level.",
+          "command-enchant-cannot-apply": "&cThe enchantment &b<enchantment> &ccannot be applied to this item."
+        },
+
+        "enchanted-item": "&aThe item in your hand has been enchanted with &b<enchantment> &6<level>.",
+        "enchanted-item-other": "&aThe item in &b<player>'s &ahand has been enchanted with &b<enchantment> &6<level>."
+      },
+
+      "hover": {
+        "command-hover": "Click this command to write it in your chat",
+        "command-hover-hint": "&eHover over a command to write it into your chat."
+      },
+
+      "help": {
+        "command-help-title": "&b&l========== &fMAIN COMMAND HELP &b==========",
+        "command-help-debug": "&7- /ue debug: &eA command used for debugging the plugin &7(permission:&f uench.debug&7)",
+        "command-help-enchant": "&7- /ue enchant: &eA command used for enchanting an item &7(permission: &fuench.enchant&7)",
+        "command-help-toggle": "&7- /ue toggle: &eA command used to personally toggle an enchantment &7(permission: &fuench.toggle&7)",
+        "command-help-download": "&7- /ue download: &eA command used to download & install enchantments &7(permission: &fuench.download.*&7)",
+        "command-help-locale": "&7- /ue locale: &eA command used to change the player's locale &7(permission: &fuench.locale&7)",
+        "command-help-help": "&7- /ue help: &6This command &7(permission: &fuench.help&7)",
+        "command-help-load": "&7- /ue load: &eA command used to load enchantments from a file &7(permission: &fuench.load.*&7)",
+        "command-help-unload": "&7- /ue unload: &eA command used to load enchantments from a file &7(permission: &fuench.unload.*&7)",
+        "command-help-reload": "&7- /ue reload: &eA command used to reload the plugin &7(permission: &fuench.reload&7)",
+        "command-help-browse-packs": "&7- /ue browsepacks: &eThis command opens a GUI to browse and download enchantment packs &7(permission: &fuench.browse.packs&7)",
+        "command-help-browse-enchs": "&7- /ue browseenchs: &eThis command opens a GUI to browse and download enchantments &7(permission: &fuench.browse.enchs&7)",
+        "command-help-browse-locales": "&7- /ue browselocales: &eThis command opens a GUI to browse and download locales &7(permission: &fuench.browse.locales&7)",
+        "command-help-browse": "&7- /ue browse <packs/enchs/locales>: &eA shorthand for &l/ue browsepacks &r&eor &l/ue browseenchs &7(required respective permissions)",
+        "command-help-syntax-details": "&eTo find more about a command's syntax, use the command with no arguments &7(such as &f/ue toggle&7).",
+        "command-help-syntax-exceptions": "&eIf a command takes no arguments, instead of displaying a help message, it will execute as per usual."
+      },
+
+      "debug": {
+        "debug-help-title": "&b&l========== &fDEBUG COMMAND &b==========",
+        "debug-help-registry": "&7- /ue debug registry: &eDisplays debug information about the registry",
+        "debug-help-log": "&7- /ue debug log: &eCreates a log file containing all the important debug information",
+        "debug-help-enchantment": "&7- /ue debug enchantment <ench>: &eDisplays debug information about the specified enchantment"
+      },
+
+      "feature-delayed": "&6This feature has been delayed to a future update.",
+
+      "enchantments-debug": {
+        "enchantments-word-tokens": {
+          "token-enchantment": "Enchantment",
+          "token-enchantment-chance": "Chance",
+          "token-enchantment-indicator": "Activation indicator",
+          "token-enchantment-applicables": "Applicables",
+          "token-enchantment-author": "Author",
+          "token-enchantment-conditions": "Conditions",
+          "token-enchantment-conflicts": "Conflicts",
+          "token-enchantment-cooldown": "Cooldown in ticks",
+          "token-enchantment-description": "Description",
+          "token-enchantment-forbidden": "Forbidden materials",
+          "token-enchantment-unique": "Is unique",
+          "token-enchantment-levels": "Levels",
+          "token-enchantment-negated": "negated",
+          "token-enchantment-actions": "actions",
+          "token-enchantment-restrictions": "Obtainment restrictions",
+          "token-enchantment-required-enchantments": "Required enchantments",
+          "token-enchantment-required-plugins": "Required plugins",
+          "token-enchantment-seekers": "Seekers",
+          "token-enchantment-trigger": "Trigger",
+          "token-enchantment-whitelist": "World whitelist",
+          "token-enchantment-blacklist": "World blacklist",
+          "token-enchantment-required-plugin-link": "Link"
+        },
+
+        "enchantment-pack-word-tokens": {
+          "token-enchantment-by": "by",
+          "token-enchantments": "enchantments"
+        }
+      },
+
+      "registry-debug": {
+        "registry-debug-title": "&b&l========== &fREGISTRY DEBUG &b==========",
+        "registry-debug-actions-loaded": "&7- &6Actions loaded: &f&l<amount>",
+        "registry-debug-applicables-loaded": "&7- &6Applicables loaded: &f&l<amount>",
+        "registry-debug-conditions-loaded": "&7- &6Conditions loaded: &f&l<amount>",
+        "registry-debug-indicators-loaded": "&7- &6Indicators loaded: &f&l<amount>",
+        "registry-debug-placeholders-loaded": "&7- &6Placeholders loaded: &f&l<amount>",
+        "registry-debug-seekers-loaded": "&7- &6Seekers loaded: &f&l<amount>",
+        "registry-debug-triggers-loaded": "&7- &6Triggers loaded: &f&l<amount>",
+        "registry-debug-built-in-amount": "&r&fout of them <amount> are built-in.",
+
+        "registry-debug-more-info": "&eFor more information, use &f/ue debug registry <type>&e.",
+        "registry-debug-invalid-type": "&cInvalid type. Valid types are: &factions, applicables, conditions, indicators, placeholders, seekers, triggers&c.",
+
+        "more-info": {
+          "actions": {
+            "registry-debug-actions-title": "&b&l========== &fACTIONS &b==========",
+            "registry-debug-actions-info": "&eThe following actions &f(&7<amount>&f)&e are currently loaded:",
+            "registry-debug-actions-built-in": "&7- &f<name> &7(&6this action is provided by UnderscoreEnchants&7)",
+            "registry-debug-actions-custom": "&7- &f<name> &7(&6this action is provided by &f<plugin>&7)"
+          },
+
+          "applicables": {
+            "registry-debug-applicables-title": "&b&l========== &fAPPLICABLES &b==========",
+            "registry-debug-applicables-info": "&eThe following applicables &f(&7<amount>&f)&e are currently loaded:",
+            "registry-debug-applicables-built-in": "&7- &f<name> &7(&6this applicable is provided by UnderscoreEnchants&7)",
+            "registry-debug-applicables-custom": "&7- &f<name> &7(&6this applicable is provided by &f<plugin>&7)"
+          },
+
+          "conditions": {
+            "registry-debug-conditions-title": "&b&l========== &fCONDITIONS &b==========",
+            "registry-debug-conditions-info": "&eThe following conditions &f(&7<amount>&f)&e are currently loaded:",
+            "registry-debug-conditions-built-in": "&7- &f<name> &7(&6this condition is provided by UnderscoreEnchants&7)",
+            "registry-debug-conditions-custom": "&7- &f<name> &7(&6this condition is provided by &f<plugin>&7)"
+          },
+
+          "indicators": {
+            "registry-debug-indicators-title": "&b&l========== &fINDICATORS &b==========",
+            "registry-debug-indicators-info": "&eThe following indicators &f(&7<amount>&f)&e are currently loaded:",
+            "registry-debug-indicators-built-in": "&7- &f<name> &7(&6this indicator is provided by UnderscoreEnchants&7)",
+            "registry-debug-indicators-custom": "&7- &f<name> &7(&6this indicator is provided by &f<plugin>&7)"
+          },
+
+          "placeholders": {
+            "registry-debug-placeholders-title": "&b&l========== &fPLACEHOLDERS &b==========",
+            "registry-debug-placeholders-info": "&eThe following placeholders &f(&7<amount>&f)&e are currently loaded:",
+            "registry-debug-placeholders-built-in": "&7- &f<name> &7(&6this placeholder is provided by UnderscoreEnchants&7)",
+            "registry-debug-placeholders-custom": "&7- &f<name> &7(&6this placeholder is provided by &f<plugin>&7)"
+          },
+
+          "seekers": {
+            "registry-debug-seekers-title": "&b&l========== &fSEEKERS &b==========",
+            "registry-debug-seekers-info": "&eThe following seekers &f(&7<amount>&f)&e are currently loaded:",
+            "registry-debug-seekers-built-in": "&7- &f<name> &7(&6this seeker is provided by UnderscoreEnchants&7)",
+            "registry-debug-seekers-custom": "&7- &f<name> &7(&6this seeker is provided by &f<plugin>&7)"
+          },
+
+          "triggers": {
+            "registry-debug-triggers-title": "&b&l========== &fTRIGGERS &b==========",
+            "registry-debug-triggers-info": "&eThe following triggers &f(&7<amount>&f)&e are currently loaded:",
+            "registry-debug-triggers-built-in": "&7- &f<name> &7(&6this trigger is provided by UnderscoreEnchants&7)",
+            "registry-debug-triggers-custom": "&7- &f<name> &7(&6this trigger is provided by &f<plugin>&7)"
+          }
+        }
+      },
+
+      "download": {
+        "help": {
+          "download-help-title": "&b&l========== &fDOWNLOAD COMMAND &b==========",
+          "download-help-enchantment": "&7- /ue download enchantment <id> <true/false>: &eDownloads an enchantment by its ID and loads it if the value is \"true\" &7(permission: &fuench.download.enchantment&7)",
+          "download-help-pack": "&7- /ue download pack <id> <true/false>: &eDownloads an enchantment pack by its ID and loads it if the value is \"true\" &7(permission: &fuench.download.pack&7)",
+          "download-help-locale": "&7- /ue download locale <id> <true/false>: &eDownloads a locale by its ID and loads it if the value is \"true\" &7(permission: &fuench.download.locale&7)"
+        },
+
+        "error": {
+          "download-invalid-type": "&cInvalid type. Valid types are: &fenchantment&c, &fpack&c and &flocale&c.",
+          "download-no-id": "&cYou must provide an ID to download an enchantment or a pack.",
+          "download-unsuccessful": "&cThe download was unsuccessful. Please double-check the ID and try again."
+        },
+
+        "downloaded": {
+          "enchantment": {
+            "download-enchantment-successful": "&aThe download was successful. Use &f/ue load &ato load the enchantment, or click on this message.",
+            "download-enchantment-successful-no-prompt": "&aThe download was successful. Use &f/ue load &ato load the enchantment.",
+            "download-and-load-enchantment-successful": "&aThe download was successful. The enchantment has been loaded.",
+            "download-enchantment-click-to-load": "&6Click to load the enchantment"
+          },
+
+          "pack": {
+            "download-pack-successful": "&aThe download was successful. Use &f/ue load &ato load the pack, or click on this message.",
+            "download-pack-successful-no-prompt": "&aThe download was successful. Use &f/ue load &ato load the pack.",
+            "download-and-load-pack-successful": "&aThe download was successful. The pack has been loaded.",
+            "download-pack-click-to-load": "&6Click to load the pack"
+          },
+
+          "locale": {
+            "download-locale-successful": "&aThe download was successful. Use &f/ue load &ato load the locale, or click on this message.",
+            "download-locale-successful-no-prompt": "&aThe download was successful. Use &f/ue load &ato load the locale.",
+            "download-and-load-locale-successful": "&aThe download was successful. The locale has been loaded.",
+            "download-locale-click-to-load": "&6Click to load the locale"
+          }
+        }
+      },
+
+      "load": {
+        "help": {
+          "load-help-title": "&b&l========== &fLOAD COMMAND &b==========",
+          "load-help-enchantment": "&7- /ue load enchantment <filename>: &eLoads an enchantment by its filename &7(permission: &fuench.load.enchantment&7)",
+          "load-help-pack": "&7- /ue load pack <filename>: &eLoads an enchantment pack by its filename &7(permission: &fuench.load.pack&7)",
+          "load-help-locale": "&7- /ue load locale <filename>: &eLoads a locale by its filename &7(permission: &fuench.load.locale&7)"
+        },
+
+        "error": {
+          "load-invalid-type": "&cInvalid type. Valid types are: &fenchantment&c, &fpack&c and &flocale&c.",
+          "load-no-filename": "&cYou must provide a filename to load an enchantment or a pack."
+        },
+
+        "loaded": {
+          "enchantment": {
+            "load-enchantment-successful": "&aThe enchantment has been loaded.",
+            "load-enchantment-reloaded": "&aThe enchantment has been reloaded.",
+            "load-enchantment-not-found": "&cThe enchantment was not found."
+          },
+
+          "pack": {
+            "load-pack-successful": "&aThe pack has been loaded.",
+            "load-pack-not-found": "&cThe pack was not found."
+          },
+
+          "locale": {
+            "load-locale-successful": "&aThe locale has been loaded.",
+            "load-locale-not-found": "&cThe locale was not found."
+          }
+        }
+      },
+
+      "unload": {
+        "help": {
+          "unload-help-title": "&b&l========== &fUNLOAD COMMAND &b==========",
+          "unload-help-enchantment": "&7- /ue unload enchantment <name>: &eUnloads an enchantment by its name &7(permission: &fuench.unload.enchantment&7)",
+          "unload-help-pack": "&7- /ue unload pack <name>: &eUnloads an enchantment pack by its name &7(permission: &fuench.unload.pack&7)"
+        },
+
+        "error": {
+          "unload-invalid-type": "&cInvalid type. Valid types are: &fenchantment&c, &fpack&c and &flocale&c.",
+          "unload-no-name": "&cYou must provide a name to unload an enchantment or a pack."
+        },
+
+        "unloaded": {
+          "enchantment": {
+            "unload-enchantment-successful": "&aThe enchantment has been unloaded.",
+            "unload-enchantment-not-found": "&cThe enchantment was not found."
+          },
+
+          "pack": {
+            "unload-pack-successful": "&aThe pack has been unloaded.",
+            "unload-pack-not-found": "&cThe pack was not found."
+          },
+
+          "locale": {
+            "unload-locale-successful": "&aThe locale has been unloaded.",
+            "unload-locale-not-found": "&cThe locale was not found."
+          }
+        }
+      }
+    }
+  }
+}

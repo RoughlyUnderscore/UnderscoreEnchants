@@ -1,0 +1,19 @@
+{
+  "connection": {
+    "jdbc": {
+      "driver": "mysql",
+      "url": "localhost",
+      "port": 3306,
+      "database": "my_server",
+      "username": "root",
+      "password": ""
+    },
+    "mongo": {
+      "url": "localhost",
+      "database": "my_server",
+      "collection": "underscore_enchants",
+      "username": "bestest_username",
+      "password": ""
+    }
+  }
+}

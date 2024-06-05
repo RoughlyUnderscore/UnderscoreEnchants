@@ -1,0 +1,495 @@
+{
+  "identifier": "ru_RU",
+  "messages": {
+    "tokens": {
+      "yes": "да",
+      "no": "нет"
+    },
+
+    "start-messages": {
+      "word-tokens": {
+        "started": "Начинаю <action>.",
+        "finished": "Закончил <action>. Действие заняло <ms>мс."
+      },
+
+      "process": {
+        "populating-registry": "наполнять реестр",
+        "initializing-connection": "инициализировать данные о соединении",
+        "initializing-data": "инициализировать хранилище данных",
+        "preparing-metrics": "инициализацию метрики bStats",
+        "checking-updates": "инициализацию автоматической проверки обновлений",
+        "creating-tasks": "создавать задачи",
+        "registering-listeners": "регистрировать слушателей",
+        "initializing-commands": "инициализировать команды",
+        "initializing-economy": "инициализировать экономику",
+        "registering-enchantments": "регистрировать зачарования",
+        "adding-readme": "добавлять README при необходимости",
+        "implementing-api": "реализовывать API",
+        "starting-retrofit": "запускать Retrofit для работы с сетью"
+      },
+
+      "started": {
+        "initialized": "<plugin> был успешно запущен за <ms>ms.",
+        "report-bugs-here": "Если вы обнаружили ошибку, пожалуйста, сообщите о ней здесь: https://discord.gg/bBge7bj3ra",
+        "review-request": "Если вам понравился плагин, пожалуйста, оставьте отзыв на SpigotMC: <link>",
+        "thanks-for-using-ue": "Спасибо, что используете UnderscoreEnchants!"
+      }
+    },
+
+    "start-errors": {
+      "invalid-connection": "&cНе получилось подключиться к базе данных. Проверьте настройки подключения, перезагрузите сервер и попробуйте еще раз."
+    },
+
+    "insufficiency": {
+      "no-permissions": "&cВаших прав недостаточно, чтобы выполнить данное действие.",
+      "not-for-console": "&cДанная команда недоступна для консоли."
+    },
+
+    "ui": {
+      "ui-next": "&eДалее",
+      "ui-previous": "&eНазад",
+      "ui-back": "&eВернуться",
+      "ui-close": "&cЗакрыть",
+
+      "browsing": {
+        "ui-browsing-sort-by-downloads": "Сортировать по количеству загрузок",
+        "ui-browsing-sort-by-name": "Сортировать по имени",
+        "ui-browsing-sort-by-author": "Сортировать по автору",
+        "ui-browsing-sort-by-amount": "Сортировать по количеству",
+        "ui-browsing-downloaded": "&eЗагружено: &b<amount> раз",
+        "ui-browsing-click-to-toggle": "&eНажмите, чтобы переключить"
+      },
+
+      "state": {
+        "ui-state-on": "&a&lВКЛ",
+        "ui-state-off": "&c&lВЫКЛ"
+      },
+
+      "ui-browsing-click": "&a&lНажмите, чтобы установить",
+      "ui-browsing-shift-click": "&a&lShift + Нажмите, чтобы загрузить",
+      "ui-browsing-right-click": "&a&lПКМ, чтобы предпросмотреть",
+      "ui-browsing-download": "&a&lНажмите, чтобы установить",
+      "ui-browsing-load": "&a&lНажмите, чтобы загрузить",
+
+      "pack-browsing": {
+        "ui-pack-browsing-title": "&r&f&6&lПАКИ ЗАЧАРОВАНИЙ",
+        "ui-pack-browsing-pack-author": "&eАвтор пака: &b<author>",
+        "ui-pack-browsing-pack-amount": "&eЗачарований: &b<amount>",
+        "ui-pack-browsing-pack-website": "&eСайт пака: &b<website>",
+        "ui-pack-browsing-has-conflicts-first-line": "&r&cНекоторые зачарования на сервере совпадают с названиями некоторых",
+        "ui-pack-browsing-has-conflicts-second-line": "&r&cзачарований в паке. Это может привести к несостыковкам.",
+        "ui-pack-browsing-show-downloaded": "&eПоказывать скачанные паки: <state>",
+
+        "preview": {
+          "ui-pack-browsing-pack-description": "&eОписание",
+          "ui-pack-browsing-pack-whitelists-first-line": "&eДанный пак содержит черный/белый список миров.",
+          "ui-pack-browsing-pack-whitelists-second-line": "&eВозможно, вам придется изменить конфигурацию пака впоследствии.",
+          "ui-pack-browsing-pack-enchantments": "&eЗачарования",
+          "ui-pack-browsing-pack-truncated": "&7...и еще &6<amount> &7зачарований."
+        }
+      },
+
+      "enchantment-browsing": {
+        "ui-enchantment-browsing-title": "&r&f&b&lЗАЧАРОВАНИЯ",
+        "ui-enchantment-browsing-enchantment-author": "&eАвтор: &b<author>",
+        "ui-enchantment-browsing-show-downloaded": "&eПоказывать скачанные зачарования: <state>",
+
+        "preview": {
+          "ui-enchantment-browsing-description": "&eОписание",
+          "ui-enchantment-browsing-chance": "&eШанс активации: &b<chance>",
+          "ui-enchantment-browsing-trigger": "&eТриггер: &b<trigger>",
+          "ui-enchantment-browsing-conflicts": "&eКонфликтует с: <conflicts>",
+          "ui-enchantment-browsing-cooldown": "&eПерезарядка: &b<cooldown>",
+          "ui-enchantment-browsing-forbidden": "&eЗапрещенные материалы: <forbidden>",
+          "ui-enchantment-browsing-unique": "&eУникальное: &b<unique>",
+          "ui-enchantment-browsing-seekers": "&eИскатели: <seekers>",
+          "ui-enchantment-browsing-required": "&eТребуемые зачарования: <required>",
+
+          "preview-word-tokens": {
+            "ui-enchantment-preview-seconds": "сек",
+            "ui-enchantment-preview-minutes": "мин",
+            "ui-enchantment-preview-hours": "ч",
+            "ui-enchantment-preview-day": "день"
+          },
+
+          "required-plugins": {
+            "ui-enchantment-browsing-required-plugins": "&eТребуемые плагины",
+            "ui-enchantment-browsing-required-plugin": "&7- &b<plugin>: <installed>",
+            "ui-enchantment-browsing-required-plugin-installed": "&aУстановлен",
+            "ui-enchantment-browsing-required-plugin-not-installed": "&cНе установлен",
+            "ui-enchantment-browsing-required-plugin-click": "&eНажмите, чтобы установить",
+            "ui-enchantment-browsing-required-plugin-disclaimer-first-line": "&7UnderscoreEnchants не скачивает плагины автоматически. Вам понадобится скачать их вручную.",
+            "ui-enchantment-browsing-required-plugin-disclaimer-second-line": "&7UnderscoreEnchants не несет ответственности за ущерб, причиненный сторонними плагинами.",
+            "ui-enchantment-required-plugin-chat-syntax": "&e<plugin> &f- &6&l<link>"
+          }
+        }
+      },
+
+      "locale-browsing": {
+        "ui-locale-browsing-title": "&r&f&b&lЛОКАЛИЗАЦИЯ",
+        "ui-locale-browsing-show-downloaded": "&eПоказывать скачанные языки: <state>"
+      }
+    },
+
+    "log": {
+      "creating-log": "&6Процесс создания лог-файла был запущен...",
+      "log-created": "&aЛог-файл был успешно создан и находится в &b<location>.",
+      "log-not-created": "&cНе удалось создать лог-файл. Подробности можно найти в консоли.",
+
+      "word-tokens": {
+        "log-token-authors": "Авторы",
+        "log-token-created": "Дата создания лога",
+        "log-token-worlds": "Информация о мирах",
+
+        "world-word-tokens": {
+          "log-token-world-name": "Название",
+          "log-token-world-uuid": "UUID",
+          "log-token-world-env": "Окружающая среда",
+          "log-token-world-seed": "Сид",
+          "log-token-world-difficulty": "Сложность",
+          "log-token-world-spawn": "Локация спавна",
+          "log-token-world-time": "Время",
+          "log-token-world-rain": "Дождь",
+          "log-token-world-thunder": "Гроза",
+          "log-token-world-spawn-limit": "(лимит спавнов)"
+        },
+
+        "log-token-registry": "Информация о реестре",
+
+        "registry-word-tokens": {
+          "log-token-registry-action-singular": "Действие",
+          "log-token-registry-action-plural": "Действий",
+          "log-token-registry-applicable-singular": "Применимое",
+          "log-token-registry-applicable-plural": "Применимых",
+          "log-token-registry-condition-singular": "Условия",
+          "log-token-registry-condition-plural": "Условий",
+          "log-token-registry-indicator-singular": "Индикатор",
+          "log-token-registry-indicator-plural": "Индикаторов",
+          "log-token-registry-placeholder-singular": "Плейсхолдер",
+          "log-token-registry-placeholder-plural": "Плейсхолдеров",
+          "log-token-registry-seeker-singular": "Искатель",
+          "log-token-registry-seeker-plural": "Искателей",
+          "log-token-registry-trigger-singular": "Триггер",
+          "log-token-registry-trigger-plural": "Триггеров",
+          "log-token-registry-loaded": "загружено",
+          "log-token-registry-provider": "Провайдер"
+        },
+
+        "log-token-enchantments": "Информация о зачарованиях",
+        "log-token-enchantments-loaded": "Зачарований загружено"
+      }
+    },
+
+    "invalid-state": {
+      "invalid-enchantment-name": "&cЗачарование &b<enchantment> &cне является существующим зачарованием.",
+      "invalid-enchantment-level": "&cУровень зачарования &b<level> &cне является числом.",
+      "invalid-parameter": "&cПараметр &b<parameter> &cневерный.",
+      "invalid-url": "&cURL &b<url> &cлибо не является верным URL, либо не ведет к зачарованию/паку зачарований. Требуется прямая ссылка на скачивание.",
+      "enchantment-level-out-of-bounds": "&cУровень зачарования &b<level> &cвыходит за его пределы. Минимальный уровень - &b<min>&c, максимальный уровень - &b<max>.",
+      "over-the-limit": "&cНа предмете не может быть более чем &b<limit> &cenchantments зачарований.",
+      "enchantment-conflicts": "&cДанное зачарование конфликтует с некоторыми другими зачарованиями на запрошенном предмете.",
+      "enchantment-unique": "&cДанное зачарование является уникальным и не может быть нанесено на предмет, уже содержащий зачарования.",
+      "has-unique-enchantment": "&cДанный предмет содержит уникальное зачарование и не может принимать дополнительных зачарований.",
+      "bad-update": "&cНе удалось проверить обновления. Проверьте подключение к Интернету и попробуйте еще раз.",
+      "player-not-found": "&cИгрок &b<player> &cне найден.",
+      "already-registered": "&6<new> &cуже зарегистрирован как &6<old> &cот &6<plugin>."
+    },
+
+    "activated": {
+      "default-activation-indicator": "&aЗачарование &b<enchantment> &aбыло активировано."
+    },
+
+    "downloaded": {
+      "downloaded-enchantment": "&aЗачарование &b<enchantment> &aбыло скачано.",
+      "downloaded-pack": "&aПак зачарований &b<pack> &aбыл скачан.",
+      "downloaded-locale": "&aФайл локализации &b<locale> &aбыл скачан.",
+      "failed-to-download-enchantment": "&cНе удалось скачать зачарование &b<enchantment>&c.",
+      "failed-to-download-pack": "&cНе удалось скачать пак зачарований &b<pack>&c.",
+      "failed-to-download-locale": "&cНе удалось скачать файл локализации &b<locale>&c."
+    },
+
+    "loaded": {
+      "loaded-enchantment": "&aЗачарование &b<enchantment> &aбыло загружено.",
+      "loaded-pack": "&aПак зачарований &b<pack> &aс &b<amount> &aзачарованиями был загружен.",
+      "loaded-locale": "&aФайл локализации &b<locale> &aбыл загружен.",
+      "failed-to-load-enchantment": "&cНе удалось загрузить зачарование &b<enchantment>&c.",
+      "failed-to-load-pack": "&cНе удалось загрузить пак зачарований &b<pack>&c.",
+      "failed-to-load-locale": "&cНе удалось загрузить файл локализации &b<locale>&c."
+    },
+
+    "unloaded": {
+      "unloaded-enchantment": "&aЗачарование &b<enchantment> &aбыло отгружено.",
+      "unloaded-pack": "&aПак зачарований &b<pack> &aбыл отгружен.",
+      "unloaded-locale": "&aФайл локализации &b<locale> &aбыл отгружен."
+    },
+
+    "toggled": {
+      "toggled-enchantment": "&aЗачарование &b<enchantment> &aбыло переключено (&b<state>&a).",
+      "toggled-enchantment-other": "&aВы переключили зачарование &b<enchantment> &aдля игрока &b<player> &a(&b<state>&a).",
+      "toggled-enchantment-externally": "&aЗачарование &b<enchantment> &aбыло переключено (&b<state>&a) для вас администрацией или другим плагином.",
+      "state-on": "&aвключено",
+      "state-off": "&cвыключено",
+      "cant-toggle-vanilla": "&cYou cannot toggle vanilla enchantments."
+    },
+
+    "locale": {
+      "changed-locale": "&aВы изменили свой язык на &bРусский &a(&6ru_RU&a).",
+      "changed-locale-externally": "&aВаш язык был изменён на &bРусский &a(&6ru_RU&a) администрацией или другим плагином.",
+      "changed-locale-other": "&aВы изменили язык игрока &6<player> на &bРусский &a(&6ru_RU&a).",
+      "cant-change-locale": "&cФункция персонализации языка выключена в данном плагине. Свяжитесь с администрацией сервера, если вы считаете, что произошла ошибка.",
+      "no-such-locale": "&cНе удалось найти язык &6<locale>&c."
+    },
+
+    "data": {
+      "loading": "&eВаши данные загружаются. Пожалуйста, подождите немного.",
+      "loaded": "&aВаши данные были успешно загружены. Приятного времяпрепровождения."
+    },
+
+    "command": {
+      "reloaded": "&aПлагин был перезагружен за &6<ms>&aмс.",
+
+      "enchant": {
+        "error": {
+          "command-enchant-no-enchantment-name": "&cНеобходимо предоставить название зачарования.",
+          "command-enchant-no-enchantment-level": "&cНеобходимо предоставить уровень зачарования.",
+          "command-enchant-cannot-apply": "&cЗачарование &b<enchantment> &cнельзя наложить на данный предмет."
+        },
+
+        "enchanted-item": "&aНа предмет в вашей руке нанесено было зачарование &b<enchantment> &6<level>.",
+        "enchanted-item-other": "&aНа предмет в руке &b<player> &aбыло нанесено зачарование &b<enchantment> &6<level>."
+      },
+
+      "hover": {
+        "command-hover": "Нажмите на эту команду, чтобы ввести ее в чат",
+        "command-hover-hint": "&eНажмите на команду, чтобы ввести ее в чат."
+      },
+
+      "help": {
+        "command-help-title": "&b&l========== &fПОМОЩЬ ПО ОСНОВНОЙ КОМАНДЕ &b==========",
+        "command-help-debug": "&7- /ue debug: &eКоманда, используемая для дебаггинга плагина &7(привилегия:&f uench.debug&7)",
+        "command-help-enchant": "&7- /ue enchant: &eКоманда, используемая для накладывания чар на предмет &7(привилегия: &fuench.enchant&7)",
+        "command-help-toggle": "&7- /ue toggle: &eКоманда, используемая для персонального включения/отключения зачарований &7(привилегия: &fuench.toggle&7)",
+        "command-help-download": "&7- /ue download: &eКоманда, используемая для скачивания и установки зачарований &7(привилегия: &fuench.download.*&7)",
+        "command-help-locale": "&7- /ue locale: &eКоманда для изменения языка игрока &7(привилегия: &fuench.locale&7)",
+        "command-help-help": "&7- /ue help: &6Данная команда &7(привилегия: &fuench.help&7)",
+        "command-help-load": "&7- /ue load: &eКоманда, используемая для загрузки зачарований из файлов &7(привилегия: &fuench.load.*&7)",
+        "command-help-unload": "&7- /ue unload: &eКоманда, используемая для отгрузки зачарований из файлов &7(привилегия: &fuench.unload.*&7)",
+        "command-help-reload": "&7- /ue reload: &eКоманда, используемая для перезагрузки плагина &7(привилегия: &fuench.reload&7)",
+        "command-help-browse-packs": "&7- /ue browsepacks: &eКоманда, открывающая GUI для просмотра и скачивания паков зачарований &7(привилегия: &fuench.browse.packs&7)",
+        "command-help-browse-enchs": "&7- /ue browseenchs: &eКоманда, открывающая GUI для просмотра и скачивания зачарований &7(привилегия: &fuench.browse.enchs&7)",
+        "command-help-browse-locales": "&7- /ue browselocales: &eКоманда, открывающая GUI для просмотра и скачивания локализаций &7(привилегия: &fuench.browse.locales&7)",
+        "command-help-browse": "&7- /ue browse <packs/enchs/locales>: &eАльтернатива для &l/ue browsepacks&r&e, &l/ue browselocales &r&eили &l/ue browseenchs &7(требуются соответствующие привилегии)",
+        "command-help-syntax-details": "&eЧтобы подробнее изучить синтаксис команды, введите ее без параметров &7(например, &f/ue toggle&7).",
+        "command-help-syntax-exceptions": "&eЕсли команда не принимает параметры, вместо сообщения-помощника, она будет исполнена как обычно."
+      },
+
+      "debug": {
+        "debug-help-title": "&b&l========== &fКОМАНДА ДЕБАГА &b==========",
+        "debug-help-registry": "&7- /ue debug registry: &eВыводит информацию для дебаггинга реестра",
+        "debug-help-log": "&7- /ue debug log: &eСоздает лог-файл, содержащий важную для дебаггинга информацию",
+        "debug-help-enchantment": "&7- /ue debug enchantment <ench>: &eВыводит информацию для дебаггинга зачарования"
+      },
+
+      "feature-delayed": "&6Данная функция будет доступна в следующем обновлении.",
+
+      "enchantments-debug": {
+        "enchantments-word-tokens": {
+          "token-enchantment": "Зачарование",
+          "token-enchantment-chance": "Шанс",
+          "token-enchantment-indicator": "Индикатор активации",
+          "token-enchantment-applicables": "Применимые",
+          "token-enchantment-author": "Автор",
+          "token-enchantment-conditions": "Условия",
+          "token-enchantment-conflicts": "Конфликты",
+          "token-enchantment-cooldown": "Перезарядка в тактах",
+          "token-enchantment-description": "Описание",
+          "token-enchantment-forbidden": "Запрещенные материалы",
+          "token-enchantment-unique": "Уникальное",
+          "token-enchantment-levels": "Уровни",
+          "token-enchantment-negated": "наоборот",
+          "token-enchantment-actions": "действия",
+          "token-enchantment-restrictions": "Ограничения по добыче",
+          "token-enchantment-required-enchantments": "Обязательные зачарования",
+          "token-enchantment-required-plugins": "Обязательные плагины",
+          "token-enchantment-seekers": "Искатели",
+          "token-enchantment-trigger": "Триггер",
+          "token-enchantment-whitelist": "Белый список миров",
+          "token-enchantment-blacklist": "Чёрный список миров",
+          "token-enchantment-required-plugin-link": "Ссылка"
+        },
+
+        "enchantment-pack-word-tokens": {
+          "token-enchantment-by": "от",
+          "token-enchantments": "зачарования"
+        }
+      },
+
+      "registry-debug": {
+        "registry-debug-title": "&b&l========== &fДЕБАГ РЕЕСТРА &b==========",
+        "registry-debug-actions-loaded": "&7- &6Загружено действий: &f&l<amount>",
+        "registry-debug-applicables-loaded": "&7- &6Загружено применимых: &f&l<amount>",
+        "registry-debug-conditions-loaded": "&7- &6Загружено условий: &f&l<amount>",
+        "registry-debug-indicators-loaded": "&7- &6Загружено индикаторов: &f&l<amount>",
+        "registry-debug-placeholders-loaded": "&7- &6Загружено плейсхолдеров: &f&l<amount>",
+        "registry-debug-seekers-loaded": "&7- &6Загружено искателей: &f&l<amount>",
+        "registry-debug-triggers-loaded": "&7- &6Загружено триггеров: &f&l<amount>",
+        "registry-debug-built-in-amount": "&r&fиз них встроенных: <amount>",
+
+        "registry-debug-more-info": "&eЧтобы получить более подробную информацию о каждом из разделов, введите &f/ue debug registry <section>&e.",
+        "registry-debug-invalid-type": "&cНеизвестный тип. Принимаются типы: &factions, applicables, conditions, indicators, placeholders, seekers, triggers&c.",
+
+        "more-info": {
+          "actions": {
+            "registry-debug-actions-title": "&b&l========== &fДЕЙСТВИЯ &b==========",
+            "registry-debug-actions-info": "&eСледующие действия &f(&7<amount>&f)&e доступны на данный момент:",
+            "registry-debug-actions-built-in": "&7- &f<name> &7(&6это действие предоставляется UnderscoreEnchants&7)",
+            "registry-debug-actions-custom": "&7- &f<name> &7(&6это действие предоставляется &f<plugin>&7)"
+          },
+
+          "applicables": {
+            "registry-debug-applicables-title": "&b&l========== &fПРИМЕНИМЫЕ &b==========",
+            "registry-debug-applicables-info": "&eСледующие применимые &f(&7<amount>&f)&e доступны на данный момент:",
+            "registry-debug-applicables-built-in": "&7- &f<name> &7(&6это применимое предоставляется UnderscoreEnchants&7)",
+            "registry-debug-applicables-custom": "&7- &f<name> &7(&6это применимое предоставляется &f<plugin>&7)"
+          },
+
+          "conditions": {
+            "registry-debug-conditions-title": "&b&l========== &fУСЛОВИЯ &b==========",
+            "registry-debug-conditions-info": "&eСледующие условия &f(&7<amount>&f)&e доступны на данный момент:",
+            "registry-debug-conditions-built-in": "&7- &f<name> &7(&6это условие предоставляется UnderscoreEnchants&7)",
+            "registry-debug-conditions-custom": "&7- &f<name> &7(&6это условие предоставляется &f<plugin>&7)"
+          },
+
+          "indicators": {
+            "registry-debug-indicators-title": "&b&l========== &fИНДИКАТОРЫ &b==========",
+            "registry-debug-indicators-info": "&eСледующие индикаторы &f(&7<amount>&f)&e доступны на данный момент:",
+            "registry-debug-indicators-built-in": "&7- &f<name> &7(&6этот индикатор предоставляется UnderscoreEnchants&7)",
+            "registry-debug-indicators-custom": "&7- &f<name> &7(&6этот индикатор предоставляется &f<plugin>&7)"
+          },
+
+          "placeholders": {
+            "registry-debug-placeholders-title": "&b&l========== &fПЛЕЙСХОЛДЕРЫ &b==========",
+            "registry-debug-placeholders-info": "&eСледующие плейсхолдеры &f(&7<amount>&f)&e доступны на данный момент:",
+            "registry-debug-placeholders-built-in": "&7- &f<name> &7(&6этот плейсхолдер предоставляется UnderscoreEnchants&7)",
+            "registry-debug-placeholders-custom": "&7- &f<name> &7(&6этот плейсхолдер предоставляется &f<plugin>&7)"
+          },
+
+          "seekers": {
+            "registry-debug-seekers-title": "&b&l========== &fИСКАТЕЛИ &b==========",
+            "registry-debug-seekers-info": "&eСледующие искатели &f(&7<amount>&f)&e доступны на данный момент:",
+            "registry-debug-seekers-built-in": "&7- &f<name> &7(&6этот искатель предоставляется UnderscoreEnchants&7)",
+            "registry-debug-seekers-custom": "&7- &f<name> &7(&6этот искатель предоставляется &f<plugin>&7)"
+          },
+
+          "triggers": {
+            "registry-debug-triggers-title": "&b&l========== &fТРИГГЕРЫ &b==========",
+            "registry-debug-triggers-info": "&eСледующие триггеры &f(&7<amount>&f)&e доступны на данный момент:",
+            "registry-debug-triggers-built-in": "&7- &f<name> &7(&6этот триггер предоставляется UnderscoreEnchants&7)",
+            "registry-debug-triggers-custom": "&7- &f<name> &7(&6этот триггер предоставляется &f<plugin>&7)"
+          }
+        }
+      },
+
+      "download": {
+        "help": {
+          "download-help-title": "&b&l========== &fКОМАНДА СКАЧИВАНИЯ &b==========",
+          "download-help-enchantment": "&7- /ue download enchantment <id> <true/false>: &eСкачивает зачарование по ID и загружает, если значение \"true\" &7(привилегия: &fuench.download.enchantment&7)",
+          "download-help-pack": "&7- /ue download pack <id> <true/false>: &eСкачивает пак зачарований по ID и загружает, если значение \"true\" &7(привилегия: &fuench.download.pack&7)",
+          "download-help-locale": "&7- /ue download locale <id> <true/false>: &eСкачивает файл локализации по ID и загружает, если значение \"true\" &7(привилегия: &fuench.download.locale&7)"
+        },
+
+        "error": {
+          "download-invalid-type": "&cНеверный тип. Типы: &fenchantment&c, &fpack&c и &flocale&c.",
+          "download-no-id": "&cНеобходимо предоставить ID для скачивания зачарования или пака.",
+          "download-unsuccessful": "&cНе удалось выполнить скачивание. Проверьте ID и попробуйте снова."
+        },
+
+        "downloaded": {
+          "enchantment": {
+            "download-enchantment-successful": "&aЗачарование успешно скачано. Воспользуйтесь &f/ue load &aдля загрузки, или нажмите на это сообщение.",
+            "download-enchantment-successful-no-prompt": "&aЗачарование успешно скачано.",
+            "download-and-load-enchantment-successful": "&aЗачарование успешно скачано и загружено.",
+            "download-enchantment-click-to-load": "&6Нажмите, чтобы загрузить зачарование"
+          },
+
+          "pack": {
+            "download-pack-successful": "&aПак успешно скачан. Воспользуйтесь &f/ue load &aдля загрузки, или нажмите на это сообщение.",
+            "download-pack-successful-no-prompt": "&aПак успешно скачан.",
+            "download-and-load-pack-successful": "&aПак успешно скачан и загружен.",
+            "download-pack-click-to-load": "&6Нажмите, чтобы загрузить пак"
+          },
+
+          "locale": {
+            "download-locale-successful": "&aФайл локализации успешно скачан. Воспользуйтесь &f/ue load &aдля загрузки, или нажмите на это сообщение.",
+            "download-locale-successful-no-prompt": "&aФайл локализации успешно скачан.",
+            "download-and-load-locale-successful": "&aФайл локализации успешно скачан и загружен.",
+            "download-locale-click-to-load": "&6Нажмите, чтобы загрузить файл локализации"
+          }
+        }
+      },
+
+      "load": {
+        "help": {
+          "load-help-title": "&b&l========== &fКОМАНДА ЗАГРУЗКИ &b==========",
+          "load-help-enchantment": "&7- /ue load enchantment <имя файла>: &eЗагружает зачарование по имени файла &7(привилегия: &fuench.load.enchantment&7)",
+          "load-help-pack": "&7- /ue load pack <имя файла>: &eЗагружает пак зачарований по имени файла &7(привилегия: &fuench.load.pack&7)",
+          "load-help-locale": "&7- /ue load locale <имя файла>: &eЗагружает язык по имени файла &7(привилегия: &fuench.load.locale&7)"
+        },
+
+        "error": {
+          "load-invalid-type": "&cНеверный тип. Типы: &fenchantment&c, &fpack&c и &flocale&c.",
+          "load-no-filename": "&cНеобходимо предоставить ID для загрузки зачарования или пака."
+        },
+
+        "loaded": {
+          "enchantment": {
+            "load-enchantment-successful": "&aЗачарование успешно загружено.",
+            "load-enchantment-reloaded": "&aЗачарование успешно перезагружено.",
+            "load-enchantment-not-found": "&cНе удалось найти зачарование."
+          },
+
+          "pack": {
+            "load-pack-successful": "&aПак успешно загружен.",
+            "load-pack-not-found": "&cНе удалось найти пак."
+          },
+
+          "locale": {
+            "load-locale-successful": "&aФайл локализации успешно загружен.",
+            "load-locale-not-found": "&cНе удалось найти файл локализации."
+          }
+        }
+      },
+
+      "unload": {
+        "help": {
+          "unload-help-title": "&b&l========== &fКОМАНДА ОТГРУЗКИ &b==========",
+          "unload-help-enchantment": "&7- /ue unload enchantment <название>: &eОтгружает зачарование по названию &7(привилегия: &fuench.unload.enchantment&7)",
+          "unload-help-pack": "&7- /ue unload pack <название>: &eОтгружает пак по названию &7(привилегия: &fuench.unload.pack&7)",
+          "unload-help-locale": "&7- /ue unload locale <name>: &eОтгружает язык по названию &7(привилегия: &fuench.unload.locale&7)"
+        },
+
+        "error": {
+          "unload-invalid-type": "&cНеверный тип. Типы: &fenchantment&c, &fpack&c и &flocale&c.",
+          "unload-no-name": "&cНеобходимо предоставить ID для отгрузки зачарования или пака."
+        },
+
+        "unloaded": {
+          "enchantment": {
+            "unload-enchantment-successful": "&aЗачарование успешно отгружено.",
+            "unload-enchantment-not-found": "&cНе удалось найти зачарование."
+          },
+
+          "pack": {
+            "unload-pack-successful": "&aПак успешно отгружен.",
+            "unload-pack-not-found": "&cНе удалось найти пак."
+          },
+
+          "locale": {
+            "unload-locale-successful": "&aФайл локализации успешно отгружен.",
+            "unload-locale-not-found": "&cНе удалось найти файл локализации."
+          }
+        }
+      }
+    }
+  }
+}

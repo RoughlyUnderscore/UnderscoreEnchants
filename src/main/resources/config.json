@@ -1,0 +1,33 @@
+{
+  "config-version": 22,
+  "configuration": {
+    "settings": {
+      "generate-readme": true,
+      "locale": "en_US",
+      "players-can-change-locales": true,
+      "include-default-locales": true,
+      "storage-medium": "json",
+      "storage-saving-period-ticks": 900,
+      "notify-players-of-data-loading": true,
+      "repository-url": "https://ue.runderscore.com/api/v1/"
+    },
+    "misc": {
+      "bStats": true,
+      "update-checker-frequency-hours": 24,
+      "notify-ops-about-updates": true,
+      "debug": false
+    },
+    "generation": {
+      "chest-loot-chance": 14.2857142857149,
+      "fishing-loot-chance": 14.2857142857149,
+      "villager-item-trade-chance": 14.2857142857149,
+      "enchantment-chance": 14.2857142857149
+    },
+    "ui": {
+      "truncate-pack-data-after-x-enchantments": 10
+    },
+    "enchantments": {
+      "limit": -1
+    }
+  }
+}

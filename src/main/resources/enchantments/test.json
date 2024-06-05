@@ -1,0 +1,76 @@
+{
+  "name": "Parkour",
+  "author": "Roughly_",
+  "description": [
+    "When you take damage from falling, you have a chance to cancel the damage.",
+    "Bla bla bla etc."
+  ],
+  "chance": 70,
+  "trigger": "gothurt",
+  "applicables": ["feet"],
+  "enchantmentSeekers": ["feet"],
+  "activationIndicator": "bossbar",
+  "forbidden": [
+    "leather_boots",
+    "chainmail_boots"
+  ],
+  "conflictsWith": [
+    "Frost Walker",
+    "Depth Strider"
+  ],
+  "required": [
+    {
+      "key": "unbreaking",
+      "seekers": ["feet"],
+      "levels": "1-3,5"
+    }
+  ],
+  "requiredPlugins": [
+    {
+      "name": "PlaceholderAPI",
+      "displayName": "PlaceholderAPI (2.10.9+)",
+      "link": "https://www.spigotmc.org/resources/placeholderapi.6245/"
+    }
+  ],
+  "conditions": [
+    {
+      "condition": "cause falling"
+    },
+    {
+      "condition": "dmg > 3"
+    }
+  ],
+  "obtainment": [
+    {
+      "type": "enchanting_table",
+      "levels": "1-3,5"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "conditions": [
+        {
+          "condition": "damage lethal",
+          "negate": true
+        }
+      ],
+      "chance": 95,
+      "cooldownTicks": 5,
+      "actions": [
+        {
+          "action": "time 10000 <target=first_player:placeholder=player_world>",
+          "delayTicks": 1,
+          "chance": 50
+        },
+        {
+          "action": "player-set-hand MAIN DIAMOND",
+          "player": "first"
+        },
+        {
+          "action": "cancel"
+        }
+      ]
+    }
+  ]
+}
