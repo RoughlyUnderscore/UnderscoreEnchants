@@ -39,3 +39,5 @@ Only 2 classes are at the root of the main package - they are as follows:
   This class is the implementation of the UnderscoreEnchantsAPI's RegistrableEnchantment. Aside storing all the data of an enchantment, it also contains a `registerEnchantment` method, which turns a stale RegistrableEnchantment into a functioning enchantment.
 - `UnderscoreEnchantsPlugin`
   This is the core class of the plugin, containing the initializers, such as registering commands, listeners and enchantments, and the implementation of the API methods at the bottom part of the class.
+
+The documentation is available [here](https://ue.runderscore.com/docs).

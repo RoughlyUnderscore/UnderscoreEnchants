@@ -29,10 +29,10 @@ import org.bukkit.event.Event
  * Sets the player's main/off hand item
  *
  * Example:
- * - `set-hand main DIAMOND:15`
+ * - `set-hand main DIAMOND`
  *
  * Syntax:
- * - `set-main-hand (MAIN/OFF) ITEM`
+ * - `set-hand (MAIN/OFF) ITEM`
  * - If `MAIN` is specified, the main hand item will be set. If `OFF` is specified, the off hand item will be set.
  * - Item takes a standard item syntax found in the parseIntoItem method.
  * - Types can be found [here](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html)

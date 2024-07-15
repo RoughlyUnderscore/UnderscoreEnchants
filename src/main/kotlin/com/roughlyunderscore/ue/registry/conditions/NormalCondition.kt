@@ -36,6 +36,7 @@ class NormalCondition : RegistrableCondition {
     "is-normal-difficulty",
     "normal-diff",
     "is-normal-diff",
+    "normal"
   )
 
   override fun evaluateCondition(trigger: RegistrableTrigger, event: Event, target: TargetType, arguments: List<String>): Boolean {

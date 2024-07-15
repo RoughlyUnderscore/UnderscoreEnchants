@@ -34,8 +34,8 @@ import org.bukkit.event.Event
  *
  * Syntax:
  * - `tp X Y Z WORLD`
- * - If you leave the world field empty, or such world is not present, it will default to the current player's world.
- * - You can also leave out the coordinates, but leave the world name, to teleport the player to that world's spawnpoint.
+ * - If you leave the world field empty, or such world is not present, it will default to the current entity's world.
+ * - You can also leave out the coordinates, but leave the world name, to teleport the entity to that world's spawnpoint.
  */
 @Since("2.2")
 @Stable

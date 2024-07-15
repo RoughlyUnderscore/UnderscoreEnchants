@@ -46,7 +46,7 @@ class CreateWorldAction : RegistrableAction {
   override fun execute(event: Event, trigger: RegistrableTrigger, arguments: List<String>, target: TargetType): EventModifications? {
     if (arguments.size < 3) return null
 
-    val type = safeValue<WorldType>(arguments[0]) ?: WorldType.getByName(arguments[0]) ?: return null
+    val type = safeValue<WorldType>(arguments[0].uppercase()) ?: WorldType.getByName(arguments[0].uppercase()) ?: return null
     val generatorSettings = arguments[1]
     val name = arguments[2]
 

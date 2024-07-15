@@ -33,7 +33,7 @@ import org.bukkit.event.Event
  *
  * Syntax:
  * - `spawn-particle PARTICLE`
- * - Particles can be found [here](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html)
+ * - Particles can be found [here](https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/particles/XParticle.java)
  */
 @Since("2.2")
 @Stable

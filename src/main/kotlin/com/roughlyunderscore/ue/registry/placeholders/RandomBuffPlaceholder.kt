@@ -28,17 +28,14 @@ import org.bukkit.event.Event
 class RandomBuffPlaceholder : RegistrablePlaceholder {
   override val aliases = listOf(
     "random-positive-effect",
-    "random_positive-potion-effect",
     "random-positive-potion",
     "random-positive-effect",
     "random-positive",
-    "random_pos-potion-effect",
     "random-pos-potion",
     "random-pos-effect",
     "random-pos",
     "random-buff",
     "random-buff-effect",
-    "random_buff-potion-effect",
     "random-buff-potion",
     "random-buff-effect",
     "buff",

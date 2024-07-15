@@ -36,7 +36,7 @@ import org.bukkit.event.Event
 @Since("2.2")
 @Stable
 class BroadcastMessageAction : RegistrableAction {
-  override val aliases = listOf("broadcast", "broadcast-message", "servermessage", "allmessage")
+  override val aliases = listOf("broadcast", "broadcast-message", "broadcastmessage", "servermessage", "server-message", "allmessage", "all-message")
 
   override fun execute(event: Event, trigger: RegistrableTrigger, arguments: List<String>, target: TargetType): EventModifications? {
     Bukkit.broadcastMessage(arguments.joinToString(separator = " ").formatColor())

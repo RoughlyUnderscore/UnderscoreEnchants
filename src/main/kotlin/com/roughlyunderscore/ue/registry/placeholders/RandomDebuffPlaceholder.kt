@@ -28,17 +28,14 @@ import org.bukkit.event.Event
 class RandomDebuffPlaceholder : RegistrablePlaceholder {
   override val aliases = listOf(
     "random-negative-effect",
-    "random_negative-potion-effect",
     "random-negative-potion",
     "random-negative-effect",
     "random-negative",
-    "random_neg-potion-effect",
     "random-neg-potion",
     "random-neg-effect",
     "random-neg",
     "random-debuff",
     "random-debuff-effect",
-    "random_debuff-potion-effect",
     "random-debuff-potion",
     "random-debuff-effect",
     "debuff",

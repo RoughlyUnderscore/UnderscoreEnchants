@@ -49,7 +49,7 @@ class OnTopCondition : RegistrableCondition {
     val playerBlockX = entity.location.blockX
     val playerBlockZ = entity.location.blockZ
 
-    val playerBlockY = entity.location.blockY - 1 // to get the location that the player is standing on
+    val playerBlockY = entity.location.blockY - 1 // to get the location that the entity is standing on
     val highestY = entity.world.getHighestBlockYAt(playerBlockX, playerBlockZ)
 
     return playerBlockY == highestY

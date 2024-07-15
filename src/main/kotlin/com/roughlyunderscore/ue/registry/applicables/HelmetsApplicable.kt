@@ -23,7 +23,7 @@ import org.bukkit.Material
 @Since("2.2")
 @Stable
 class HelmetsApplicable : RegistrableApplicable {
-  override val aliases = listOf("helmet", "head", "armorhelmet", "armorhead", "armor-helmet", "armor-head", "armor_helmet", "armor_head")
+  override val aliases = listOf("helmet", "head", "armorhelmet", "armorhead", "armor-helmet", "armor-head", "armor_helmet", "armor_head", "helmets")
 
   override fun canBeAppliedTo(type: Material): Boolean = type in Constants.HELMETS
 }

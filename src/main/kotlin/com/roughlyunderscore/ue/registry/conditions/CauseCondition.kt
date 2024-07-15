@@ -71,6 +71,11 @@ class CauseCondition : RegistrableCondition {
       "thorns", "thorn", "counter", "counterattack" -> cause == DamageCause.THORNS
       "void" -> cause == DamageCause.VOID
       "wither", "withering", "withered" -> cause == DamageCause.WITHER
+      "worldborder", "border" -> cause == DamageCause.WORLD_BORDER
+      "killcommand", "kill" -> cause == DamageCause.KILL
+      "melting", "melt" -> cause == DamageCause.MELTING
+      "dryout", "dry" -> cause == DamageCause.DRYOUT
+      "sonicboom", "sonic" -> cause == DamageCause.SONIC_BOOM
       else -> false
     }
   }

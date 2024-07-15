@@ -28,7 +28,7 @@ import org.bukkit.inventory.meta.Damageable
 import kotlin.math.roundToInt
 
 /**
- * Damages the player's armor piece by an amount.
+ * Damages the player's item by an amount.
  *
  * Example:
  * - `damage-item chestplate 2`

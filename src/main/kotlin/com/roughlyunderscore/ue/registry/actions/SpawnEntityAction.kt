@@ -85,7 +85,7 @@ class SpawnEntityAction : RegistrableAction {
 
       when (optional.first) {
         SpawnEntityArgumentType.HEALTH -> {
-          val health = (optional.second as? Double)?.let { number -> number.clamp(0.0, 2048.0)} ?: continue
+          val health = (optional.second as? Double)?.clamp(0.0, 2048.0) ?: continue
 
           if (entity !is LivingEntity) continue
           entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue = health

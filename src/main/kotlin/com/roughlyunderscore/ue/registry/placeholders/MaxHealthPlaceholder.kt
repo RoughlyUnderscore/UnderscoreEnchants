@@ -30,6 +30,8 @@ class MaxHealthPlaceholder : RegistrablePlaceholder {
   override val aliases = listOf(
     "max-hp",
     "max-health",
+    "maximum-hp",
+    "maximum-health"
   )
 
   override fun replacedText(

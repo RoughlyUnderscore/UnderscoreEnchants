@@ -27,7 +27,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Event
 
 /**
- * Says a message/command on the player's behalf.
+ * Sends a message/command on the player's behalf.
  *
  * Example:
  * - `chat You are DOOMED!`
@@ -38,7 +38,7 @@ import org.bukkit.event.Event
 @Since("2.2")
 @Stable
 class PlayerChatAction(private val plugin: UnderscoreEnchantsPlugin) : RegistrableAction {
-  override val aliases = listOf("chat", "say")
+  override val aliases = listOf("chat", "say", "player-chat")
 
   override fun execute(event: Event, trigger: RegistrableTrigger, arguments: List<String>, target: TargetType): EventModifications? {
     if (arguments.isEmpty()) return null

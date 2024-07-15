@@ -28,8 +28,7 @@ import org.bukkit.event.Event
 class WorldPlaceholder : RegistrablePlaceholder {
   override val aliases = listOf(
     "world",
-    "world-name",
-    "player-world"
+    "world-name"
   )
 
   override fun replacedText(

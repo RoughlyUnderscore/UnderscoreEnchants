@@ -44,6 +44,8 @@ class PeacefulCondition : RegistrableCondition {
     "is-peaceful-difficulty",
     "peaceful-diff",
     "is-peaceful-diff",
+    "peaceful",
+    "peace"
   )
 
   override fun evaluateCondition(trigger: RegistrableTrigger, event: Event, target: TargetType, arguments: List<String>): Boolean {

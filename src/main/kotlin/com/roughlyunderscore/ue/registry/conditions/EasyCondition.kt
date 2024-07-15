@@ -36,6 +36,7 @@ class EasyCondition : RegistrableCondition {
     "is-easy-difficulty",
     "easy-diff",
     "is-easy-diff",
+    "easy"
   )
 
   override fun evaluateCondition(trigger: RegistrableTrigger, event: Event, target: TargetType, arguments: List<String>): Boolean {

@@ -28,6 +28,7 @@ import org.bukkit.event.Event
 class OnFireCondition : RegistrableCondition {
   override val aliases = listOf(
     "onfire",
+    "on-fire",
     "isonfire",
     "burning",
     "isburning",

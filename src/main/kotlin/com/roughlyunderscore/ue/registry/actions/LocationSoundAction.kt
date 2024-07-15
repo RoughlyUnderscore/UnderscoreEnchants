@@ -33,7 +33,7 @@ import org.bukkit.event.Event
  *
  * Syntax:
  * - `place-sound SOUND X Y Z WORLD`
- * - Sounds can be found [here](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html)
+ * - Sounds can be found [here](https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/XSound.java)
  */
 @Since("2.2")
 @Stable

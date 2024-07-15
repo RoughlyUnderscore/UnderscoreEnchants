@@ -27,7 +27,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Event
 
 /**
- * Sets entity's health, clamping it between 0 and player's max health
+ * Sets entity's health, clamping it between 0 and their max health
  *
  * Example:
  * - `hp 306`

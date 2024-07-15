@@ -19,7 +19,7 @@ import com.roughlyunderscore.annotations.Stable
 import com.roughlyunderscore.enums.TargetType
 import com.roughlyunderscore.registry.RegistrablePlaceholder
 import com.roughlyunderscore.registry.RegistrableTrigger
-import com.roughlyunderscore.enums.DataRetrievalType
+import com.roughlyunderscore.ue.utils.mapToDrt
 import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 
@@ -39,7 +39,7 @@ class ItemNamePlaceholder : RegistrablePlaceholder {
     target: TargetType,
     args: Map<String, String>
   ): String? {
-    val method = trigger.getTriggerDataHolder().dataRetrievalMethods[DataRetrievalType.FIRST_ITEM] ?: return null
+    val method = trigger.getTriggerDataHolder().dataRetrievalMethods[target.mapToDrt()] ?: return null
     val item = method.invoke(event) as? ItemStack ?: return null
     return item.type.name
   }

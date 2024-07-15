@@ -38,7 +38,7 @@ import kotlin.math.roundToInt
 @Since("2.2")
 @Stable
 class PlayerSubtitleAction : RegistrableAction {
-  override val aliases = listOf("subtitle", "send-subtitle")
+  override val aliases = listOf("subtitle", "send-subtitle", "player-subtitle")
 
   override fun execute(event: Event, trigger: RegistrableTrigger, arguments: List<String>, target: TargetType): EventModifications? {
     if (arguments.size < 4) return null

@@ -36,7 +36,7 @@ import org.bukkit.event.Event
 @Since("2.2")
 @Stable
 class ForwardAction : RegistrableAction {
-  override val aliases = listOf("forward", "go-forward", "teleport-forward")
+  override val aliases = listOf("forward", "go-forward", "teleport-forward", "dash")
 
   override fun execute(event: Event, trigger: RegistrableTrigger, arguments: List<String>, target: TargetType): EventModifications? {
     if (arguments.isEmpty()) return null

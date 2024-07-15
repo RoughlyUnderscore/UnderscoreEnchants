@@ -23,6 +23,6 @@ import org.bukkit.inventory.ItemStack
 @Since("2.2")
 @Stable
 class HelmetSeeker : RegistrableEnchantmentSeeker {
-  override val aliases = listOf("head", "helmet")
+  override val aliases = listOf("head", "helmet", "helm")
   override fun seekItems(player: Player): List<ItemStack?> = listOf(player.inventory.helmet)
 }

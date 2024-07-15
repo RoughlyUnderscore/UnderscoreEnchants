@@ -25,7 +25,7 @@ import com.roughlyunderscore.registry.RegistrableTrigger
 @Since("2.2")
 @Stable
 class PlayerGotHurtTrigger : RegistrableTrigger {
-  override val aliases = listOf("playergothurt", "playergothurtevent", "gothurt", "gothurtevent")
+  override val aliases = listOf("playergothurt", "playergothurtevent", "gothurt", "gothurtevent", "got-hurt")
 
   override fun getTriggerDataHolder(): TriggerDataHolder = TriggerDataHolder.fromStringMethods(
     PlayerGotHurtEvent::class.java,

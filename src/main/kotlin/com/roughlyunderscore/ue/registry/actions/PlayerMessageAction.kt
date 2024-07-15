@@ -37,7 +37,7 @@ import org.bukkit.event.Event
 @Since("2.2")
 @Stable
 class PlayerMessageAction : RegistrableAction {
-  override val aliases = listOf("message", "send-message", "msg")
+  override val aliases = listOf("message", "send-message", "msg", "player-message")
 
   override fun execute(event: Event, trigger: RegistrableTrigger, arguments: List<String>, target: TargetType): EventModifications? {
     if (arguments.isEmpty()) return null

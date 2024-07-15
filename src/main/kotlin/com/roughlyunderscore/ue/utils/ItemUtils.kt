@@ -443,11 +443,7 @@ fun ItemStack.getAllEnchantmentsByKey(registry: RegistryImpl): Map<NamespacedKey
  * - `stone|15%!cobblestone|20%!granite|10!oak_log|15%`: Returns either itemstack of 3 stone (15% chance), 30 cobblestone (20% chance), 10 granite (chance calculated later), or 1 oak log (15% chance)
  * - `stone|70%`: Returns either itemstack of 3 stone (70% chance) or nothing (30% chance)
  * - `stone|50%!cobblestone|30%`: Returns either itemstack of 1 stone (50% chance), 1 cobblestone (30% chance) or nothing (20% chance)
- * Explanation:
- * - The first argument must always be the item (component format).
- * - The second argument can be either the amount or the chance. If the string has a percent sign, it is the chance,
- *  otherwise it is the amount. Alternatively, there's no second argument, in which case the amount is 1, and
- *  the chance is calculated automatically.
+ * Notes:
  * - The total chance of all items must not exceed 100%. Otherwise, the method returns null.
  * - If any item requires smart chance calculation, then the total chance of implicitly specified
  *  items must be less than 100%. Otherwise, the method returns null.

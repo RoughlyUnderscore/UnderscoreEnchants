@@ -40,7 +40,7 @@ import org.bukkit.event.Event
 @Since("2.2")
 @Stable
 class PlayerActionbarAction(private val plugin: UnderscoreEnchantsPlugin) : RegistrableAction {
-  override val aliases = listOf("actionbar", "send-actionbar")
+  override val aliases = listOf("actionbar", "send-actionbar", "player-actionbar")
 
   override fun execute(event: Event, trigger: RegistrableTrigger, arguments: List<String>, target: TargetType): EventModifications? {
     if (arguments.isEmpty()) return null

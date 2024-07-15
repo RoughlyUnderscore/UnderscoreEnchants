@@ -47,7 +47,7 @@ import java.util.*
 @Since("2.2")
 @Stable
 class PlayerBossbarAction(private val plugin: UnderscoreEnchantsPlugin) : RegistrableAction {
-  override val aliases = listOf("bossbar", "send-bossbar")
+  override val aliases = listOf("bossbar", "send-bossbar", "player-bossbar")
 
   override fun execute(event: Event, trigger: RegistrableTrigger, arguments: List<String>, target: TargetType): EventModifications? {
     if (arguments.size < 4) return null

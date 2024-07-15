@@ -35,7 +35,7 @@ import kotlin.math.roundToInt
  *
  * Syntax:
  * - `effect EFFECT TICKS AMPLIFIER`
- * - Potion effects can be found [here](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionEffectType.html)
+ * - Potion effects can be found [here](https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/XPotion.java)
  */
 @Since("2.2")
 @Stable

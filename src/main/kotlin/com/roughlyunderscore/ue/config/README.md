@@ -8,5 +8,5 @@ The plugin's configuration is stored in `config.json` in the plugin's data folde
 # ConnectionData
 The plugin's connection data is stored in `connection.json` in the plugin's data folder. The connection data is loaded and saved with this class.
 
-# Commands roadmap
+# Config roadmap
 - [ ] Nothing yet!

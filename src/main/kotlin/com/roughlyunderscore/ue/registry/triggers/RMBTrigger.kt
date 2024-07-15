@@ -25,7 +25,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 @Since("2.2")
 @Stable
 class RMBTrigger : RegistrableTrigger {
-  override val aliases = listOf("rmb", "rightclick", "rightclickevent")
+  override val aliases = listOf("rmb", "rightclick", "rightclickevent", "interact")
 
   override fun getTriggerDataHolder(): TriggerDataHolder = TriggerDataHolder.fromStringMethods(
     PlayerInteractEvent::class.java,

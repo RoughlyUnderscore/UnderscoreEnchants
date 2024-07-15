@@ -36,6 +36,7 @@ class HardCondition : RegistrableCondition {
     "is-hard-difficulty",
     "hard-diff",
     "is-hard-diff",
+    "hard"
   )
 
   override fun evaluateCondition(trigger: RegistrableTrigger, event: Event, target: TargetType, arguments: List<String>): Boolean {

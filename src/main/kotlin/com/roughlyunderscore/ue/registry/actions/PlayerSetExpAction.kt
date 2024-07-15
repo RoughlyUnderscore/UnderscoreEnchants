@@ -50,7 +50,7 @@ class PlayerSetExpAction : RegistrableAction {
     val method = trigger.getTriggerDataHolder().dataRetrievalMethods[target.mapToDrt()] ?: return null
     val player = method.invoke(event) as? Player ?: return null
 
-    // It is actually fucking stupid that you can't set exp directly
+    // It is actually fucking stupid that you can't set exp directly.
     // player.totalExperience is just the statistic. Why??????
     // I'm fine with setting statistics via Player#setStatistic
     player.level = 0

@@ -38,7 +38,7 @@ import kotlin.math.roundToInt
 @Since("2.2")
 @Stable
 class PlayerTitleAction : RegistrableAction {
-  override val aliases = listOf("title", "send-title")
+  override val aliases = listOf("title", "send-title", "player-title")
 
   override fun execute(event: Event, trigger: RegistrableTrigger, arguments: List<String>, target: TargetType): EventModifications? {
     if (arguments.size < 4) return null

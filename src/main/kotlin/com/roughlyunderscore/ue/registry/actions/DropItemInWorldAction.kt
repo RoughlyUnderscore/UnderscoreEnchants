@@ -29,7 +29,7 @@ import org.bukkit.event.Event
  * Drops an item at a location
  *
  * Example:
- * - `drop-item DIAMOND 30 50 120 -801 world`
+ * - `drop-item DIAMOND 50 120 -801 world`
  *
  * Syntax:
  * - `drop-item ITEM X Y Z WORLD`
