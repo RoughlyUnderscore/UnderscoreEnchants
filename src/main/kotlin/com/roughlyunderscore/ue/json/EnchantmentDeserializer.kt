@@ -24,6 +24,7 @@ import com.roughlyunderscore.ue.UnderscoreEnchantsPlugin
 import com.roughlyunderscore.annotations.Since
 import com.roughlyunderscore.data.*
 import com.roughlyunderscore.enums.EnchantmentObtainmentMeans
+import com.roughlyunderscore.enums.NotifiedPlayer
 import com.roughlyunderscore.json.DeserializationNames
 import com.roughlyunderscore.registry.RegistrableAction
 import com.roughlyunderscore.registry.RegistrableApplicable
@@ -34,6 +35,7 @@ import com.roughlyunderscore.ulib.data.TimeMeasurementUnit
 import com.roughlyunderscore.ulib.json.*
 import com.roughlyunderscore.ulib.text.normalize
 import com.roughlyunderscore.ue.utils.*
+import com.roughlyunderscore.ulib.data.safeValueOr
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Registry
@@ -56,6 +58,10 @@ class EnchantmentDeserializer(private val plugin: UnderscoreEnchantsPlugin, priv
     val indicator = json.onAnyStringStrict(DeserializationNames.Enchantment.ACTIVATION, { "bossbar" }) {
       registry.findIndicator(this) ?: UndiscoveredActivationIndicator(this)
     }
+
+    val notifiedPlayer = json.onAnyString(DeserializationNames.Enchantment.NOTIFIED, { NotifiedPlayer.FIRST }) {
+      safeValueOr(this.normalize().uppercase(), NotifiedPlayer.FIRST)
+    }!!
 
     val applicables = json.onAnyArrayOfStrings(DeserializationNames.Enchantment.APPLICABLES) { mapNotNull {
       if (it.startsWith("#")) object : RegistrableApplicable {
@@ -93,7 +99,8 @@ class EnchantmentDeserializer(private val plugin: UnderscoreEnchantsPlugin, priv
 
     return UnderscoreEnchantment(
       name = name, author = author, description = description, key = key,
-      activationChance = chance, cooldown = cooldown, trigger = trigger, activationIndicator = indicator,
+      activationChance = chance, cooldown = cooldown, trigger = trigger,
+      activationIndicator = indicator, notifiedPlayer = notifiedPlayer,
       applicables = applicables, forbiddenMaterials = forbidden, conditions = conditions, conflicts = conflicts,
       levels = levels, obtainmentRestrictions = obtainmentRestrictions, enchantmentSeekers = seekers,
       unique = unique, stackable = stackable,

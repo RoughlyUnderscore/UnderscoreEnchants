@@ -17,9 +17,9 @@ package com.roughlyunderscore.ue
 import com.roughlyunderscore.annotations.Since
 import com.roughlyunderscore.annotations.Stable
 import com.roughlyunderscore.data.*
-import com.roughlyunderscore.debug.Describer
 import com.roughlyunderscore.enums.DataRetrievalType
 import com.roughlyunderscore.enums.EnchantmentObtainmentMeans
+import com.roughlyunderscore.enums.NotifiedPlayer
 import com.roughlyunderscore.enums.TargetType
 import com.roughlyunderscore.events.EnchantmentActivateEvent
 import com.roughlyunderscore.registry.*
@@ -106,6 +106,12 @@ data class UnderscoreEnchantment(
   override val activationIndicator: RegistrableActivationIndicator,
 
   /**
+   * The player that will be notified about the activation.
+   */
+  @Since("2.2")
+  override val notifiedPlayer: NotifiedPlayer,
+
+  /**
    * The list of applicables for this enchantment. An enchantment can be legally applied to
    * any of these.
    */
@@ -175,7 +181,7 @@ data class UnderscoreEnchantment(
 
   /**
    * The list of all enchantments that are required to be present with the player. A required enchantment
-   * can have its own list of seekers (out of which, at least one must find a match) and a list of accepted
+   * can have its own list of seekers (out of which, at least one must find a match), and a list of accepted
    * levels.
    */
   @Since("2.2")
@@ -315,6 +321,8 @@ data class UnderscoreEnchantment(
         if (requiredEnchantment.levels.intersect(levels).isEmpty()) return@registerEvent
       }
 
+
+
       if (!stackable) executeLevel(items, level, registry, event, player, plugin)
       else {
         // If the enchantment is stackable, execute o̶r̶d̶e̶r̶ ̶6̶6̶ the levels the respective amount of times
@@ -333,7 +341,13 @@ data class UnderscoreEnchantment(
   }
 
   private fun executeLevel(
-    enchantedItems: List<ItemStack>, level: EnchantmentLevel, registry: RegistryImpl, event: Event, player: Player, plugin: UnderscoreEnchantsPlugin, applyCooldown: Boolean = true
+    enchantedItems: List<ItemStack>,
+    level: EnchantmentLevel,
+    registry: RegistryImpl,
+    event: Event,
+    player: Player,
+    plugin: UnderscoreEnchantsPlugin,
+    applyCooldown: Boolean = true
   ) {
     // Check the level's conditions
     for (condition in level.conditions) {
@@ -351,8 +365,12 @@ data class UnderscoreEnchantment(
     Bukkit.getPluginManager().callEvent(activationEvent)
     if (activationEvent.isCancelled) return
 
+    // I definitely need to figure out how to not spam this if a level gets executed multiple times (stackable)
     activationIndicator.indicateAboutActivation(
-      plugin.globalLocale.defaultActivationIndicator.replace("<enchantment>", name), player
+      plugin.globalLocale.defaultActivationIndicator.replace("<enchantment>", name), when (notifiedPlayer) {
+        NotifiedPlayer.FIRST -> player
+        NotifiedPlayer.SECOND -> trigger.getTriggerDataHolder().dataRetrievalMethods[DataRetrievalType.SECOND_PLAYER]!!.invoke(event) as Player
+      }
     )
 
     // Start the enchantment actions
