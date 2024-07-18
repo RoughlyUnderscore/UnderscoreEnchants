@@ -17,10 +17,7 @@ package com.roughlyunderscore.ue
 import com.roughlyunderscore.annotations.Since
 import com.roughlyunderscore.annotations.Stable
 import com.roughlyunderscore.data.*
-import com.roughlyunderscore.enums.DataRetrievalType
-import com.roughlyunderscore.enums.EnchantmentObtainmentMeans
-import com.roughlyunderscore.enums.NotifiedPlayer
-import com.roughlyunderscore.enums.TargetType
+import com.roughlyunderscore.enums.*
 import com.roughlyunderscore.events.EnchantmentActivateEvent
 import com.roughlyunderscore.registry.*
 import com.roughlyunderscore.ue.data.Constants
@@ -106,12 +103,6 @@ data class UnderscoreEnchantment(
   override val activationIndicator: RegistrableActivationIndicator,
 
   /**
-   * The player that will be notified about the activation.
-   */
-  @Since("2.2")
-  override val notifiedPlayer: NotifiedPlayer,
-
-  /**
    * The list of applicables for this enchantment. An enchantment can be legally applied to
    * any of these.
    */
@@ -152,6 +143,13 @@ data class UnderscoreEnchantment(
    */
   @Since("2.2")
   override val enchantmentSeekers: List<RegistrableEnchantmentSeeker>,
+
+  /**
+   * The player to use the seekers on, to notify about activation, etc.
+   * Defaults to [EnchantmentPlayer.FIRST].
+   */
+  @Since("2.2")
+  override val targetPlayer: EnchantmentPlayer,
 
   /**
    * The list of obtainment methods for this enchantment. A level of enchantment can only be obtained
@@ -259,7 +257,11 @@ data class UnderscoreEnchantment(
       if (event is Cancellable && event.isCancelled) return@registerEvent
 
       // Get the player.
-      val player = holder.dataRetrievalMethods[DataRetrievalType.FIRST_PLAYER]!!.invoke(event) as Player
+      val player = holder.dataRetrievalMethods[when (targetPlayer) {
+        EnchantmentPlayer.FIRST -> DataRetrievalType.FIRST_PLAYER
+        EnchantmentPlayer.SECOND -> DataRetrievalType.SECOND_PLAYER
+      }]?.invoke(event) as? Player ?: return@registerEvent
+
       val worldName = player.world.name
 
       // Check if the enchantment is blacklisted or whitelisted in the world.
@@ -366,12 +368,7 @@ data class UnderscoreEnchantment(
     if (activationEvent.isCancelled) return
 
     // I definitely need to figure out how to not spam this if a level gets executed multiple times (stackable)
-    activationIndicator.indicateAboutActivation(
-      plugin.globalLocale.defaultActivationIndicator.replace("<enchantment>", name), when (notifiedPlayer) {
-        NotifiedPlayer.FIRST -> player
-        NotifiedPlayer.SECOND -> trigger.getTriggerDataHolder().dataRetrievalMethods[DataRetrievalType.SECOND_PLAYER]!!.invoke(event) as Player
-      }
-    )
+    activationIndicator.indicateAboutActivation(plugin.globalLocale.defaultActivationIndicator.replace("<enchantment>", name), player)
 
     // Start the enchantment actions
     action@ for (action in level.actions) {
@@ -422,6 +419,8 @@ data class UnderscoreEnchantment(
       }
 
       .map { argument -> registry.replacePlaceholders(argument, event, trigger, target) }
+
+      .map { argument -> if (argument.startsWith("\\")) argument.drop(1) else argument }
   }
 
   override fun getKey() = key

@@ -195,17 +195,6 @@ private fun ItemStack.randomSuccessfulEnchantWithBounds(
   return response.resultItem
 }
 
-
-/**
- * Checks whether an item is enchantable. This means it is either a tool, weapon, armor, book, or enchanted book.
- */
-@Since("2.2")
-fun ItemStack.isEnchantable() =
-  this.type.let {
-    Constants.ARMOR.contains(it) || Constants.TOOLS.contains(it) || Constants.WEAPONS.contains(it) ||
-      Constants.RANGED_WEAPONS.contains(it) || it == Material.BOOK || it == Material.ENCHANTED_BOOK
-  }
-
 fun ItemStack.isEnchantableWithCustom(plugin: UnderscoreEnchantsPlugin) =
   this.type in (plugin.registry).enchantable
 
@@ -457,7 +446,11 @@ fun String.parseIntoItem(): ItemStack? {
     if (split.isEmpty()) return@mapNotNull null
 
     // First argument is always the type of the item
-    val itemComponent = Bukkit.getItemFactory().createItemStack(split[0])
+    val itemComponent = try {
+      Bukkit.getItemFactory().createItemStack(split[0])
+    } catch (ex: Exception) {
+      Material.matchMaterial(split[0])?.let { ItemStack(it) }
+    } ?: return null
 
     // Second argument can be either choice or amount. If the string has a percent sign, it is the chance,
     // otherwise it is the amount. Alternatively, there's no second argument, in which case the amount is 1, and

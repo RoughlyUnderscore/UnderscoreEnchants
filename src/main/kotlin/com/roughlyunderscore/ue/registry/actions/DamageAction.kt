@@ -16,34 +16,44 @@ package com.roughlyunderscore.ue.registry.actions
 
 import com.roughlyunderscore.annotations.Since
 import com.roughlyunderscore.annotations.Stable
+import com.roughlyunderscore.data.EventModifications
 import com.roughlyunderscore.enums.TargetType
 import com.roughlyunderscore.registry.RegistrableAction
-import com.roughlyunderscore.data.EventModifications
 import com.roughlyunderscore.registry.RegistrableTrigger
+import com.roughlyunderscore.ue.UnderscoreEnchantsPlugin
 import com.roughlyunderscore.ue.utils.mapToDrt
-import org.bukkit.entity.Fireball
+import org.bukkit.Bukkit
+import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Event
-import org.bukkit.projectiles.ProjectileSource
 
 /**
- * Sends a fireball in the direction that the entity is looking
+ * Damages an entity on behalf of a player
+ *
+ * Example:
+ * - `dmg 306 Notch`
  *
  * Syntax:
- * - `launch-fireball`
+ * - `dmg AMOUNT SOURCE`
  */
 @Since("2.2")
 @Stable
-class LaunchFireballAction : RegistrableAction {
-  override val aliases = listOf("launch-fireball", "fireball", "send-fireball")
+class DamageAction(private val plugin: UnderscoreEnchantsPlugin) : RegistrableAction {
+  override val aliases = listOf("dmg", "damage", "attack")
 
   override fun execute(event: Event, trigger: RegistrableTrigger, arguments: List<String>, target: TargetType): EventModifications? {
+    if (arguments.size < 2) return null
+
+    val health = arguments[0].toDoubleOrNull() ?: return null
+    val player = Bukkit.getPlayerExact(arguments[1]) ?: return null
+
     val method = trigger.getTriggerDataHolder().dataRetrievalMethods[target.mapToDrt()] ?: return null
-    val entity = method.invoke(event) as? ProjectileSource ?: return null
+    val entity = method.invoke(event) as? LivingEntity ?: return null
 
-    entity.launchProjectile(Fireball::class.java).apply {
-      this.shooter = entity
+    return null.apply {
+      Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+        entity.noDamageTicks = 0
+        entity.damage(health, player)
+      }, 1L)
     }
-
-    return null
   }
 }

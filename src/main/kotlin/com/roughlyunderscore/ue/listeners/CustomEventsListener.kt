@@ -42,7 +42,7 @@ class CustomEventsListener : Listener {
     val damager = event.damager as Player
     val victim = event.entity as Player
 
-    val pvpEvent = PVPEvent(damager, victim, event.cause, event.damage)
+    val pvpEvent = PVPEvent(damager, victim, event.cause, event.finalDamage)
     pvpEvent.isCancelled = event.isCancelled
 
     Bukkit.getPluginManager().callEvent(pvpEvent)
@@ -56,7 +56,7 @@ class CustomEventsListener : Listener {
 
     val victim = event.entity as Player
 
-    val playerGotHurtEvent = PlayerGotHurtEvent(victim, event.cause, event.damage)
+    val playerGotHurtEvent = PlayerGotHurtEvent(victim, event.cause, event.finalDamage)
     playerGotHurtEvent.isCancelled = event.isCancelled
 
     Bukkit.getPluginManager().callEvent(playerGotHurtEvent)
@@ -71,7 +71,7 @@ class CustomEventsListener : Listener {
     if (event.entity is Player) return
     val damager = event.damager as? Player ?: (event.damager as? Arrow)?.shooter as? Player ?: return
 
-    val playerHurtEntityEvent = PlayerHurtEntityEvent(damager, event.entity, event.cause, event.damage)
+    val playerHurtEntityEvent = PlayerHurtEntityEvent(damager, event.entity, event.cause, event.finalDamage)
     playerHurtEntityEvent.isCancelled = event.isCancelled
 
     Bukkit.getPluginManager().callEvent(playerHurtEntityEvent)
@@ -101,7 +101,7 @@ class CustomEventsListener : Listener {
     val damager = (event.damager as Arrow).shooter as Player
     val victim = event.entity as Player
 
-    val playerBowHitEvent = PlayerBowHitEvent(damager, victim, event.damage)
+    val playerBowHitEvent = PlayerBowHitEvent(damager, victim, event.finalDamage)
     playerBowHitEvent.isCancelled = event.isCancelled
 
     Bukkit.getPluginManager().callEvent(playerBowHitEvent)

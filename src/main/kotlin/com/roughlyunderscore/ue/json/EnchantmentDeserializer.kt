@@ -24,7 +24,7 @@ import com.roughlyunderscore.ue.UnderscoreEnchantsPlugin
 import com.roughlyunderscore.annotations.Since
 import com.roughlyunderscore.data.*
 import com.roughlyunderscore.enums.EnchantmentObtainmentMeans
-import com.roughlyunderscore.enums.NotifiedPlayer
+import com.roughlyunderscore.enums.EnchantmentPlayer
 import com.roughlyunderscore.json.DeserializationNames
 import com.roughlyunderscore.registry.RegistrableAction
 import com.roughlyunderscore.registry.RegistrableApplicable
@@ -59,10 +59,6 @@ class EnchantmentDeserializer(private val plugin: UnderscoreEnchantsPlugin, priv
       registry.findIndicator(this) ?: UndiscoveredActivationIndicator(this)
     }
 
-    val notifiedPlayer = json.onAnyString(DeserializationNames.Enchantment.NOTIFIED, { NotifiedPlayer.FIRST }) {
-      safeValueOr(this.normalize().uppercase(), NotifiedPlayer.FIRST)
-    }!!
-
     val applicables = json.onAnyArrayOfStrings(DeserializationNames.Enchantment.APPLICABLES) { mapNotNull {
       if (it.startsWith("#")) object : RegistrableApplicable {
         override val aliases = listOf("\$custom-applicable{${it.substring(1)}}")
@@ -74,7 +70,12 @@ class EnchantmentDeserializer(private val plugin: UnderscoreEnchantsPlugin, priv
     } }!!
 
     val forbidden = json.onAnyArrayOfStrings(DeserializationNames.Enchantment.FORBIDDEN) { mapNotNull { Material.matchMaterial(it) } } ?: emptyList()
+
     val seekers = json.onAnyArrayOfStrings(DeserializationNames.Enchantment.SEEKERS) { map { registry.findSeeker(it) ?: UndiscoveredEnchantmentSeeker(it) } } ?: emptyList()
+    val targetPlayer = json.onAnyString(DeserializationNames.Enchantment.TARGET_PLAYER, { EnchantmentPlayer.FIRST }) {
+      safeValueOr(this.normalize().uppercase(), EnchantmentPlayer.FIRST)
+    }!!
+
     val conflicts = json.onAnyArrayOfStrings(DeserializationNames.Enchantment.CONFLICTS) { mapNotNull { it } } ?: emptyList()
 
     val unique = json.anyBoolean(DeserializationNames.Enchantment.UNIQUE) ?: false
@@ -92,7 +93,7 @@ class EnchantmentDeserializer(private val plugin: UnderscoreEnchantsPlugin, priv
     if (levels.isEmpty()) return null
 
     val key = try {
-      NamespacedKey(plugin, name.normalize())
+      NamespacedKey(plugin, name.lowercase().replace(" ", "_"))
     } catch (e: IllegalArgumentException) {
       return null
     }
@@ -100,9 +101,10 @@ class EnchantmentDeserializer(private val plugin: UnderscoreEnchantsPlugin, priv
     return UnderscoreEnchantment(
       name = name, author = author, description = description, key = key,
       activationChance = chance, cooldown = cooldown, trigger = trigger,
-      activationIndicator = indicator, notifiedPlayer = notifiedPlayer,
-      applicables = applicables, forbiddenMaterials = forbidden, conditions = conditions, conflicts = conflicts,
-      levels = levels, obtainmentRestrictions = obtainmentRestrictions, enchantmentSeekers = seekers,
+      activationIndicator = indicator, applicables = applicables,
+      forbiddenMaterials = forbidden, conditions = conditions, conflicts = conflicts,
+      levels = levels, obtainmentRestrictions = obtainmentRestrictions,
+      enchantmentSeekers = seekers, targetPlayer = targetPlayer,
       unique = unique, stackable = stackable,
       requiredEnchantments = requiredEnchantments, requiredPlugins = requiredPlugins,
       worldBlacklist = worldBlacklist, worldWhitelist = worldWhitelist,

@@ -19,12 +19,12 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.roughlyunderscore.json.DeserializationNames
 import com.roughlyunderscore.ue.UnderscoreEnchantsPlugin
-import com.roughlyunderscore.ue.data.Cooldown
 import com.roughlyunderscore.ue.data.PlayerData
+import com.roughlyunderscore.ue.utils.toCooldowns
+import com.roughlyunderscore.ue.utils.toDisabledEnchantments
 import com.roughlyunderscore.ulib.json.anyString
 import com.roughlyunderscore.ulib.json.onAnyString
 import com.roughlyunderscore.ulib.text.safeUuid
-import org.bukkit.NamespacedKey
 import java.lang.reflect.Type
 
 class PlayerDataDeserializer(private val plugin: UnderscoreEnchantsPlugin) : JsonDeserializer<PlayerData> {
@@ -35,18 +35,8 @@ class PlayerDataDeserializer(private val plugin: UnderscoreEnchantsPlugin) : Jso
     val uuid = data.onAnyString(DeserializationNames.PlayerData.UUID) { safeUuid() } ?: return null
     val locale = data.anyString(DeserializationNames.PlayerData.LOCALE)
 
-    val toggledEnchants = data.onAnyString(DeserializationNames.PlayerData.TOGGLED_ENCHANTS) {
-      if (isBlank()) null else split(",").map { NamespacedKey(plugin, this) }.toMutableList()
-    }
-
-    val cooldowns = data.onAnyString(DeserializationNames.PlayerData.COOLDOWNS) {
-      if (isBlank()) null else split(",").map {
-        val split = it.split(":")
-        val enchantmentKey = NamespacedKey(plugin, split[0])
-        val endsAt = split[1].toLong()
-        Cooldown(uuid, enchantmentKey, endsAt)
-      }.toMutableList()
-    }
+    val toggledEnchants = data.onAnyString(DeserializationNames.PlayerData.TOGGLED_ENCHANTS) { this.toDisabledEnchantments(plugin) }
+    val cooldowns = data.onAnyString(DeserializationNames.PlayerData.COOLDOWNS) { this.toCooldowns(uuid, plugin) }
 
     return PlayerData(uuid, locale, toggledEnchants, cooldowns)
   }

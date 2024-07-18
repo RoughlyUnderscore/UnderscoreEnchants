@@ -38,7 +38,7 @@ import java.io.InputStream
  */
 @Since("2.2")
 @Beta
-fun File.loadPackFromTARFile(plugin: UnderscoreEnchantsPlugin): EnchantmentPack? = inputStream().use { it.loadPackFromInputStream(plugin) }
+fun File.loadPackFromTARFile(plugin: UnderscoreEnchantsPlugin): EnchantmentPack? = inputStream().use { it.loadPackFromInputStream(this.name, plugin) }
 
 /**
  * Loads an [EnchantmentPack] from an [inputStream] resembling the contents of a TAR archive.
@@ -52,17 +52,29 @@ fun File.loadPackFromTARFile(plugin: UnderscoreEnchantsPlugin): EnchantmentPack?
  */
 @Since("2.2")
 @Beta
-fun InputStream.loadPackFromInputStream(plugin: UnderscoreEnchantsPlugin): EnchantmentPack? = this.tempUntarOperate(listOf("json")) { files ->
+fun InputStream.loadPackFromInputStream(fileName: String, plugin: UnderscoreEnchantsPlugin): EnchantmentPack? = this.tempUntarOperate(listOf("json")) { files ->
   val enchantments = mutableListOf<RegistrableEnchantment>()
   var metadata: EnchantmentPackMetadata? = null
 
   for (file in files) {
     if (file.isDirectory) continue
     if (file.name.equals("pack_metadata.json", true)) {
-      metadata = file.reader().use { plugin.gson.fromJson(it, EnchantmentPackMetadata::class.java) }
+      metadata = try {
+        file.reader().use { plugin.gson.fromJson(it, EnchantmentPackMetadata::class.java) }
+      } catch (ex: Exception) {
+        plugin.logger.severe("Failed to load pack metadata from pack file ${fileName}!")
+        continue
+      }
+
       continue
     } else {
-      val enchantment = file.reader().use { plugin.gson.fromJson(it, UnderscoreEnchantment::class.java) }
+      val enchantment = try {
+        file.reader().use { plugin.gson.fromJson(it, UnderscoreEnchantment::class.java) }
+      } catch (ex: Exception) {
+        plugin.logger.severe("Failed to load enchantment from file ${file.name}!")
+        continue
+      }
+
       if (enchantment != null) enchantments.add(enchantment)
     }
   }

@@ -226,7 +226,13 @@ class RegistryImpl(val underscoreEnchantsPlugin: UnderscoreEnchantsPlugin) : UEA
 
     if (jsonFiles != null) {
       for (file in jsonFiles) {
-        val enchantment = file.reader().use { underscoreEnchantsPlugin.gson.fromJson(it, UnderscoreEnchantment::class.java) } ?: continue
+        val enchantment = try {
+          file.reader().use { underscoreEnchantsPlugin.gson.fromJson(it, UnderscoreEnchantment::class.java) } ?: continue
+        } catch (ex: Exception) {
+          underscoreEnchantsPlugin.logger.severe("Failed to load enchantment from file ${file.name}!")
+          continue
+        }
+
         if (!enchantment.anyUndiscovered()) enchantment.initializeEnchantment(underscoreEnchantsPlugin)
         else registerEnchantment(enchantment, underscoreEnchantsPlugin)
       }

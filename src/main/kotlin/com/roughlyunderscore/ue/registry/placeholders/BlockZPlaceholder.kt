@@ -16,11 +16,10 @@ package com.roughlyunderscore.ue.registry.placeholders
 
 import com.roughlyunderscore.annotations.Since
 import com.roughlyunderscore.annotations.Stable
+import com.roughlyunderscore.enums.DataRetrievalType
 import com.roughlyunderscore.enums.TargetType
 import com.roughlyunderscore.registry.RegistrablePlaceholder
 import com.roughlyunderscore.registry.RegistrableTrigger
-import com.roughlyunderscore.enums.DataRetrievalType
-import com.roughlyunderscore.ue.utils.*
 import org.bukkit.block.Block
 import org.bukkit.event.Event
 

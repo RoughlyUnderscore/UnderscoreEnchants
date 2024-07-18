@@ -31,23 +31,24 @@ import org.bukkit.entity.Player
 class CommandUtils {
   object Debugger {
     fun UnderscoreEnchantsCommand.debugEnchantment(arguments: List<String>, sender: CommandSender, locale: UELocale, registry: RegistryImpl) {
-      val params = arguments.drop(1)
-      if (params.isEmpty()) debug(sender, null)
-      else {
-        val enchantment = registry.findEnchantmentByKeyString(params[0]) ?: run {
-          sender.sendMessage(locale.invalidEnchantmentName.replace("<enchantment>", params[0]))
-          return
-        }
-
-        sender.sendMessage()
-        EnchantmentDescriber.describe(locale, enchantment).forEach { sender.sendMessage(it) }
-        sender.sendMessage()
+      if (arguments.size <= 1) {
+        debug(sender, null)
+        return
       }
+
+      val enchantment = registry.findEnchantmentByKeyString(arguments[1]) ?: run {
+        sender.sendMessage(locale.invalidEnchantmentName.replace("<enchantment>", arguments[1]))
+        return
+      }
+
+      sender.sendMessage()
+      EnchantmentDescriber.describe(locale, enchantment).forEach { sender.sendMessage(it) }
+      sender.sendMessage()
     }
+
     fun debugRegistry(arguments: List<String>, locale: UELocale, sender: CommandSender, registryDebugger: RegistryDebugger) {
-      val params = arguments.drop(1)
-      if (params.isEmpty()) registryDebugger.debugRegistry(locale, sender)
-      else registryDebugger.debugRegistryType(locale, sender, params[0])
+      if (arguments.size <= 1) registryDebugger.debugRegistry(locale, sender)
+      else registryDebugger.debugRegistryType(locale, sender, arguments[1])
     }
   }
 

@@ -40,7 +40,7 @@ class DamageCondition : RegistrableCondition {
     if (arguments.size == 1 && arguments[0].lowercase().startsWith("lethal")) {
       val entityMethod = trigger.getTriggerDataHolder().dataRetrievalMethods[target.mapToDrt()] ?: return false
       val entity = entityMethod.invoke(event) as? LivingEntity ?: return false
-      return entity.health <= damage
+      return damage >= entity.health
     }
 
     if (arguments.size < 2) return false

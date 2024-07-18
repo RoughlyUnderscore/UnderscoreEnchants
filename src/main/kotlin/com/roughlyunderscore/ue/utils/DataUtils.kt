@@ -64,7 +64,7 @@ fun List<Cooldown>?.serializableString() = this?.let { it.ifEmpty { null } }?.jo
  */
 @Since("2.2")
 @Stable
-fun String?.toDisabledEnchantments(plugin: UnderscoreEnchantsPlugin): MutableList<NamespacedKey>? =
+fun String?.toDisabledEnchantments(plugin: UnderscoreEnchantsPlugin): MutableList<NamespacedKey>? = if (this?.isBlank() == true) null else
   this?.split(",")?.map { NamespacedKey(plugin, it) }?.toMutableList()
 
 /**
@@ -74,7 +74,7 @@ fun String?.toDisabledEnchantments(plugin: UnderscoreEnchantsPlugin): MutableLis
  */
 @Since("2.2")
 @Stable
-fun String?.toCooldowns(uuid: UUID, plugin: UnderscoreEnchantsPlugin): MutableList<Cooldown>? =
+fun String?.toCooldowns(uuid: UUID, plugin: UnderscoreEnchantsPlugin): MutableList<Cooldown>? = if (this?.isBlank() == true) null else
   this?.split(",")?.map {
     val split = it.split(":")
     Cooldown(uuid, NamespacedKey(plugin, split[0]), split[1].toLong())

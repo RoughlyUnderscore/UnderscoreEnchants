@@ -41,26 +41,19 @@ class ForwardAction : RegistrableAction {
   override fun execute(event: Event, trigger: RegistrableTrigger, arguments: List<String>, target: TargetType): EventModifications? {
     if (arguments.isEmpty()) return null
 
-    var blocks = arguments[0].toDoubleOrNull() ?: return null
+    val blocks = arguments[0].toDoubleOrNull() ?: return null
 
     val method = trigger.getTriggerDataHolder().dataRetrievalMethods[target.mapToDrt()] ?: return null
     val entity = method.invoke(event) as? LivingEntity ?: return null
 
-    val rayTrace = entity.rayTraceBlocks(blocks)
-    if (rayTrace != null && rayTrace.hitBlock != null) {
-      // Something obstructs the path
-      blocks = (rayTrace.hitBlock?.location?.distance(entity.location) ?: return null)
-    }
-
     val clonedLocation = entity.location.clone()
     // Not setting the Y to 0 would mean that having your camera be even slightly non-straight
     // will result in being sent to either heaven or the underworld
-    val direction = clonedLocation.direction.setY(0)
+    val direction = clonedLocation.direction.setY(0).normalize().multiply(blocks)
     // Normalization converts the vector to a vector with length 1,
     // which basically means that the direction remains, and the length
     // does not. It is exactly what we need to send the entity forward
-    clonedLocation.add(direction.normalize().multiply(blocks))
-    entity.teleport(clonedLocation)
+    entity.velocity = direction
 
     return null
   }

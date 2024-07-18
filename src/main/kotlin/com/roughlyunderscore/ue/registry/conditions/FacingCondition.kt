@@ -14,43 +14,54 @@
 
 package com.roughlyunderscore.ue.registry.conditions
 
-import com.cryptomorin.xseries.XMaterial
 import com.roughlyunderscore.annotations.Since
 import com.roughlyunderscore.annotations.Stable
-import com.roughlyunderscore.ue.data.Constants
 import com.roughlyunderscore.enums.TargetType
 import com.roughlyunderscore.registry.RegistrableCondition
 import com.roughlyunderscore.registry.RegistrableTrigger
 import com.roughlyunderscore.ue.utils.mapToDrt
+import com.roughlyunderscore.ulib.text.normalize
+import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Event
-import org.bukkit.inventory.ItemStack
-import kotlin.jvm.optionals.getOrNull
 
 @Since("2.2")
 @Stable
-class ItemIsCondition : RegistrableCondition {
+class FacingCondition : RegistrableCondition {
   override val aliases = listOf(
-    "itemis",
-    "item-is",
+    "facing",
+    "dir"
   )
 
   override fun evaluateCondition(trigger: RegistrableTrigger, event: Event, target: TargetType, arguments: List<String>): Boolean {
-    if (arguments.isEmpty()) return false
+    if (arguments.size < 2) return false
 
     val method = trigger.getTriggerDataHolder().dataRetrievalMethods[target.mapToDrt()] ?: return false
-    val itemType = (method.invoke(event) as? ItemStack)?.type ?: return false
+    val entity = method.invoke(event) as? LivingEntity ?: return false
 
-    val argument = arguments[0]
+    val type = arguments[0].normalize().first()
+    val expected = arguments[1]
 
-    if (argument.startsWith("#")) {
-      return when (argument.lowercase().substring(1).first()) {
-        'v' -> itemType in Constants.VEGETARIAN_FOODS
-        'p' -> itemType in Constants.PESCETARIAN_FOODS
+    if (type == 'v') {
+      val pitch = entity.location.pitch
+      return when (expected.normalize().first()) {
+        'd' -> pitch in 45.0.rangeUntil(90.0)
+        'u' -> pitch in (-90.0).rangeUntil(-45.0)
+        'f' -> pitch in (-45.0).rangeUntil(45.0)
         else -> false
       }
     }
 
-    val checkAgainst = XMaterial.matchXMaterial(argument.uppercase()).getOrNull()?.parseMaterial() ?: return false
-    return itemType == checkAgainst
+    if (type == 'h') {
+      val yaw = entity.location.yaw
+      return when (expected.normalize().first()) {
+        's' -> yaw in (-45.0).rangeUntil(45.0)
+        'w' -> yaw in 45.0.rangeUntil(135.0)
+        'n' -> yaw in 135.0..180.0 || yaw in (-180.0).rangeUntil(-135.0)
+        'e' -> yaw in (-135.0).rangeUntil(-45.0)
+        else -> false
+      }
+    }
+
+    return false
   }
 }

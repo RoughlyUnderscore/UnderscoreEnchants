@@ -29,21 +29,21 @@ import java.io.File
 
 class BackendAPIRepository(private val api: BackendAPI, private val plugin: UnderscoreEnchantsPlugin) {
   suspend fun downloadPack(id: Long): Pair<EnchantmentPack, File>? = downloadAndParse(
-    { api.downloadPack(id) },
-    { input, name -> saveToFile(content = input, name = name).await() },
-    { content -> content.byteInputStream(Charsets.UTF_8).use { stream -> stream.loadPackFromInputStream(plugin) } }
+    downloadCallback = { api.downloadPack(id) },
+    inputCallback = { input, name -> saveToFile(content = input, name = name).await() },
+    loadCallback = { content, name -> content.byteInputStream(Charsets.UTF_8).use { stream -> stream.loadPackFromInputStream(name, plugin) } }
   )
 
   suspend fun downloadEnchantment(id: Long): Pair<UnderscoreEnchantment, File>? = downloadAndParse(
-    { api.downloadEnchantment(id) },
-    { input, name -> saveToFile(content = input, name = name).await() },
-    { content -> plugin.gson.fromJson(content, UnderscoreEnchantment::class.java) }
+    downloadCallback = { api.downloadEnchantment(id) },
+    inputCallback = { input, name -> saveToFile(content = input, name = name).await() },
+    loadCallback = { content, _ -> plugin.gson.fromJson(content, UnderscoreEnchantment::class.java) }
   )
 
   suspend fun downloadLocale(id: Long): Pair<UELocale, File>? = downloadAndParse(
-    { api.downloadLocale(id) },
-    { input, name -> saveToFile(content = input, name = name, subdirectory = "messages").await() },
-    { content -> plugin.gson.fromJson(content, UELocale::class.java) }
+    downloadCallback = { api.downloadLocale(id) },
+    inputCallback = { input, name -> saveToFile(content = input, name = name, subdirectory = "messages").await() },
+    loadCallback = { content, _ -> plugin.gson.fromJson(content, UELocale::class.java) }
   )
 
   suspend fun getPacks() = api.packs().body() ?: emptyList()
@@ -53,7 +53,7 @@ class BackendAPIRepository(private val api: BackendAPI, private val plugin: Unde
   private suspend inline fun <reified T> downloadAndParse(
     crossinline downloadCallback: suspend BackendAPI.() -> Response<ResponseBody>,
     crossinline inputCallback: suspend (String, String) -> File,
-    crossinline loadCallback: (String) -> T?
+    crossinline loadCallback: (String, String) -> T?
   ): Pair<T, File>? = coroutineScope {
     val file = api.downloadCallback()
     if (!file.isSuccessful) return@coroutineScope null
@@ -65,7 +65,7 @@ class BackendAPIRepository(private val api: BackendAPI, private val plugin: Unde
 
     val content = body.inputStream().use { input -> input.bufferedReader().readText() }
     val resultFile = inputCallback(content, name)
-    val result = loadCallback(content) ?: return@coroutineScope null // plugin.gson.fromJson(content, T::class.java)
+    val result = loadCallback(content, name) ?: return@coroutineScope null // plugin.gson.fromJson(content, T::class.java)
     result to resultFile
   }
 

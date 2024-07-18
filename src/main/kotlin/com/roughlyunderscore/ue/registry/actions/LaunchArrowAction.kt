@@ -16,11 +16,12 @@ package com.roughlyunderscore.ue.registry.actions
 
 import com.roughlyunderscore.annotations.Since
 import com.roughlyunderscore.annotations.Stable
+import com.roughlyunderscore.data.EventModifications
 import com.roughlyunderscore.enums.TargetType
 import com.roughlyunderscore.registry.RegistrableAction
-import com.roughlyunderscore.data.EventModifications
 import com.roughlyunderscore.registry.RegistrableTrigger
 import com.roughlyunderscore.ue.utils.mapToDrt
+import org.bukkit.entity.AbstractArrow
 import org.bukkit.entity.Arrow
 import org.bukkit.event.Event
 import org.bukkit.projectiles.ProjectileSource
@@ -40,7 +41,10 @@ class LaunchArrowAction : RegistrableAction {
     val method = trigger.getTriggerDataHolder().dataRetrievalMethods[target.mapToDrt()] ?: return null
     val entity = method.invoke(event) as? ProjectileSource ?: return null
 
-    entity.launchProjectile(Arrow::class.java).shooter = entity
+    entity.launchProjectile(Arrow::class.java).apply {
+      shooter = entity
+      pickupStatus = AbstractArrow.PickupStatus.CREATIVE_ONLY
+    }
 
     return null
   }

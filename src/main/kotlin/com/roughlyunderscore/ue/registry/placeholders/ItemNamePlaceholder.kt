@@ -41,6 +41,6 @@ class ItemNamePlaceholder : RegistrablePlaceholder {
   ): String? {
     val method = trigger.getTriggerDataHolder().dataRetrievalMethods[target.mapToDrt()] ?: return null
     val item = method.invoke(event) as? ItemStack ?: return null
-    return item.type.name
+    return item.type.name.lowercase()
   }
 }

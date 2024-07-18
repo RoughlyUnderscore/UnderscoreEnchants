@@ -16,12 +16,12 @@ package com.roughlyunderscore.ue.registry.actions
 
 import com.roughlyunderscore.annotations.Since
 import com.roughlyunderscore.annotations.Stable
+import com.roughlyunderscore.data.EventModifications
 import com.roughlyunderscore.enums.TargetType
 import com.roughlyunderscore.registry.RegistrableAction
-import com.roughlyunderscore.data.EventModifications
 import com.roughlyunderscore.registry.RegistrableTrigger
-import com.roughlyunderscore.ulib.math.clamp
 import com.roughlyunderscore.ue.utils.mapToDrt
+import com.roughlyunderscore.ulib.math.clamp
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Event
@@ -47,6 +47,13 @@ class SetHealthAction : RegistrableAction {
 
     val method = trigger.getTriggerDataHolder().dataRetrievalMethods[target.mapToDrt()] ?: return null
     val entity = method.invoke(event) as? LivingEntity ?: return null
+
+    /*
+    arguments.getOrNull(1)?.let { name ->
+      val player = Bukkit.getPlayerExact(name) ?: return null
+      entity.damage(0.0, player)
+    }
+    */
 
     entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue?.let { entity.health = health.clamp(0.0, it) }
 

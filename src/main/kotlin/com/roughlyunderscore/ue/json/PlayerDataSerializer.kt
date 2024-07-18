@@ -20,6 +20,7 @@ import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import com.roughlyunderscore.json.DeserializationNames
 import com.roughlyunderscore.ue.data.PlayerData
+import com.roughlyunderscore.ue.utils.serializableString
 import java.lang.reflect.Type
 
 object PlayerDataSerializer : JsonSerializer<PlayerData> {
@@ -32,12 +33,12 @@ object PlayerDataSerializer : JsonSerializer<PlayerData> {
 
     playerData.disabled?.let { disabled ->
       if (disabled.isEmpty()) return@let
-      else data.addProperty(DeserializationNames.PlayerData.TOGGLED_ENCHANTS.first(), disabled.joinToString(",") { it.key })
+      else data.addProperty(DeserializationNames.PlayerData.TOGGLED_ENCHANTS.first(), disabled.serializableString())
     }
 
     playerData.cooldowns?.let { cooldowns ->
       if (cooldowns.isEmpty()) return@let
-      else data.addProperty(DeserializationNames.PlayerData.COOLDOWNS.first(), cooldowns.joinToString(",") { "${it.enchantmentKey.key}:${it.endsAt}" })
+      else data.addProperty(DeserializationNames.PlayerData.COOLDOWNS.first(), cooldowns.serializableString())
     }
 
     return data
