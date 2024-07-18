@@ -1,0 +1,66 @@
+{
+  "name": "Block",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "SLIME_BLOCK",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+  "targetPlayer": "second",
+
+  "applicables": [ "chest" ],
+  "seekers": [ "chest" ],
+
+  "levels": [
+    {
+      "level": 1, "chance": 3, "actions": [
+        { "target": "secondplayer", "delay": 1, "action": "hp <hp>+<dmg>" },
+        { "delay": 1, "action": "velocity 1.5 1.5 1.5" }
+      ]
+    },
+
+    {
+      "level": 2, "chance": 5, "actions": [
+        { "target": "secondplayer", "delay": 1, "action": "hp <hp>+<dmg>" },
+        { "delay": 1, "action": "velocity 1.5 1.5 1.5" }
+      ]
+    },
+
+    {
+      "level": 3, "chance": 7, "actions": [
+        { "target": "secondplayer", "delay": 1, "action": "hp <hp>+<dmg>" },
+        { "delay": 1, "action": "velocity 1.5 1.5 1.5" }
+      ]
+    },
+
+    {
+      "level": 4, "chance": 9, "actions": [
+        { "target": "secondplayer", "delay": 1, "action": "hp <hp>+<dmg>" },
+        { "delay": 1, "action": "velocity 1.5 1.5 1.5" }
+      ]
+    },
+
+    {
+      "level": 5, "chance": 11, "actions": [
+        { "target": "secondplayer", "delay": 1, "action": "hp <hp>+<dmg>" },
+        { "delay": 1, "action": "velocity 1.5 1.5 1.5" }
+      ]
+    },
+
+    {
+      "level": 6, "chance": 11, "actions": [
+        { "target": "secondplayer", "delay": 1, "action": "hp <hp>+<dmg>" },
+        { "delay": 1, "action": "velocity 1.6 1.6 1.6" }
+      ]
+    },
+
+    {
+      "level": 7, "chance": 11, "actions": [
+        { "target": "secondplayer", "delay": 1, "action": "hp <hp>+<dmg>" },
+        { "delay": 1, "action": "velocity 1.75 1.75 1.75" }
+      ]
+    }
+  ]
+}

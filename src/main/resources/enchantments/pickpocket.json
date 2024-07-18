@@ -1,0 +1,46 @@
+{
+  "name": "Pickpocket",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "DEEPSLATE_BRICK_STAIRS",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 2,
+      "actions": [{ "target": "secondplayer", "action": "drop-hand m f" }]
+    },
+
+    {
+      "level": 1,
+      "chance": 3,
+      "actions": [{ "target": "secondplayer", "action": "drop-hand m f" }]
+    },
+
+    {
+      "level": 1,
+      "chance": 4,
+      "actions": [{ "target": "secondplayer", "action": "drop-hand m f" }]
+    },
+
+    {
+      "level": 1,
+      "chance": 5,
+      "actions": [{ "target": "secondplayer", "action": "drop-hand m f" }]
+    },
+
+    {
+      "level": 1,
+      "chance": 6,
+      "actions": [{ "target": "secondplayer", "action": "drop-hand m f" }]
+    }
+  ]
+}

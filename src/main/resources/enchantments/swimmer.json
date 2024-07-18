@@ -1,0 +1,24 @@
+{
+  "name": "Swimmer",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "TURTLE_SCUTE",
+
+  "trigger": "blockbreak",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "tools" ],
+  "seekers": [ "mainhand" ],
+
+  "conditions": [{ "condition": "swimming" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "cooldown": 400,
+      "actions": [{ "action": "effect REGENERATION 60 2" }]
+    }
+  ]
+}

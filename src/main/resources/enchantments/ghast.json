@@ -1,0 +1,23 @@
+{
+  "name": "Ghast",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "FIRE_CHARGE",
+
+  "trigger": "playershootbow",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "bows" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "actions": [
+        { "action": "launch-fireball" }
+      ]
+    }
+  ]
+}

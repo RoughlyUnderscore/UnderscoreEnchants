@@ -1,0 +1,24 @@
+{
+  "name": "Evoker",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "EMERALD",
+
+  "trigger": "bowhit",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "bows" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 30,
+      "actions": [
+        { "delay": 9, "target": "secondplayer", "action": "spawn-entity EVOKER_FANGS <x> <y> <z> <world>" }
+      ]
+    }
+  ]
+}

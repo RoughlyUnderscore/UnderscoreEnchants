@@ -1,0 +1,26 @@
+{
+  "name": "Gun",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "IRON_HOE",
+
+  "trigger": "interact",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "hoes" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "cooldown": 40,
+      "actions": [
+        {
+          "actions": [ "launch-arrow", "damage-item m 2" ]
+        }
+      ]
+    }
+  ]
+}

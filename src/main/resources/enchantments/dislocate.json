@@ -1,0 +1,49 @@
+{
+  "name": "Dislocate",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "DROPPER",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 10,
+      "actions": [
+        {
+          "target": "secondplayer",
+          "action": "direction <placeholder=rnddbl:arguments={lowerBound=0.0|upperBound=360.0}> <placeholder=rnddbl:arguments={lowerBound=0.0|upperBound=360.0}>"
+        }
+      ]
+    },
+
+    {
+      "level": 2,
+      "chance": 12,
+      "actions": [
+        {
+          "target": "secondplayer",
+          "action": "direction <placeholder=rnddbl:arguments={lowerBound=0.0|upperBound=360.0}> <placeholder=rnddbl:arguments={lowerBound=0.0|upperBound=360.0}>"
+        }
+      ]
+    },
+
+    {
+      "level": 3,
+      "chance": 15,
+      "actions": [
+        {
+          "target": "secondplayer",
+          "action": "direction <placeholder=rnddbl:arguments={lowerBound=0.0|upperBound=360.0}> <placeholder=rnddbl:arguments={lowerBound=0.0|upperBound=360.0}>"
+        }
+      ]
+    }
+  ]
+}

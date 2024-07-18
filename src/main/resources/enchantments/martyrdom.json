@@ -1,0 +1,24 @@
+{
+  "name": "Martyrdom",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "CREEPER_SPAWN_EGG",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+  "targetPlayer": "second",
+
+  "applicables": [ "armor" ],
+  "seekers": [ "armor" ],
+
+  "conditions": [{ "target": "secondplayer", "condition": "damage lethal" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "actions": [{ "target": "secondplayer", "action": "spawn-entity PRIMED_TNT <x> <y> <z> <world>" }]
+    }
+  ]
+}

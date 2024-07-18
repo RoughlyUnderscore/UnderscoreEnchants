@@ -1,0 +1,28 @@
+{
+  "name": "Lifesteal",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "REDSTONE_BLOCK",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 15,
+      "actions": [{ "action": "hp <hp>+(<dmg>*0.2)" }]
+    },
+
+    {
+      "level": 2,
+      "chance": 18,
+      "actions": [{ "action": "hp <hp>+(<dmg>*0.2)" }]
+    }
+  ]
+}

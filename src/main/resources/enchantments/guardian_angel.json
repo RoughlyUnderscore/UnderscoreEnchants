@@ -1,0 +1,38 @@
+{
+  "name": "Guardian Angel",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "GOLDEN_CHESTPLATE",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+  "targetPlayer": "second",
+
+  "applicables": [ "armor" ],
+  "seekers": [ "armor" ],
+
+  "conditions": [{ "target": "secondplayer", "condition": "damage lethal" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "cooldown": 12000,
+      "actions": [
+        { "action": "cancel" },
+        {
+          "delay": 1,
+          "target": "secondplayer",
+          "actions": [
+            "hp <maximum-hp>",
+            "remove-debuffs",
+            "effect REGENERATION 300 5",
+            "particle TOTEM_OF_UNDYING",
+            "world-sound ITEM_TOTEM_USE <x> <y> <z> <world>"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "name": "Hocus Pocus",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "LADDER",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 1,
+      "actions": [{ "target": "secondplayer", "action": "shuffle-hotbar" }]
+    },
+
+    {
+      "level": 2,
+      "chance": 2,
+      "actions": [{ "target": "secondplayer", "action": "shuffle-hotbar" }]
+    },
+
+    {
+      "level": 3,
+      "chance": 3,
+      "actions": [{ "target": "secondplayer", "action": "shuffle-hotbar" }]
+    },
+
+    {
+      "level": 4,
+      "chance": 4,
+      "actions": [{ "target": "secondplayer", "action": "shuffle-hotbar" }]
+    },
+
+    {
+      "level": 5,
+      "chance": 5,
+      "actions": [{ "target": "secondplayer", "action": "shuffle-hotbar" }]
+    },
+
+    {
+      "level": 6,
+      "chance": 6,
+      "actions": [{ "target": "secondplayer", "action": "shuffle-hotbar" }]
+    },
+
+    {
+      "level": 7,
+      "chance": 1,
+      "actions": [{ "target": "secondplayer", "action": "shuffle-inventory" }]
+    },
+
+    {
+      "level": 8,
+      "chance": 3,
+      "actions": [{ "target": "secondplayer", "action": "shuffle-inventory" }]
+    }
+  ]
+}

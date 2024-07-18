@@ -1,0 +1,34 @@
+{
+  "name": "Bloodthirsty",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "DIAMOND_SWORD",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 3,
+      "actions": [{ "action": "effect STRENGTH 80 1" }]
+    },
+
+    {
+      "level": 2,
+      "chance": 5,
+      "actions": [{ "action": "effect STRENGTH 80 1" }]
+    },
+
+    {
+      "level": 3,
+      "chance": 5,
+      "actions": [{ "action": "effect STRENGTH 100 1" }]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Ninja",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "IRON_SWORD",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "conditions": [{ "target": "secondplayer", "condition": "damage lethal" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "actions": [{ "actions": [ "effect SPEED 300 2", "effect JUMP_BOOST 140 1" ] }]
+    }
+  ]
+}

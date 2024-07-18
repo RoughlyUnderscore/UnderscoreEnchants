@@ -1,0 +1,23 @@
+{
+  "name": "Vampire",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "DIAMOND_AXE",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "conditions": [{ "target": "secondplayer", "condition": "damage lethal" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "actions": [{ "action": "effect REGENERATION 200 3" }]
+    }
+  ]
+}

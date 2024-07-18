@@ -1,0 +1,21 @@
+{
+  "name": "Trail",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "LAVA_BUCKET",
+
+  "trigger": "move",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "boots" ],
+  "seekers": [ "boots" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "actions": [{ "action": "particle FLAME" }]
+    }
+  ]
+}

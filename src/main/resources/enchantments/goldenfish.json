@@ -1,0 +1,28 @@
+{
+  "name": "Goldenfish",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "SILVERFISH_SPAWN_EGG",
+
+  "trigger": "bowhit",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "bows" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 8,
+      "actions": [{ "target": "secondplayer", "action": "spawn-entity SILVERFISH <x> <y> <z> <world> HEALTH=200 EFFECTS=STRENGTH;999999;1" }]
+    },
+
+    {
+      "level": 2,
+      "chance": 9,
+      "actions": [{ "target": "secondplayer", "action": "spawn-entity SILVERFISH <x> <y> <z> <world> HEALTH=200 EFFECTS=STRENGTH;999999;1" }]
+    }
+  ]
+}

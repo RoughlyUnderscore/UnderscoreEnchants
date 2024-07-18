@@ -1,0 +1,8 @@
+{
+  "name": "Default UnderscoreEnchants pack",
+  "authors": [ "Roughly_" ],
+  "description": [ "This pack contains the default enchantments to get you started." ],
+  "website": "ue.runderscore.com",
+  "version": "1.0",
+  "item": "BOOK"
+}

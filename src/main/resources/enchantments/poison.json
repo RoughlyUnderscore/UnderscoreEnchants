@@ -1,0 +1,28 @@
+{
+  "name": "Poison",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "EMERALD_BLOCK",
+
+  "trigger": "bowhit",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "bows" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 12,
+      "actions": [{ "target": "secondplayer", "action": "effect POISON 50 5" }]
+    },
+
+    {
+      "level": 2,
+      "chance": 14,
+      "actions": [{ "target": "secondplayer", "action": "effect POISON 50 5" }]
+    }
+  ]
+}

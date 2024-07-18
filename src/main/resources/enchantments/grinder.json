@@ -1,0 +1,30 @@
+{
+  "name": "Grinder",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "EXPERIENCE_BOTTLE",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "conditions": [{ "target": "secondplayer", "condition": "damage lethal" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 5,
+      "actions": [{ "action": "level <level>+<placeholder=rndint:arguments={lowerBound=1|upperBound=2}>" }]
+    },
+
+    {
+      "level": 2,
+      "chance": 6,
+      "actions": [{ "action": "level <level>+<placeholder=rndint:arguments={lowerBound=1|upperBound=2}>" }]
+    }
+  ]
+}

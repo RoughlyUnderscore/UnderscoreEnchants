@@ -1,0 +1,24 @@
+{
+  "name": "Obsidianium",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "OBSIDIAN",
+
+  "trigger": "move",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "boots" ],
+  "seekers": [ "boots" ],
+
+  "conditions": [{ "condition": "to-is OBSIDIAN" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "cooldown": 100,
+      "actions": [{ "action": "effect speed 100 1" }]
+    }
+  ]
+}

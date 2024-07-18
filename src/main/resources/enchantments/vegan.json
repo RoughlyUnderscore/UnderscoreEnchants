@@ -1,0 +1,35 @@
+{
+  "name": "Vegan",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "CARROT",
+
+  "trigger": "itemeat",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "armor" ],
+  "seekers": [ "armor" ],
+
+  "conditions": [{ "target": "first_item", "condition": "item-is #v" }],
+
+  "conflicts": [ "pescetarian" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "actions": [{ "actions": [ "hp <hp>+4", "effect SATURATION 80 1" ] }]
+    },
+
+    {
+      "level": 2,
+      "actions": [{ "actions": [ "hp <hp>+4", "effect SATURATION 80 2" ] }]
+    },
+
+    {
+      "level": 3,
+      "actions": [{ "actions": [ "hp <hp>+5", "effect SATURATION 80 2" ] }]
+    }
+  ]
+}

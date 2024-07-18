@@ -1,0 +1,23 @@
+{
+  "name": "Thorncover",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "CHAINMAIL_CHESTPLATE",
+
+  "trigger": "gothurt",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "armor" ],
+  "seekers": [ "armor" ],
+
+  "conditions": [{ "condition": "cause thorns" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "actions": [{ "action": "cancel" }]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "name": "Consistency",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "LECTERN",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "conditions": [{ "condition": "dmg < 1" }],
+      "actions": [{ "target": "secondplayer", "action": "hp <hp>+<dmg>-1" }]
+    },
+
+    {
+      "level": 2,
+      "conditions": [{ "condition": "dmg < 2" }],
+      "actions": [{ "target": "secondplayer", "action": "hp <hp>+<dmg>-2" }]
+    },
+
+    {
+      "level": 3,
+      "conditions": [{ "condition": "dmg < 3" }],
+      "actions": [{ "target": "secondplayer", "action": "hp <hp>+<dmg>-3" }]
+    },
+
+    {
+      "level": 4,
+      "conditions": [{ "condition": "dmg < 4" }],
+      "actions": [{ "target": "secondplayer", "action": "hp <hp>+<dmg>-4" }]
+    },
+
+    {
+      "level": 5,
+      "conditions": [{ "condition": "dmg < 5" }],
+      "actions": [{ "target": "secondplayer", "action": "hp <hp>+<dmg>-5" }]
+    }
+  ]
+}

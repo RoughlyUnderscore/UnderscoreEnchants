@@ -1,0 +1,24 @@
+{
+  "name": "Adjusting",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "SMITHING_TABLE",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 2,
+      "actions": [
+        { "action": "damage-item m -536870912" }
+      ]
+    }
+  ]
+}

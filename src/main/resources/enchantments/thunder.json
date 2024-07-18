@@ -1,0 +1,28 @@
+{
+  "name": "Thunder",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "STONE_SWORD",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 10,
+      "actions": [{ "target": "secondplayer", "actions": [ "strike-fake-lightning", "velocity 1 1 1", "fire 60" ] }]
+    },
+
+    {
+      "level": 1,
+      "chance": 15,
+      "actions": [{ "target": "secondplayer", "actions": [ "strike-fake-lightning", "velocity 1 1 1", "fire 60" ] }]
+    }
+  ]
+}

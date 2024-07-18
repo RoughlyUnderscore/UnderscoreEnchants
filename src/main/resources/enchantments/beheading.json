@@ -1,0 +1,25 @@
+{
+  "name": "Beheading",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "SKELETON_SKULL",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "conditions": [{ "target": "secondplayer", "condition": "damage lethal" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "actions": [
+        { "action": "skull <target=second_player:placeholder=name>" }
+      ]
+    }
+  ]
+}

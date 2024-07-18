@@ -1,0 +1,24 @@
+{
+  "name": "Severe",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "NETHERITE_INGOT",
+
+  "trigger": "bowhit",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "bows" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "cooldown": 120,
+      "chance": 1,
+      "delay": 1,
+      "actions": [{ "target": "secondplayer", "action": "hp <hp>-10" }]
+    }
+  ]
+}

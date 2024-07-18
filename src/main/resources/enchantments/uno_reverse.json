@@ -1,0 +1,24 @@
+{
+  "name": "Uno Reverse",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "ARROW",
+
+  "trigger": "bowhit",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "bows" ],
+  "seekers": [ "mainhand" ],
+
+  "conditions": [{ "target": "secondplayer", "condition": "blocking" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 30,
+      "actions": [{ "action": "hp <hp>-<placeholder=rnddbl:arguments={lowerBound=1.0|upperBound=3.0}>" }]
+    }
+  ]
+}

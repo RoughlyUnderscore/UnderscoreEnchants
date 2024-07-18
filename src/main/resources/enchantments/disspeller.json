@@ -1,0 +1,34 @@
+{
+  "name": "Disspeller",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "GLASS_BOTTLE",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 10,
+      "actions": [{ "target": "secondplayer", "action": "remove-buffs" }]
+    },
+
+    {
+      "level": 2,
+      "chance": 11,
+      "actions": [{ "target": "secondplayer", "action": "remove-buffs" }]
+    },
+
+    {
+      "level": 3,
+      "chance": 12,
+      "actions": [{ "target": "secondplayer", "action": "remove-buffs" }]
+    }
+  ]
+}

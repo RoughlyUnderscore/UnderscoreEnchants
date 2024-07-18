@@ -1,0 +1,30 @@
+{
+  "name": "Lucky",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "GOLD_NUGGET",
+
+  "trigger": "blockbreak",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "tools" ],
+  "seekers": [ "mainhand" ],
+
+  "conditions": [{ "condition": "block-is COAL_ORE" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 5,
+      "actions": [{ "action": "drop-item gold_nugget|80%!gold_ingot|20% <x> <y> <z> <world>" }]
+    },
+
+    {
+      "level": 2,
+      "chance": 4,
+      "actions": [{ "action": "drop-item gold_nugget|40%!gold_ingot|60% <x> <y> <z> <world>" }]
+    }
+  ]
+}

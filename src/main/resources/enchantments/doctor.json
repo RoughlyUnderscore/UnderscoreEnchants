@@ -1,0 +1,26 @@
+{
+  "name": "Doctor",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "DANDELION",
+
+  "trigger": "blockbreak",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "tools" ],
+  "seekers": [ "mainhand" ],
+
+  "forbidden": [ "GOLDEN_PICKAXE" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 3,
+      "actions": [
+        { "action": "heal" }
+      ]
+    }
+  ]
+}

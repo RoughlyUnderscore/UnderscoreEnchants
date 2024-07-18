@@ -1,0 +1,31 @@
+{
+  "name": "Shield",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "GOLDEN_APPLE",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+  "targetPlayer": "second",
+
+  "applicables": [ "leggings" ],
+  "seekers": [ "leggings" ],
+
+  "conditions": [{ "target": "secondplayer", "condition": "hp <= 4" }],
+
+  "cooldown": 1200,
+
+  "levels": [
+    {
+      "level": 1,
+      "actions": [{ "target": "secondplayer", "actions": [ "effect SPEED 300 1", "effect ABSORPTION 300 1" ] }]
+    },
+
+    {
+      "level": 2,
+      "actions": [{ "target": "secondplayer", "actions": [ "effect SPEED 400 1", "effect ABSORPTION 320 1" ] }]
+    }
+  ]
+}

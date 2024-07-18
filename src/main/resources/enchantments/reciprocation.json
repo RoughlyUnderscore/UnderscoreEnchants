@@ -1,0 +1,35 @@
+{
+  "name": "Reciprocation",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "CHAIN",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+  "targetPlayer": "second",
+
+  "applicables": [ "armor" ],
+  "seekers": [ "armor" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 12,
+      "actions": [{ "action": "effect SLOWNESS 30 100"}]
+    },
+
+    {
+      "level": 2,
+      "chance": 14,
+      "actions": [{ "action": "effect SLOWNESS 30 100"}]
+    },
+
+    {
+      "level": 3,
+      "chance": 14,
+      "actions": [{ "action": "effect SLOWNESS 40 100"}]
+    }
+  ]
+}

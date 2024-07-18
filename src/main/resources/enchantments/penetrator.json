@@ -1,0 +1,58 @@
+{
+  "name": "Penetrator",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "NETHERITE_AXE",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons", "axes" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 11,
+      "actions": [{ "target": "secondplayer", "action": "damage-item c 2" }]
+    },
+
+    {
+      "level": 2,
+      "chance": 11,
+      "actions": [{ "target": "secondplayer", "action": "damage-item l 2" }]
+    },
+
+    {
+      "level": 3,
+      "chance": 11,
+      "actions": [{ "target": "secondplayer", "action": "damage-item h 2" }]
+    },
+
+    {
+      "level": 4,
+      "chance": 11,
+      "actions": [{ "target": "secondplayer", "action": "damage-item b 2" }]
+    },
+
+    {
+      "level": 5,
+      "chance": 9,
+      "actions": [{ "target": "secondplayer", "actions": [ "damage-item c 3", "damage-item l 3" ] }]
+    },
+
+    {
+      "level": 6,
+      "chance": 9,
+      "actions": [{ "target": "secondplayer", "actions": [ "damage-item c 3", "damage-item l 4" ] }]
+    },
+
+    {
+      "level": 7,
+      "chance": 8,
+      "actions": [{ "target": "secondplayer", "actions": [ "damage-item c 2", "damage-item l 2", "damage-item b 1", "damage-item h 2" ] }]
+    }
+  ]
+}

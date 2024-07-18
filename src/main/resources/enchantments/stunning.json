@@ -1,0 +1,30 @@
+{
+  "name": "Stunning",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "ANVIL",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 5,
+      "actions": [
+        {
+          "target": "secondplayer",
+          "actions": [
+            "effect BLINDNESS 40 100", "effect SLOWNESS 40 100", "effect JUMP_BOOST 40 100", "effect MINING_FATIGUE 40 100",
+            "sound BLOCK_ANVIL_PLACE"
+          ]
+        }
+      ]
+    }
+  ]
+}

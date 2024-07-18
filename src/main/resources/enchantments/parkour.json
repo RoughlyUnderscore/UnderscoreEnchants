@@ -1,0 +1,32 @@
+{
+  "name": "Parkour",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "DIAMOND_BOOTS",
+
+  "trigger": "gothurt",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "boots" ],
+  "seekers": [ "boots" ],
+
+  "conditions": [{ "condition": "cause fall" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 90,
+      "cooldown": 100,
+      "actions": [{ "action": "cancel" }]
+    },
+
+    {
+      "level": 2,
+      "chance": 90,
+      "cooldown": 50,
+      "actions": [{ "action": "cancel" }]
+    }
+  ]
+}

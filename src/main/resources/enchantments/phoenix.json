@@ -1,0 +1,22 @@
+{
+  "name": "Phoenix",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "STRING",
+
+  "trigger": "itembreak",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "tools" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "delay": 1,
+      "actions": [{"action": "give <target=first_item:placeholder=item-type>"}]
+    }
+  ]
+}

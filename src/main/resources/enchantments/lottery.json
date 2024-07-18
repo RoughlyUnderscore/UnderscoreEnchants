@@ -1,0 +1,27 @@
+{
+  "name": "Lottery",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "PAPER",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "conditions": [{ "condition": "damage lethal", "negate": true }],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 1,
+      "actions": [
+        { "action": "hp 0", "chance": 50 },
+        { "target": "secondplayer", "action": "hp 0", "chance": 50 }
+      ]
+    }
+  ]
+}

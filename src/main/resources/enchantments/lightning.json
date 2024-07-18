@@ -1,0 +1,49 @@
+{
+  "name": "Lightning",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "LIGHTNING_ROD",
+
+  "trigger": "bowhit",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "bows" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 17,
+      "actions": [
+        {
+          "target": "secondplayer",
+          "actions": [ "strike-fake-lightning", "velocity 1 1 1", "fire 60" ]
+        }
+      ]
+    },
+
+    {
+      "level": 2,
+      "chance": 20,
+      "actions": [
+        {
+          "target": "secondplayer",
+          "actions": [ "strike-fake-lightning", "velocity 1 1 1", "fire 60" ]
+        }
+      ]
+    },
+
+    {
+      "level": 3,
+      "chance": 20,
+      "actions": [
+        {
+          "target": "secondplayer",
+          "actions": [ "strike-fake-lightning", "velocity 1.15 1.15 1.15", "fire 80" ]
+        }
+      ]
+    }
+  ]
+}

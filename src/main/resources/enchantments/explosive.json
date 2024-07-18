@@ -1,0 +1,32 @@
+{
+  "name": "Explosive",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "TNT",
+
+  "trigger": "bowhit",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "bows" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 7,
+      "actions": [
+        {
+          "target": "secondplayer",
+          "delay": 1,
+          "actions": [
+            "hp <hp>-4",
+            "particle EXPLOSION",
+            "velocity 1.5 1.5 1.5"
+          ]
+        }
+      ]
+    }
+  ]
+}

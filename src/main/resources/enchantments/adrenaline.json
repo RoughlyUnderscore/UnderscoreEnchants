@@ -1,0 +1,66 @@
+{
+  "name": "Adrenaline",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "REDSTONE",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "actions": [
+        {
+          "target": "secondplayer",
+          "action": "hp <hp>-(log2((<target=first_player:placeholder=maximum-hp>-<target=first_player:placeholder=hp>)/8+1))"
+        }
+      ]
+    },
+
+    {
+      "level": 2,
+      "actions": [
+        {
+          "target": "secondplayer",
+          "action": "hp <hp>-(log2((<target=first_player:placeholder=maximum-hp>-<target=first_player:placeholder=hp>)/4+1))"
+        }
+      ]
+    },
+
+    {
+      "level": 3,
+      "actions": [
+        {
+          "target": "secondplayer",
+          "action": "hp <hp>-(log2((<target=first_player:placeholder=maximum-hp>-<target=first_player:placeholder=hp>)*3/8+1))"
+        }
+      ]
+    },
+
+    {
+      "level": 4,
+      "actions": [
+        {
+          "target": "secondplayer",
+          "action": "hp <hp>-(log2((<target=first_player:placeholder=maximum-hp>-<target=first_player:placeholder=hp>)/2+1))"
+        }
+      ]
+    },
+
+    {
+      "level": 5,
+      "actions": [
+        {
+          "target": "secondplayer",
+          "action": "hp <hp>-(log2((<target=first_player:placeholder=maximum-hp>-<target=first_player:placeholder=hp>)*5/8+1))"
+        }
+      ]
+    }
+  ]
+}

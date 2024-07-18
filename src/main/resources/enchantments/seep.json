@@ -1,0 +1,24 @@
+{
+  "name": "Seep",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "SHIELD",
+
+  "trigger": "bowhit",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "bows" ],
+  "seekers": [ "mainhand" ],
+
+  "conditions": [{ "target": "secondplayer", "condition": "blocking" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "cooldown": 120,
+      "actions": [{ "target": "secondplayer", "action": "hp <hp>-5" }]
+    }
+  ]
+}

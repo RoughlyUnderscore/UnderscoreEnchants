@@ -1,0 +1,36 @@
+{
+  "name": "Stealthy",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "RABBIT_HIDE",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "conditions": [{ "condition": "sneaking" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "delay": 1,
+      "actions": [{ "target": "secondplayer", "action": "hp <hp>-<dmg>*0.15" }]
+    },
+
+    {
+      "level": 2,
+      "delay": 1,
+      "actions": [{ "target": "secondplayer", "action": "hp <hp>-<dmg>*0.18" }]
+    },
+
+    {
+      "level": 3,
+      "delay": 1,
+      "actions": [{ "target": "secondplayer", "action": "hp <hp>-<dmg>*0.2" }]
+    }
+  ]
+}

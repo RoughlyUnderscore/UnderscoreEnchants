@@ -1,0 +1,29 @@
+{
+  "name": "Better Riptide",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "TRIDENT",
+
+  "trigger": "sneak",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "boots" ],
+  "seekers": [ "boots" ],
+
+  "conditions": [{ "condition": "rain" }, { "condition": "sneaked" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "cooldown": 600,
+      "actions": [
+        { "action": "forward 1.5", "delay": 1 },
+        { "action": "forward 1.5", "delay": 2 },
+        { "action": "forward 1.5", "delay": 3 },
+        { "action": "forward 1.5", "delay": 4 }
+      ]
+    }
+  ]
+}

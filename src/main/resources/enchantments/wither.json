@@ -1,0 +1,56 @@
+{
+  "name": "Wither",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "WITHER_ROSE",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 15,
+      "actions": [
+        { "target": "secondplayer", "action": "effect WITHER 40 2" }
+      ]
+    },
+
+    {
+      "level": 2,
+      "chance": 16,
+      "actions": [
+        { "target": "secondplayer", "action": "effect WITHER 40 2" }
+      ]
+    },
+
+    {
+      "level": 3,
+      "chance": 16.5,
+      "actions": [
+        { "target": "secondplayer", "action": "effect WITHER 40 2" }
+      ]
+    },
+
+    {
+      "level": 4,
+      "chance": 17,
+      "actions": [
+        { "target": "secondplayer", "action": "effect WITHER 40 2" }
+      ]
+    },
+
+    {
+      "level": 5,
+      "chance": 18,
+      "actions": [
+        { "target": "secondplayer", "action": "effect WITHER 40 2" }
+      ]
+    }
+  ]
+}

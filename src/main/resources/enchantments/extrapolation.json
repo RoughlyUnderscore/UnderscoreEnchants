@@ -1,0 +1,84 @@
+{
+  "name": "Extrapolation",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "GRINDSTONE",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "conditions": [{ "condition": "damage lethal", "negate": true }],
+
+  "levels": [
+    {
+      "level": 1,
+      "chance": 10,
+      "actions": [
+        {
+          "delay": 2,
+          "target": "secondplayer",
+          "actions": [
+            "dmg <placeholder=rndint:arguments={lowerBound=1|upperBound=3}> <name>",
+            "velocity 0.5 0.5 0.5"
+          ]
+        },
+
+        {
+          "delay": 4,
+          "target": "secondplayer",
+          "actions": [
+            "dmg <placeholder=rndint:arguments={lowerBound=1|upperBound=3}> <name>",
+            "velocity 0.3 0.3 0.3"
+          ]
+        },
+
+        {
+          "delay": 6,
+          "target": "secondplayer",
+          "actions": [
+            "dmg <placeholder=rndint:arguments={lowerBound=1|upperBound=3}> <name>",
+            "velocity 0.2 0.2 0.2"
+          ]
+        }
+      ]
+    },
+
+    {
+      "level": 2,
+      "chance": 15,
+      "actions": [
+        {
+          "delay": 2,
+          "target": "secondplayer",
+          "actions": [
+            "dmg <placeholder=rndint:arguments={lowerBound=1|upperBound=3}> <name>",
+            "velocity 0.5 0.5 0.5"
+          ]
+        },
+
+        {
+          "delay": 4,
+          "target": "secondplayer",
+          "actions": [
+            "dmg <placeholder=rndint:arguments={lowerBound=1|upperBound=3}> <name>",
+            "velocity 0.3 0.3 0.3"
+          ]
+        },
+
+        {
+          "delay": 6,
+          "target": "secondplayer",
+          "actions": [
+            "dmg <placeholder=rndint:arguments={lowerBound=1|upperBound=3}> <name>",
+            "velocity 0.2 0.2 0.2"
+          ]
+        }
+      ]
+    }
+  ]
+}

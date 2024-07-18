@@ -1,0 +1,33 @@
+{
+  "name": "Parasite",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "LEAD",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "conditions": [{ "condition": "dmg > 9" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "actions": [{ "actions": [ "satiate", "effect STRENGTH 70 0" ] }]
+    },
+
+    {
+      "level": 2,
+      "actions": [{ "actions": [ "satiate", "effect STRENGTH 90 0" ] }]
+    },
+
+    {
+      "level": 3,
+      "actions": [{ "actions": [ "satiate", "effect STRENGTH 60 1" ] }]
+    }
+  ]
+}

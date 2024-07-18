@@ -1,0 +1,110 @@
+{
+  "name": "Drill",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "CAULDRON",
+
+  "trigger": "blockbreak",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "tools" ],
+  "seekers": [ "mainhand" ],
+
+  "levels": [
+    {
+      "level": 1,
+      "cooldown": 40,
+      "actions": [
+        {
+          "conditions": [{ "condition": "facing v u" }],
+          "actions": [
+            "break <blockx>+1 <blocky> <blockz>",
+            "break <blockx>-1 <blocky> <blockz>",
+            "break <blockx> <blocky> <blockz>+1",
+            "break <blockx> <blocky> <blockz>-1",
+            "break <blockx>+1 <blocky> <blockz>+1",
+            "break <blockx>+1 <blocky> <blockz>-1",
+            "break <blockx>-1 <blocky> <blockz>+1",
+            "break <blockx>-1 <blocky> <blockz>-1"
+          ]
+        },
+
+        {
+          "conditions": [{ "condition": "facing v d" }],
+          "actions": [
+            "break <blockx>+1 <blocky> <blockz>",
+            "break <blockx>-1 <blocky> <blockz>",
+            "break <blockx> <blocky> <blockz>+1",
+            "break <blockx> <blocky> <blockz>-1",
+            "break <blockx>+1 <blocky> <blockz>+1",
+            "break <blockx>+1 <blocky> <blockz>-1",
+            "break <blockx>-1 <blocky> <blockz>+1",
+            "break <blockx>-1 <blocky> <blockz>-1"
+          ]
+        },
+
+
+
+        {
+          "conditions": [{ "condition": "facing v f" }, { "condition": "facing h w" }],
+          "actions": [
+            "break <blockx> <blocky> <blockz>+1",
+            "break <blockx> <blocky> <blockz>-1",
+            "break <blockx> <blocky>+1 <blockz>",
+            "break <blockx> <blocky>-1 <blockz>",
+            "break <blockx> <blocky>+1 <blockz>+1",
+            "break <blockx> <blocky>+1 <blockz>-1",
+            "break <blockx> <blocky>-1 <blockz>+1",
+            "break <blockx> <blocky>-1 <blockz>-1"
+          ]
+        },
+
+        {
+          "conditions": [{ "condition": "facing v f" }, { "condition": "facing h \\e" }],
+          "actions": [
+            "break <blockx> <blocky> <blockz>+1",
+            "break <blockx> <blocky> <blockz>-1",
+            "break <blockx> <blocky>+1 <blockz>",
+            "break <blockx> <blocky>-1 <blockz>",
+            "break <blockx> <blocky>+1 <blockz>+1",
+            "break <blockx> <blocky>+1 <blockz>-1",
+            "break <blockx> <blocky>-1 <blockz>+1",
+            "break <blockx> <blocky>-1 <blockz>-1"
+          ]
+        },
+
+
+
+        {
+          "conditions": [{ "condition": "facing v f" }, { "condition": "facing h n" }],
+          "actions": [
+            "break <blockx>+1 <blocky> <blockz>",
+            "break <blockx>-1 <blocky> <blockz>",
+            "break <blockx> <blocky>+1 <blockz>",
+            "break <blockx> <blocky>-1 <blockz>",
+            "break <blockx>+1 <blocky>+1 <blockz>",
+            "break <blockx>+1 <blocky>-1 <blockz>",
+            "break <blockx>-1 <blocky>+1 <blockz>",
+            "break <blockx>-1 <blocky>-1 <blockz>"
+          ]
+        },
+
+        {
+          "conditions": [{ "condition": "facing v f" }, { "condition": "facing h s" }],
+          "actions": [
+            "break <blockx>+1 <blocky> <blockz>",
+            "break <blockx>-1 <blocky> <blockz>",
+            "break <blockx> <blocky>+1 <blockz>",
+            "break <blockx> <blocky>-1 <blockz>",
+            "break <blockx>+1 <blocky>+1 <blockz>",
+            "break <blockx>+1 <blocky>-1 <blockz>",
+            "break <blockx>-1 <blocky>+1 <blockz>",
+            "break <blockx>-1 <blocky>-1 <blockz>"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Sauna",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "NETHERRACK",
+
+  "trigger": "gothurt",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "armor" ],
+  "seekers": [ "armor" ],
+
+  "conditions": [{ "condition": "nether" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "actions": [{ "action": "hp <hp>+0.15*<dmg>"}]
+    },
+
+    {
+      "level": 2,
+      "actions": [{ "action": "hp <hp>+0.2*<dmg>"}]
+    },
+
+    {
+      "level": 3,
+      "actions": [{ "action": "hp <hp>+0.25*<dmg>"}]
+    }
+  ]
+}

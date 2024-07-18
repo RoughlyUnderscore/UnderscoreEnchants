@@ -1,0 +1,39 @@
+{
+  "name": "Firefly",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "FLINT_AND_STEEL",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+
+  "applicables": [ "weapons" ],
+  "seekers": [ "mainhand" ],
+
+  "conditions": [{ "target": "secondplayer", "condition": "ablaze" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "actions": [
+        { "target": "secondplayer", "action": "hp <hp>+<dmg>-(<dmg>*1.18)" }
+      ]
+    },
+
+    {
+      "level": 2,
+      "actions": [
+        { "target": "secondplayer", "action": "hp <hp>+<dmg>-(<dmg>*1.27)" }
+      ]
+    },
+
+    {
+      "level": 3,
+      "actions": [
+        { "target": "secondplayer", "action": "hp <hp>+<dmg>-(<dmg>*1.36)" }
+      ]
+    }
+  ]
+}

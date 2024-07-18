@@ -1,0 +1,28 @@
+{
+  "name": "Desperate",
+  "author": "Roughly_",
+  "description": [ "This enchantment is bundled with the default pack." ],
+
+  "item": "FEATHER",
+
+  "trigger": "pvp",
+
+  "indicator": "actionbar",
+  "targetPlayer": "second",
+
+  "applicables": [ "armor" ],
+  "seekers": [ "armor" ],
+
+  "conditions": [{ "target": "secondplayer", "condition": "damage lethal" }],
+
+  "levels": [
+    {
+      "level": 1,
+      "delay": 1,
+      "actions": [
+        { "action": "velocity <placeholder=rnddbl:arguments={lowerBound=1.0|upperBound=2.0}> <placeholder=rnddbl:arguments={lowerBound=1.0|upperBound=2.0}> <placeholder=rnddbl:arguments={lowerBound=1.0|upperBound=2.0}>" },
+        { "action": "dmg 4 <target=second_player:placeholder=name>" }
+      ]
+    }
+  ]
+}
