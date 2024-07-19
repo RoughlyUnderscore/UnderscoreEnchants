@@ -34,14 +34,14 @@ In addition, contributions that largely refactor a big part of the code just for
 #### What's welcome
 Contributions that...
 * fix bugs;
-* add new API methods or fix its implementations;
+* add/fix implementations for API methods;
 * add features
   are **welcome**.
 
 #### What should every contribution have
 
-1) The added code must be tested in game.
-2) The code should be as optimized as possible.
+1) The added code must be tested.
+2) The code should be reasonably optimized.
 
 ### Creating a PR
 This project relies on the Git VCS for convenience. As such, you're expected to be familiar with it and how to create PRs.
