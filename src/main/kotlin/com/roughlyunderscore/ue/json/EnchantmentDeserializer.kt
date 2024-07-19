@@ -19,8 +19,6 @@ package com.roughlyunderscore.ue.json
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
-import com.roughlyunderscore.ue.UnderscoreEnchantment
-import com.roughlyunderscore.ue.UnderscoreEnchantsPlugin
 import com.roughlyunderscore.annotations.Since
 import com.roughlyunderscore.data.*
 import com.roughlyunderscore.enums.EnchantmentObtainmentMeans
@@ -29,13 +27,15 @@ import com.roughlyunderscore.json.DeserializationNames
 import com.roughlyunderscore.registry.RegistrableAction
 import com.roughlyunderscore.registry.RegistrableApplicable
 import com.roughlyunderscore.registry.internal.*
+import com.roughlyunderscore.ue.UnderscoreEnchantment
+import com.roughlyunderscore.ue.UnderscoreEnchantsPlugin
 import com.roughlyunderscore.ue.registry.RegistryImpl
+import com.roughlyunderscore.ue.utils.toTarget
 import com.roughlyunderscore.ulib.data.Time
 import com.roughlyunderscore.ulib.data.TimeMeasurementUnit
+import com.roughlyunderscore.ulib.data.safeValueOr
 import com.roughlyunderscore.ulib.json.*
 import com.roughlyunderscore.ulib.text.normalize
-import com.roughlyunderscore.ue.utils.*
-import com.roughlyunderscore.ulib.data.safeValueOr
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Registry
@@ -81,8 +81,12 @@ class EnchantmentDeserializer(private val plugin: UnderscoreEnchantsPlugin, priv
     val unique = json.anyBoolean(DeserializationNames.Enchantment.UNIQUE) ?: false
     val stackable = json.anyBoolean(DeserializationNames.Enchantment.STACKABLE) ?: false
 
-    val conditions = json.onAnyArray(DeserializationNames.Enchantment.CONDITIONS) { mapNotNull { loadCondition(it) } } ?: emptyList()
-    val levels = json.onAnyArray(DeserializationNames.Enchantment.LEVELS) { mapNotNull { loadLevel(it) } } ?: emptyList()
+    val variables = json.onAnyObject(DeserializationNames.Enchantment.VARIABLES) {
+      this.keySet().associateWith { key -> this.get(key).asString }
+    } ?: emptyMap()
+
+    val conditions = json.onAnyArray(DeserializationNames.Enchantment.CONDITIONS) { mapNotNull { loadCondition(it, variables) } } ?: emptyList()
+    val levels = json.onAnyArray(DeserializationNames.Enchantment.LEVELS) { mapNotNull { loadLevel(it, variables) } } ?: emptyList()
     val obtainmentRestrictions = json.onAnyArray(DeserializationNames.Enchantment.OBTAINMENT) { mapNotNull { loadObtainmentRestriction(it) } } ?: emptyList()
     val requiredEnchantments = json.onAnyArray(DeserializationNames.Enchantment.REQUIRED_ENCHANTMENTS) { mapNotNull { loadRequiredEnchantment(it) } } ?: emptyList()
     val requiredPlugins = json.onAnyArray(DeserializationNames.Enchantment.REQUIRED_PLUGINS) { mapNotNull { loadRequiredPlugin(it) } } ?: emptyList()
@@ -112,19 +116,23 @@ class EnchantmentDeserializer(private val plugin: UnderscoreEnchantsPlugin, priv
   }
 
   /**
-   * Loads a condition from a JSON [element].
+   * Loads a condition from a JSON [element] and replaces any [variables] in the arguments.
    * @return the parsed EnchantmentCondition, or null if something goes wrong.
    */
   @Since("2.2")
   @Internal
-  private fun loadCondition(element: JsonElement): EnchantmentCondition? {
+  private fun loadCondition(element: JsonElement, variables: Map<String, String>): EnchantmentCondition? {
     val json = element.asJsonObject ?: return null
 
     val fullConditionString = json.anyString(DeserializationNames.Condition.CONDITION) ?: return null
     val negate = json.anyBoolean(DeserializationNames.Condition.NEGATE) ?: false
     val targetPlayer = json.onAnyStringStrict(DeserializationNames.Condition.TARGET, { "first" }) { toTarget() }
 
-    val conditionSplit = fullConditionString.split(" ").toMutableList()
+    val conditionSplit = fullConditionString.split(" ").map { argument ->
+      if (argument.startsWith("$$")) variables[argument.substring(2)] ?: argument
+      else argument
+    }.toMutableList()
+
     val condition = registry.findCondition(conditionSplit[0]) ?: UndiscoveredCondition(conditionSplit[0])
     conditionSplit.removeFirst()
 
@@ -132,31 +140,32 @@ class EnchantmentDeserializer(private val plugin: UnderscoreEnchantsPlugin, priv
   }
 
   /**
-   * Loads an EnchantmentLevel from a JSON [element].
+   * Loads an EnchantmentLevel from a JSON [element], replacing any [variables] in arguments of
+   * actions and conditions.
    * @return the enchantment level, or null if something goes wrong.
    */
   @Since("2.2")
   @Internal
-  private fun loadLevel(element: JsonElement): EnchantmentLevel? {
+  private fun loadLevel(element: JsonElement, variables: Map<String, String>): EnchantmentLevel? {
     val json = element.asJsonObject ?: return null
 
     val levelIndex = json.anyInt(DeserializationNames.Level.INDEX) ?: return null
     val levelChance = json.anyDoubleStrict(DeserializationNames.Level.CHANCE) { 100.0 }
     val levelCooldown = json.anyLongStrict(DeserializationNames.Level.COOLDOWN) { 0 }
 
-    val actions = json.onAnyArray(DeserializationNames.Level.ACTIONS) { mapNotNull { loadActions(it) } }?.flatten() ?: return null
-    val conditions = json.onAnyArray(DeserializationNames.Level.CONDITIONS) { mapNotNull { loadCondition(it) } } ?: emptyList()
+    val actions = json.onAnyArray(DeserializationNames.Level.ACTIONS) { mapNotNull { loadActions(it, variables) } }?.flatten() ?: return null
+    val conditions = json.onAnyArray(DeserializationNames.Level.CONDITIONS) { mapNotNull { loadCondition(it, variables) } } ?: emptyList()
 
     return EnchantmentLevel(levelIndex, conditions, levelChance, Time(levelCooldown, TimeMeasurementUnit.TICKS), actions)
   }
 
   /**
-   * Loads action(s) from a JSON [element].
+   * Loads action(s) from a JSON [element], replacing any [variables] in arguments.
    * @return the list of actions, or null if something goes wrong.
    */
   @Since("2.2")
   @Internal
-  private fun loadActions(element: JsonElement): List<EnchantmentAction>? {
+  private fun loadActions(element: JsonElement, variables: Map<String, String>): List<EnchantmentAction>? {
     val json = element.asJsonObject ?: return null
 
     val singleAction = json.anyString(DeserializationNames.Action.SINGLE_ACTION)
@@ -170,17 +179,17 @@ class EnchantmentDeserializer(private val plugin: UnderscoreEnchantsPlugin, priv
     val actionChance = json.anyDoubleStrict(DeserializationNames.Action.CHANCE) { 100.0 }
     val targetPlayer = json.onAnyStringStrict(DeserializationNames.Action.TARGET, { "first" }) { toTarget() }
 
-    val conditions = json.onAnyArray(DeserializationNames.Action.CONDITIONS) { mapNotNull { loadCondition(it) } } ?: emptyList()
+    val conditions = json.onAnyArray(DeserializationNames.Action.CONDITIONS) { mapNotNull { loadCondition(it, variables) } } ?: emptyList()
 
     if (singleAction != null) {
-      val (action, actionSplit) = json.anyElement(DeserializationNames.Action.SINGLE_ACTION)?.let { discoverAction(it) } ?: return null
+      val (action, actionSplit) = json.anyElement(DeserializationNames.Action.SINGLE_ACTION)?.let { discoverAction(it, variables) } ?: return null
 
       return listOf(EnchantmentAction(action, actionChance, Time(actionDelayTicks, TimeMeasurementUnit.TICKS), targetPlayer, actionSplit, conditions))
     } else if (multipleActions != null) {
       val actionList = mutableListOf<EnchantmentAction>()
 
       multipleActions.forEach {
-        val (action, actionSplit) = discoverAction(it) ?: return@forEach
+        val (action, actionSplit) = discoverAction(it, variables) ?: return@forEach
         actionList.add(EnchantmentAction(action, actionChance, Time(actionDelayTicks, TimeMeasurementUnit.TICKS), targetPlayer, actionSplit, conditions))
       }
 
@@ -192,14 +201,19 @@ class EnchantmentDeserializer(private val plugin: UnderscoreEnchantsPlugin, priv
 
   /**
    * A tiny utility for parsing a JSON [element] representing a string into an action type
-   * and its arguments.
+   * and its arguments. Replaces any [variables] in the arguments.
    * @return the resulting action type and its arguments, or null if something goes wrong.
    */
   @Since("2.2")
   @Internal
-  private fun discoverAction(element: JsonElement?): Pair<RegistrableAction, List<String>>? {
+  private fun discoverAction(element: JsonElement?, variables: Map<String, String>): Pair<RegistrableAction, List<String>>? {
     val fullAction = element?.asString ?: return null
-    val actionSplit = fullAction.split(" ").toMutableList()
+
+    val actionSplit = fullAction.split(" ").map { argument ->
+      if (argument.startsWith("$$")) variables[argument.substring(2)] ?: argument
+      else argument
+    }.toMutableList()
+
     val actionName = actionSplit[0]
     actionSplit.removeFirst()
 
